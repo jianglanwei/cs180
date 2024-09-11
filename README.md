@@ -1,5 +1,5 @@
 ## Computer Vision Projects
-This repository contains my projects for UC Berkeley's course "COMPSCI 180:  Intro to Computer Vision and Computational Photography" for fall 2024 semester. For detailed introduction, visit [website](https://davidpaulwei.github.io/cs180/).
+This repository contains my projects for UC Berkeley's course "COMPSCI 180:  Intro to Computer Vision and Computational Photography" on fall 2024 semester. For detailed introduction, visit [website](https://davidpaulwei.github.io/cs180/).
 
 Here is a brief introduction of the projects
 
