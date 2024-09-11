@@ -1,4 +1,4 @@
-## **Project 1
+## Project 1
 
 **Colorizing the _Prokudin-Gorskii_ Photo Collection**&emsp;[My submission](https://davidpaulwei.github.io/cs180/proj1/) | [Project Description](https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj1/)
 
