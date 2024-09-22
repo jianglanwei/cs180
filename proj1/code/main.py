@@ -75,13 +75,16 @@ def align_img(img_name: str, compress: bool = False) -> ndarray:
     colored_img = np.dstack(layers)
     return colored_img, (b_shift, g_shift)
 
-for file in os.listdir():
+for file in os.listdir("media/uncolored/"):
     file_type = os.path.splitext(file)[1]
-    if file_type == '.jpg':      img, shifts = align_img(file)
-    elif file_type == '.tif':    img, shifts = align_img(file, compress=True)
+    if file_type == '.jpg':      img, shifts = align_img("media/uncolored/" + file)
+    elif file_type == '.tif':    img, shifts = align_img("media/uncolored/" + file, compress=True)
     else:                        continue
     print(f"{file}:\nblue shift: {shifts[0]}\tgreen shift: {shifts[1]}\n ")
     io.imshow(img)
     io.show()
     img = (img * 255).astype(np.uint8)
-    io.imsave("out_path/unaligned_" + file, img)
+    io.imsave("media/colored/" + file, img)
+
+
+
