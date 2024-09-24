@@ -47,7 +47,7 @@
         <i>Gaussian Filter</i> is applied to get rid of the unnecessary wrinkles. 
         Then, images can be sharpened by stacking its edges onto itself.
         The second part of this project consists of two image binding tasks. 
-        The first task generates Hybrid Image by adding the high frequency of one image to the low frequency of the another.
+        The first task generates Hybrid Image by adding the high frequency of one image to the low frequency of another.
         Both successful and failing attempts are introduced.
         The second task blends images by applying the <i>Gaussian Stack</i> and the <i>Laplacian Stack</i>.
     </p>
@@ -61,7 +61,7 @@
         I detected the edges by applying the <i>dx</i> and <i>dy</i> <a href = "https://en.wikipedia.org/wiki/Finite_difference">Finite Difference</a> Filter,
         denoted by <i>dx</i> = [1, -1], <i>dy</i> = [1, -1]^<i>T</i> respectively. 
         The horizontal and vertical edges are calculated by conducting convolution on the image and the two filters,
-        which are later combined into a single edge image. 
+        and are later combined into a single edge image. 
         To reduce the unnecessary impact of miner wrinkles, I conducted binaryzation on the edge images. 
         Figure 1 shows the original <i>Cameraman</i> image and its horizontal, vertical and combined edge image before and after their binaryzation.
     </p>
