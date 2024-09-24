@@ -1,50 +1,550 @@
 <html>
 <head>
-    <title>David Wei's CS180 Projects</title>
+    <title>David Wei's CS180 Project 1</title>
     <style>
         h2 {text-align: center;}
         h3 {text-align: left;}
-        h4 {text-align: center;}
+        h4 {text-align: left;}
         p {text-align: left;}
         div {text-align: center;}
         nav {text-align: right;}
+        figure {
+            padding: 4px;
+            margin: auto;
+        }
+        figcaption {
+            background-color: white;
+            color: black;
+            padding: 2px;
+            text-align: center;
+        }
+
     </style>
 </head>
 
 <body>
     <h2>
-        <b>UC Berkeley CS 180 Fall 2024<br>
-        Intro to Computer Vision and Computational Photography<br>
-        Projects</b>
+        <b>CS180-Proj2: Fun with Filters and Frequencies</b>
     </h2>
     <div>
-        David Wei <br>
+        David Wei<br>
         <a href= "mailto: david_wei@berkeley.edu"> david_wei@berkeley.edu </a>
         <hr>
-    </div>
+    <div>
     <nav>
-        <a href= "https://github.com/davidpaulwei/cs180/tree/main"> My CS180 Project Repository on Github</a> |
-        <a href= "https://davidpaulwei.github.io"> My Personal Webpage </a>
+        <a href= "https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj2/"> Project Introduction </a> |
+        <a href= "https://github.com/davidpaulwei/cs180/tree/main/proj2/code"> My Code </a> |
+        <a href= "https://davidpaulwei.github.io/cs180"> All My CS180 Projects </a>
     </nav>
-
-
+    
 <section>
-    <ol>
-        <li>
-            <b><a href= "https://davidpaulwei.github.io/cs180/proj1/">Project 1</a>
-            : Colorizing the <i>Prokudin-Gorskii</i> Photo Collection<br></b>
-            <i>Prokudin-Gorskii</i> photographed the Russian Empire using black-and-white negatives with red, green and blue filters,
-            hoping future technologies could stack the three layers to produce colored image.
-            I take the digitized negatives of <i>Prokudin-Gorskii</i>'s work to produce the RGB color image.
-            The original three color layers from <i>Prokudin-Gorskii</i>'s work are not accurately aligned, 
-            so I designed an alignment algorithm using <b>Image Pyramid</b> and <b>Edge Detection</b> to preprocess the layers before stacking them together. 
-
-        </li>
-    </ol>
+    <h3>
+        1. Introduction
+    </h3>
+    <p>
+        By applying filters and analyzing frequencies, images can be processed and combined in interesting ways.
+        In this project, I first detected edges of the image by applying the <i>Finite Difference</i> Filter. 
+        <i>Gaussian</i> Filter is applied to get rid of the unnecessary wrinkles. 
+        Then, images can be sharpened by stacking its edges onto itself.
+        Later, two images are combined into a single hybrid image by adding the high frequency of one image to the low frequency of the other.
+        Both successful and failing attempts are introduced.
+        At last, images are blended by applying the <i>Gaussian Stack</i> and the <i>Laplacian Stack</i>.
+    </p>
 </section>
 
-<p><br><br><br>* Last updated on Sep 11, 2024.</p>
+<section>
+    <h3>
+        2. Edge Detection by Blurred Finite Difference
+    </h3>
+    <p>
+        I detected the edges by applying the <i>dx</i> and <i>dy</i> <a href = "https://en.wikipedia.org/wiki/Finite_difference">Finite Difference</a> Filter,
+        denoted by <i>dx</i> = [1, -1], <i>dy</i> = [1, -1]^<i>T</i> respectively. 
+        The horizontal and vertical edges are calculated by conducting convolution on the image and the two filters,
+        which are later combined into a single edge image. 
+        To reduce the unnecessary impact of miner wrinkles, I conducted binaryzation on the edge images. 
+        Figure 1 shows the original <i>Cameraman</i> image and its horizontal, vertical and combined edge image before and after their binaryzation.
+    </p>
+        
+    <figure>
+        <img src="media/cameraman.png" alt="Figure 1a" width=42%, height=auto>
+        <figcaption>Figure 1a: Original <i>Cameraman</i> image.</figcaption>
+    </figure>
 
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 6%><i>dx</i></td>
+            <td width = 42%><figure>
+                <img src="media/ver_edge.png" alt="Figure 1b" width=100%, height=auto>
+                <figcaption>Figure 1c: Vertical edge image before binaryzation.</figcaption>
+            </figure></td>
+            <td width = 42%><figure>
+                <img src="media/ver_edge_bin.png" alt="Figure 1b" width=100%, height=auto>
+                <figcaption>Figure 1c: Vertical edge image after binaryzation.</figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 6%><i>dy</i></td>
+            <td width = 42%><figure>
+                <img src="media/hor_edge.png" alt="Figure 1d" width=100%, height=auto>
+                <figcaption>Figure 1d: Horizontal edge image before binaryzation.</figcaption>
+            </figure></td>
+            <td width = 42%><figure>
+                <img src="media/hor_edge_bin.png" alt="Figure 1e" width=100%, height=auto>
+                <figcaption>Figure 1e: Horizontal edge image after binaryzation.</figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 6%>combined</td>
+            <td width = 42%><figure>
+                <img src="media/edge.png" alt="Figure 1f" width=100%, height=auto>
+                <figcaption>Figure 1f: Combined edge image before binaryzation.</figcaption>
+            </figure></td>
+            <td width = 42%><figure>
+                <img src="media/edge_bin.png" alt="Figure 1g" width=100%, height=auto>
+                <figcaption>Figure 1g: Combined edge image after binaryzation.</figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        It can be obtained that the resulting edge image shown in Figure 1f still contains unwanted noise.
+        To remove the noise, I smoothed the image before edge detection by applying <a href = "https://en.wikipedia.org/wiki/Gaussian_filter">Gaussian Filter</a> with a kernel size of 9 and a sigma of 1.5.
+        The resulting edge image is shown in Figure 2a. In another attempt, I generated a <i>Blurred Finite Difference Filter</i> by 
+        conducting convolution on the <i>Gaussian Filter</i> and the two <i>Finite Difference Filters</i>, and applied the combined filters directly on the original image.
+        This result is shown in Figure 2b. 
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/edge_smoothed_uncombined_filter.png" alt="Figure 2a" width=100%, height=auto>
+                <figcaption>Figure 2a: Noiseless edge image by applying <i>Gaussian Filter</i> before edge detection.</figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/edge_smoothed_combined_filter.png" alt="Figure 2b" width=100%, height=auto>
+                <figcaption>Figure 2b: Noiseless edge image by combining <i>Gaussian Filter</i> with <i>Finite Difference Filters</i>.</figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        The noiseless edge image obtained by the two attempts are almost identical.
+    </p>
+</section>
+
+<section>
+    <h3>
+        3. Image Sharpening
+    </h3>
+    <p>
+        Image sharpening can emphasize the details of the image, making the image "clearer" when observed by human eyes. 
+        I sharpened the images using the <a href= "https://en.wikipedia.org/wiki/Unsharp_masking"> Unsharp Masking </a> technic. 
+        First, a <i>Gaussian Filter</i> is applied to the target image to generate a blurred image, which contains the low frequency features of the image.
+        Sigma in the <i>Gaussian Filter</i> is always set as 1/6 of the kernel size.
+        Then, the high-frequency details are obtained by subtracting the low frequency features from the original image. 
+        These details are emphasized in the final image by <i>sharpened_img</i> = <i>original_img</i> + <i>high_freq</i> * <i>alpha</i>.
+        Figure 3, 4 shows the sharpening result of the <i>taj</i> and <i>forest</i> image.
+    </p>
+
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/taj.jpg" alt="Figure 3a" width=100%, height=auto>
+                <figcaption>
+                    Figure 3a: Original <i>taj</i> image.<br>
+                    &nbsp;
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/taj_sharpened.jpg" alt="Figure 3b" width=100%, height=auto>
+                <figcaption>
+                    Figure 3b: Sharpened <i>taj</i> image.<br>
+                    Gaussian kernel size = 7; alpha = 1
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/forest.jpg" alt="Figure 4a" width=100%, height=auto>
+                <figcaption>
+                    Figure 4a: Original <i>forest</i> image.<br>
+                    &nbsp;
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/forest_sharpened.jpg" alt="Figure 4b" width=100%, height=auto>
+                <figcaption>
+                    Figure 4b: Sharpened <i>forest</i> image.<br>
+                    Gaussian kernel size = 9; alpha = 1.5
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+
+
+    <p>
+        In order to evaluate my image sharpening approach, I took the <i>tiger</i> image, blurred it, and then sharpened it.
+        By sharpening the blurred image the high frequency details lost in the blurring process should be restored.
+        Figure 5 shows the result.
+    </p>
+
+    <figure>
+        <img src="media/tiger.png" alt="Figure 5a" width=50%, height=auto>
+        <figcaption>
+            Figure 5a: Original <i>tiger</i> image.
+        </figcaption>
+    </figure>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/tiger_blurred.png" alt="Figure 5b" width=100%, height=auto>
+                <figcaption>
+                    Figure 5b: Blurred <i>tiger</i> image.<br>
+                    Gaussian kernel size = 7
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/tiger_sharpened.png" alt="Figure 5c" width=100%, height=auto>
+                <figcaption>
+                    Figure 5c: Sharpened <i>blurred tiger</i> image.<br>
+                    Gaussian kernel size = 15; alpha = 2
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+
+    <p>
+        The tiger in the sharpened image seems more vivid than the tiger in the blurred image.
+        This indicates that by image sharpening a lower resolution image can show similar effect on human eyes.
+    </p>
+
+</section>
+
+<section>
+    <h3>
+        4. Hybrid Images
+    </h3>
+    <p>
+        Human eyes can only identify color changes in a range of frequencies. 
+        When the colors change too swift or too slow on an image, humans can't identify the change.
+        I combined two images by adding the low frequency features of one image and the high frequency details of the other.
+        In this way, ideally, when looked afar, only the low frequency features from the first image would be noticed.
+        When looked closely, only the high frequency details of the second image would be noticed.
+        The following are three attempts of generating Hybrid Image.
+    </p>
+    <h4>
+        4.1 Who is <i>Spiderman</i>? Take off your glasses!
+    </h4>
+    <p>
+        By combining the high frequency details of the <i>Spiderman</i> with mask on and the low frequency features of the face <i>Peter Parker</i> casted by <i>Tobey Maguire</i>,
+        <i>Spiderman</i> should have mask on when looked closely. However, when look afar (or simply take off your nearsighted glasses like <i>Peter</i> did),
+        <i>Spiderman</i> will reveal his true identity!
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/spiderman_high.jpg" alt="Figure 6a" width=100%, height=auto>
+                <figcaption>
+                    Figure 6a: <i>Spiderman</i> with mask on.<br>
+                    Used as high frequency details; Gaussian kernel size = 13
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/spiderman_low.jpg" alt="Figure 6b" width=100%, height=auto>
+                <figcaption>
+                    Figure 6b: <i>Tobey Maguire</i> in <i>Spiderman</i> suit.<br>
+                    Used as low frequency features; Gaussian kernel size = 17
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <figure>
+        <img src="media/spiderman_hybrid.jpg" alt="Figure 6c" width=50%, height=auto>
+        <figcaption>
+            Figure 6c: <i>Spiderman</i> hybrid image.
+        </figcaption>
+    </figure>
+    <p>
+        I analyzed the two <i>Spiderman</i> images in frequency domain before and after their filtering using <a href= "https://en.wikipedia.org/wiki/Fast_Fourier_transform"> Fast Fourier Transform</a>,
+        Figure 7 shows the result.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/spiderman_high_fft.jpg" alt="Figure 7a" width=100%, height=auto>
+                <figcaption>
+                    Figure 7a: High frequency image in frequency domain (before filtering).
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/spiderman_low_fft.jpg" alt="Figure 7b" width=100%, height=auto>
+                <figcaption>
+                    Figure 7b: Low frequency image in frequency domain (before filtering).
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/spiderman_high_fft_filtered.jpg" alt="Figure 7c" width=100%, height=auto>
+                <figcaption>
+                    Figure 7c: High frequency image in frequency domain (after filtering).
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/spiderman_low_fft_filtered.jpg" alt="Figure 7d" width=100%, height=auto>
+                <figcaption>
+                    Figure 7d: Low frequency image in frequency domain (after filtering).
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <h4>
+        4.2 <i>Wednesday</i> Cartoon/Real-Person Hybrid
+    </h4>
+    <p>
+        I combined the high frequency details of the <i>Wednesday</i> cartoon version and the low frequency features of <i>Wednesday</i> casted by <i>Jenna Ortega</i>.
+        The cartoon <i>Wednesday</i> should appear when looked closely, and the <i>Netfilx</i> <i>Wednesday</i> will appear when looked afar.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/cartoon.jpg" alt="Figure 8a" width=100%, height=auto>
+                <figcaption>
+                    Figure 8a: <i>Wednesday</i> cartoon version.<br>
+                    Used as high frequency details; Gaussian kernel size = 13
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/real.jpg" alt="Figure 8b" width=100%, height=auto>
+                <figcaption>
+                    Figure 8b: <i>Wednesday</i> starred by <i>Jenna Ortega</i>.<br>
+                    Used as low frequency features; Gaussian kernel size = 17
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <figure>
+        <img src="media/wednesday_hybrid.jpg" alt="Figure 7c" width=50%, height=auto>
+        <figcaption>
+            Figure 8c: <i>Wednesday</i> hybrid image.
+        </figcaption>
+    </figure>
+    <h4>
+        4.3 <i>Golden Gate Bridge</i> History/Now Hybrid <a>(Failed)</a>
+    </h4>
+    <p>
+        I combined the high frequency details of <i>Golden Gate Bridge</i> image filmed last century and the low frequency features of the bridge filmed recently.
+        Figure 9 shows the result.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/bridge_high.jpg" alt="Figure 9a" width=100%, height=auto>
+                <figcaption>
+                    Figure 9a: <i>Golden Gate Bridge</i> filmed last century.<br>
+                    Used as high frequency details; Gaussian kernel size = 13
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/bridge_low.jpg" alt="Figure 9b" width=100%, height=auto>
+                <figcaption>
+                    Figure 9b: <i>Golden Gate Bridge</i> filmed recently.<br>
+                    Used as low frequency features; Gaussian kernel size = 17
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <figure>
+        <img src="media/bridge_hybrid.jpg" alt="Figure 9c" width=50%, height=auto>
+        <figcaption>
+            Figure 9c: <i>Golden Gate Bridge</i> hybrid image.
+        </figcaption>
+    </figure>
+    <p>
+        The results are not satisfying as the older <i>Golden Gate Bridge</i> image can barely be seen even when looked closely.
+        I believe this is because one of the photos are grayscale while the other is colored.
+        It can be hard for a grayscale image to gain human eyes' attention when it is mixed with a colored image.
+    </p>
+    
+<section>
+    <h3>
+        5. Multiresolution Blending
+    </h3>
+    <p>
+        When blending two images together, it would seem more natural if the high frequency details are not stacked together 
+        while the low frequency background color change gradually between the images. I implemented <i>Laplacian Stack</i>
+        to obtain the image features under different frequencies. <i>Laplacian Stack</i> is calculated using the <i>Gaussian Stack</i>. 
+        Each layer in the <i>Gaussian Stack</i> blurs the image from the last layer using <i>Gaussian Filter</i>, 
+        using an increasing larger kernel size as the layers go deep. The first layer in the <i>Gaussian Stack</i> is the original image.
+        <i>Laplacian Stack</i> is generated by <i>lstack</i>[<i>i</i>]</i> = <i>gstack</i>[<i>i</i>]</i> - <i>gstack</i>[<i>i</i> + 1]</i>.
+        In this way, only the features in a certain range of frequency are left in each layers of the <i>Laplacian Stack</i>. The last layer of 
+        the <i>Laplacian Stack</i> is the last layer of the image's <i>Gaussian Stack</i>.
+    </p>
+    <p>
+        The images are blended using a mask image. The mask image is first blurred by different degree using the <i>Gaussian Stack</i>.
+        The blending result for each layer is denoted by <i>blend</i>[<i>i</i>]</i> = <i>lstack1</i>[<i>i</i>]</i> * <i>mask</i>[<i>i</i>]</i>
+        + <i>lstack2</i>[<i>i</i>]</i> * (1 - <i>mask</i>[<i>i</i>]</i>). The final blended image is the sum of the blending result in each layer.
+    </p>
+    <p>
+        Figure 10 shows my attempt of blending the <i>apple</i> image (Figure 10a) and the <i>orange</i> image (Figure 10c) using mask image(Figure 10b).
+        Figure 11 shows the <i>Laplacian Stack</i> of this process, where the left column is the <i>Laplacian Stack</i> of the <i>apple</i> image,
+        the right column is the <i>Laplacian Stack</i> of the <i>orange</i> image, and the middle column is the blending result of each layer, 
+        whose sum is the blended image shown in Figure 10d.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 33%><figure>
+                <img src="media/apple.png" alt="Figure 10a" width=100%, height=auto>
+                <figcaption>
+                    Figure 10a: <i>Apple</i> image.<br>
+                    Blended from the left.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/oraple_mask.png" alt="Figure 10b" width=100%, height=auto>
+                <figcaption>
+                    Figure 10b: Mask image.<br>
+                    &nbsp;
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/orange.png" alt="Figure 10c" width=100%, height=auto>
+                <figcaption>
+                    Figure 10c: <i>Orange</i> image.<br>
+                    Blended from the right.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <figure>
+        <img src="media/oraple.png" alt="Figure 10d" width=50%, height=auto>
+        <figcaption>
+            Figure 10d: <i>Oraple</i> image.
+        </figcaption>
+    </figure>
+    <figure>
+        <img src="media/lstack.png" alt="Figure 11" width=75%, height=auto>
+        <figcaption>
+            Figure 11: <i>Laplacian Stack</i> of the <i>Oraple</i> image blending process.
+        </figcaption>
+    </figure>
+    <p>
+        I also blended earth and moon images to generate <i>moonearth</i> (imagine when human inhabits half of the moon),
+        and blended my friend <i>Mike</i> and a kangaroo to generate <i>Mikaroo</i> (a scornful kangaroo). 
+        The results are shown in Figure 12 and 13 respectively.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 33%><figure>
+                <img src="media/earth.jpg" alt="Figure 12a" width=100%, height=auto>
+                <figcaption>
+                    Figure 12a: Earth image.<br>
+                    Blended from the top.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure> 
+                <img src="media/moonearth_mask.png" alt="Figure 12b" width=100%, height=auto>
+                <figcaption>
+                    Figure 12b: Mask image.<br>
+                    &nbsp;
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/moon.jpg" alt="Figure 12c" width=100%, height=auto>
+                <figcaption>
+                    Figure 12c: Moon image.<br>
+                    Blended from the bottom.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <figure>
+        <img src="media/moonearth.png" alt="Figure 12d" width=50%, height=auto>
+        <figcaption>
+            Figure 12d: <i>Moonearth</i> image.
+        </figcaption>
+    </figure>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 33%><figure>
+                <img src="media/mike.jpg" alt="Figure 13a" width=100%, height=auto>
+                <figcaption>
+                    Figure 13a: Image of <i>Mike</i>.<br>
+                    Contributed the scornful eyes.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/mikaroo_mask.jpg" alt="Figure 13b" width=100%, height=auto>
+                <figcaption>
+                    Figure 13b: Mask image.<br>
+                    &nbsp;
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/kangaroo.jpg" alt="Figure 13c" width=100%, height=auto>
+                <figcaption>
+                    Figure 13c: Image of a kangaroo.<br>
+                    Contributed to all other parts except the eyes.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <figure>
+        <img src="media/mikaroo.png" alt="Figure 13d" width=50%, height=auto>
+        <figcaption>
+            Figure 13d: A <b>scornful</b> kangaroo.
+        </figcaption>
+    </figure>
+    <h4>
+        Bells and Whistles
+    </h4>
+    <p>
+        When trying different ways of recoloring the <i>moonearth</i> image, I accidentally used the <i>moonearth</i> image generated last time as the new mask image.
+        The blending result is amazing. It looks like lunar surface, but has clouds and oceans. I cannot explain this phenomenon, but here is the image.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 33%><figure>
+                <img src="media/earth.jpg" alt="Figure 14a" width=100%, height=auto>
+                <figcaption>
+                    Figure 14a: Earth image.<br>
+                    &nbsp;
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure> 
+                <img src="media/moonearth.png" alt="Figure 14b" width=100%, height=auto>
+                <figcaption>
+                    Figure 14b: Mask image (the blending result from last time).
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/moon.jpg" alt="Figure 14c" width=100%, height=auto>
+                <figcaption>
+                    Figure 14c: Moon image.<br>
+                    &nbsp;
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <figure>
+        <img src="media/moonearth_ultra.png" alt="Figure 14d" width=50%, height=auto>
+        <figcaption>
+            Figure 14d: <i>Moonearth Ultra</i> image.
+        </figcaption>
+    </figure>
+
+
+</section>
+
+
+
+<p>* Finished on Sep 23, 2024.</p>
 
 </body>
 </html>
