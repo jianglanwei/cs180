@@ -1,8 +1,15 @@
-## Project 3
+## CS 180 Project 3 Code
 
-**Face Morphing and Modelling a Photo Collection**&emsp;[Webpage](https://davidpaulwei.github.io/cs180/proj3/) | [My Code](https://github.com/davidpaulwei/cs180/tree/main/proj3/code)  
+**Face Morphing and Modelling a Photo Collection**&emsp;[Webpage](https://davidpaulwei.github.io/cs180/proj3/)
 
-   In the first part of this project, I morphed two face images using **Affine Transformation**. I obtained 100 correspondences for each of the two faces and computed their average coordinates. **Triangulation** was conducted on the correspondences and for each triangle, **Affine Matrixes** were generated to stretch the triangles from the original image to the Midway image. I used **Cross Dissolve** to bind the color. I furtherly generated a sequence of 51 morphed images using different **Morph Weight** to produce the morphing GIF. In the second part, I computed the mean face of 12 Brazilian faces, and stretched my face into the shape of the mean face. I also computed the mean face of 12 smiling Brazilian faces to add a smile on my grim portrait.
+**main.py** contains all the necessary code for Project 3, run it within this folder. The following libraries are required:
+
+1. numpy
+2. pickle
+3. matplotlib.pyplot
+4. skimage
+5. scipy.spatial
+
+Functions `get_points()` and `get_tri()` in **main.py** are used to manually select correspondences of image and generate triangulation. These functions are not called as correspondences and its triangulation are already generated and stored in _.pickle_ files. So instead, functions that reads these datas, `read_points()` and `read_tri()` respectively, are called.
 
 Finished on Oct 2, 2024.
-
