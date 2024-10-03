@@ -150,8 +150,6 @@ def img_mean(path: str, num_imgs: int):
             # morph pixel:
             morphed_img[y, x] = img[y_ori, x_ori]
         morphed_imgs.append(morphed_img)
-        # plt.imshow(morphed_img)
-        # plt.show()
     mean_img = np.array(morphed_imgs).mean(axis=0)
     return mean_img, mean_points
     
