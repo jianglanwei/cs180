@@ -133,10 +133,10 @@
         4. Mean Face of Population
     </h3>
     <p>
-        Using 68 coordinates, we get to align and morph two faces into a midway face, or <b>Mean Face</b>.
-        The same process can be adapted on a larger population. I computed the mean face of 12 Brazilian male
-        using closeup face images from the <a href= "https://fei.edu.br/~cet/facedatabase.html"> FEI Face Database</a>.
-        The 12 face closeups I used are shown in Figure 4, and the output mean face is shown in Figure 5.
+        Using coordinates, we get to align and morph two faces into a midway face, or <b>Mean Face</b>.
+        The same process can be adapted on a larger population. I aligned 12 Brazilian male faces from the <a href= "https://fei.edu.br/~cet/facedatabase.html"> FEI Face Database</a> 
+        using 68 correspondences and then computed the mean.
+        The 12 face closeups, the closeups after alignment, and the mean face are shown in Figure 4, 5, 6, respectively.
     </p>
     <figure>
         <img src="media/grim_faces.png" alt="Figure 4" width=100%, height=auto>
@@ -145,28 +145,34 @@
         </figcaption>
     </figure>
     <figure>
-        <img src="media/mean_img_regular.png" alt="Figure 5" width=30%, height=auto>
+        <img src="media/grim_faces_morphed.png" alt="Figure 5" width=100%, height=auto>
         <figcaption>
-            Figure 5: Mean face of Brazilian male.
+            Figure 5: Faces of Brazilian male after alignment.
+        </figcaption>
+    </figure>   
+    <figure>
+        <img src="media/mean_img_regular.png" alt="Figure 6" width=30%, height=auto>
+        <figcaption>
+            Figure 6: Mean face of Brazilian male.
         </figcaption>
     </figure>
     <p>
         I aligned my face to the mean face to generate a Brazilian version of me, but still kept its color.
         This is similar to the morphing progress introduced in Section 3 only without the Cross-Dissolve.
-        The output image is shown in Figure 6.
+        The output image is shown in Figure 7.
     </p>
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
                 <img src="media/me.png" alt="Figure 5a" width=100%, height=auto>
                 <figcaption>
-                    Figure 6a: My face.<br>
+                    Figure 7a: My face.<br>
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
                 <img src="media/me_morphed.png" alt="Figure 5b" width=100%, height=auto>
                 <figcaption>
-                    Figure 6b: My face Brazilian version.<br>
+                    Figure 7b: My face Brazilian version.<br>
                 </figcaption>
             </figure></td>
         </tr>
@@ -180,19 +186,19 @@
     <p>
         In order to generate a smiling face using the original grim face of myself, 
         I aligned my face to the mean face of a smiling Brazilian population.
-        Figure 7, 8, 9 shows the smiling population, mean face, and my face before and after alignment, respectively.
+        Figure 8, 9, 10 shows the smiling population, mean face, and my face before and after alignment, respectively.
 
     </p>
     <figure>
-        <img src="media/smiling_faces.png" alt="Figure 7" width=100%, height=auto>
+        <img src="media/smiling_faces.png" alt="Figure 8" width=100%, height=auto>
         <figcaption>
-            Figure 7: Faces of smiling Brazilian male.
+            Figure 8: Faces of smiling Brazilian male.
         </figcaption>
     </figure>
     <figure>
-        <img src="media/mean_img_smile.png" alt="Figure 8" width=30%, height=auto>
+        <img src="media/mean_img_smile.png" alt="Figure 9" width=30%, height=auto>
         <figcaption>
-            Figure 8: Mean face of smiling Brazilian male.
+            Figure 9: Mean face of smiling Brazilian male.
         </figcaption>
     </figure>
     <table class="center" style="margin-left:auto;margin-right:auto;">
@@ -200,13 +206,13 @@
             <td width = 50%><figure>
                 <img src="media/me.png" alt="Figure 9a" width=100%, height=auto>
                 <figcaption>
-                    Figure 9a: My face.<br>
+                    Figure 10a: My face.<br>
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
                 <img src="media/me_smile.png" alt="Figure 9b" width=100%, height=auto>
                 <figcaption>
-                    Figure 9b: My face smiling.<br>
+                    Figure 10b: My face smiling.<br>
                 </figcaption>
             </figure></td>
         </tr>
