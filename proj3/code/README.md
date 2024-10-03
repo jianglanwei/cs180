@@ -10,6 +10,6 @@
 4. skimage
 5. scipy.spatial
 
-Functions `get_points()` and `get_tri()` in **main.py** are used to manually select correspondences of image and generate triangulation. These functions are not called as correspondences and its triangulation are already generated and stored in _.pickle_ files. So instead, functions that reads these datas, `read_points()` and `read_tri()` respectively, are called.
+Functions `get_points()` and `get_tri()` in **main.py** are used to manually select correspondences of image and generate triangulation. These functions are not called as correspondences and their triangulation are already generated and stored in _.pickle_ files. So instead, functions that reads these datas, `read_points()` and `read_tri()` respectively, are called.
 
 Finished on Oct 2, 2024.
