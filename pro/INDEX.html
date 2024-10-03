@@ -1,0 +1,199 @@
+<html>
+<head>
+    <title>David Wei's CS180 Project 3</title>
+    <style>
+        h2 {text-align: center;}
+        h3 {text-align: left;}
+        h4 {text-align: left;}
+        p {text-align: left;}
+        div {text-align: center;}
+        nav {text-align: right;}
+        figure {
+            padding: 4px;
+            margin: auto;
+        }
+        figcaption {
+            background-color: white;
+            color: black;
+            padding: 2px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h2>
+        <b>CS180-Proj3: Face Morphing and Modelling a Photo Collection</b>
+    </h2>
+    <div>
+        David Wei<br>
+        <a href= "mailto: david_wei@berkeley.edu"> david_wei@berkeley.edu </a>
+        <hr>
+    <div>
+    <nav>
+        <a href= "https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj3/"> Project Introduction </a> |
+        <a href= "https://github.com/davidpaulwei/cs180/tree/main/proj3/code"> My Code </a> |
+        <a href= "https://davidpaulwei.github.io/cs180"> All My CS180 Projects </a>
+    </nav>
+    
+<section>
+    <h3>
+        1. Introduction
+    </h3>
+    <p>
+        In the first part of this project, I morphed two face images using <b>Affine Transformation</b>.
+        I obtained 100 correspondences for each of the two faces and computed their average coordinates.
+        <b>Triangulation</b> was conducted on the correspondences and for each triangle, <b>Affine Matrixes</b> were generated to stretch the triangles from the original image to the Midway image.
+        I used <b>Cross Dissolve</b> to bind the color. I furtherly generated a sequence of 51 morphed images using different <b>Morph Weight</b> to produce the morphing GIF.
+        In the second part, I computed the mean face of 12 Brazilian faces, and stretched my face into the shape of the mean face.
+        I also computed the mean face of 12 smiling Brazilian faces to add a smile on my grim portrait.
+    </p>
+</section>
+
+<section>
+    <h3>
+        2. Correspondences and Triangulation
+    </h3>
+    <p>
+        To morph the close-ups of <a href= "https://en.wikipedia.org/wiki/Elon_Musk"> Elon Musk</a> and 
+        <a href= "https://en.wikipedia.org/wiki/George_Clooney"> George Clooney</a> by <a href= "https://en.wikipedia.org/wiki/Martin_Schoeller"> Martin Schoeller</a>,
+        I manually selected a total of 100 correspondences on each image. In this way, the two faces can be morphed by aligning the correspondences.
+        I conducted <a href= "https://en.wikipedia.org/wiki/Delaunay_triangulation"> Delaunay Triangulation</a>
+        on <i>Elon</i>'s correspondences and adapted the triangulation on <i>George</i>'s image. Each pixel in the two close-ups belongs to a triangle.
+        The correspondences and triangulation of the images are shown in Figure 1.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/elon_musk_points.png" alt="Figure 1a" width=100%, height=auto>
+                <figcaption>Figure 1a: Correspondences and triangulation on <i>Elon Musk</i>'s closeup.</figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/george_clooney_points.png" alt="Figure 1b" width=100%, height=auto>
+                <figcaption>Figure 1b: Correspondences and triangulation on <i>George_Clooney</i>'s closeup.</figcaption>
+            </figure></td>
+        </tr>
+    </table>
+
+    <section>
+        <h3>
+            3. Midway Face and the Morph Sequence
+        </h3>
+        <p>
+            <b>Midway Face</b> is a generated morphed image where ideally the shape and color of the corresponding elements are the mean of that on the two faces.
+            To generate the Midway Face, I computed the average coordinates of the correspondences on the two faces to represent the mean shape of each face elements, 
+            and the faces of <i>Elon</i> and <i>George</i> are aligned to the mean correspondences by conducting 
+            <a href= "https://en.wikipedia.org/wiki/Affine_transformation"> Affine Transformation</a> on each triangle.
+            The Midway face is the mean of the two aligned faces. It is shown in Figure 2.
+        </p>
+        <figure>
+            <img src="media/midway.png" alt="Figure 2" width=50%, height=auto>
+            <figcaption>Figure 2: Midway of <i>Elon Musk</i> and <i>George_Clooney</i>.</figcaption>
+        </figure>
+    <p>
+        To present a more vivid process of morphing, I generated a sequence containing 51 morphed images of <i>Elon</i> and <i>George</i>'s closeups, 
+        where each image is assigned with a different <b>Morph Weight</b>. 
+        Morph Weight controls the extent of morphing and is within the range of [0, 1]. A morphed image with a weight of 0 is identical to the original <i>Elon</i>'s closeup, with the same correspondence coordinates 
+        and the same color on the corresponding pixels.
+        As the weight increases, the morphed correspondences become closer to that of <i>George</i>'s image, and the color of the image dissolves to <i>George</i>'s color.
+        When the Morph Weight reaches 1, the output image becomes identical to the original <i>George</i>.
+        This morphed image sequence is played at 50ms per frame to produce the morphing GIF shown in Figure 3.
+    </p>
+    <figure>
+        <img src="media/morph.gif" alt="Figure 3" width=50%, height=auto>
+        <figcaption>Figure 3: Morphing sequence of <i>Elon Musk</i> and <i>George_Clooney</i>.</figcaption>
+    </figure>
+</section>
+
+<section>
+    <h3>
+        4. Mean Face of Population
+    </h3>
+    <p>
+        Using 68 coordinates, we get to align and morph two faces into a midway face, or <b>Mean Face</b>.
+        The same process can be adapted on a larger population. I computed the mean face of 12 Brazilian male
+        using closeup face images from the <a href= "https://fei.edu.br/~cet/facedatabase.html"> FEI Face Database</a>.
+        The 12 face closeups I used are shown in Figure 4, and the output mean face is shown in Figure 5.
+    </p>
+    <figure>
+        <img src="media/grim_faces.png" alt="Figure 4" width=100%, height=auto>
+        <figcaption>
+            Figure 4: Faces of Brazilian male.
+        </figcaption>
+    </figure>
+    <figure>
+        <img src="media/mean_img_regular.png" alt="Figure 5" width=30%, height=auto>
+        <figcaption>
+            Figure 5: Mean face of Brazilian male.
+        </figcaption>
+    </figure>
+    <p>
+        I aligned my face to the mean face to generate a Brazilian version of me, but still kept its color.
+        This is similar to the morphing progress introduced in Section 3 only without the Cross-Dissolve.
+        The output image is shown in Figure 6.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/me.png" alt="Figure 5a" width=100%, height=auto>
+                <figcaption>
+                    Figure 6a: My face.<br>
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/me_morphed.png" alt="Figure 5b" width=100%, height=auto>
+                <figcaption>
+                    Figure 6b: My face Brazilian version.<br>
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+</section>
+
+<section>
+    <h3>
+        5. Make Me Smile! (Bells & Whistles)
+    </h3>
+    <p>
+        In order to generate a smiling face using the original grim face of myself, 
+        I aligned my face to the mean face of a smiling Brazilian population.
+        Figure 7, 8, 9 shows the smiling population, mean face, and my face before and after alignment, respectively.
+
+    </p>
+    <figure>
+        <img src="media/smiling_faces.png" alt="Figure 7" width=100%, height=auto>
+        <figcaption>
+            Figure 7: Faces of smiling Brazilian male.
+        </figcaption>
+    </figure>
+    <figure>
+        <img src="media/mean_img_smile.png" alt="Figure 8" width=30%, height=auto>
+        <figcaption>
+            Figure 8: Mean face of smiling Brazilian male.
+        </figcaption>
+    </figure>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/me.png" alt="Figure 9a" width=100%, height=auto>
+                <figcaption>
+                    Figure 9a: My face.<br>
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/me_smile.png" alt="Figure 9b" width=100%, height=auto>
+                <figcaption>
+                    Figure 9b: My face smiling.<br>
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+</section>
+
+
+
+<p>* Finished on Oct 2, 2024.</p>
+
+</body>
+</html>
