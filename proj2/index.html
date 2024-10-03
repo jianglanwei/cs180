@@ -43,13 +43,13 @@
     </h3>
     <p>
         By applying filters and analyzing frequencies, images can be processed and combined in interesting ways.
-        In the first part of this project, edge detection is conducted by applying the <i>Finite Difference Filter</i>. 
-        <i>Gaussian Filter</i> is applied to get rid of the unnecessary wrinkles. 
-        Then, images can be sharpened by stacking its edges onto itself.
+        In the first part of this project, edge detection is conducted by applying the <b>Finite Difference Filter</b>. 
+        <b>Gaussian Filter</b> is applied to get rid of the unnecessary wrinkles. 
+        Then, images are sharpened by stacking its edges onto itself.
         The second part of this project consists of two image binding tasks. 
         The first task generates Hybrid Image by adding the high frequency of one image to the low frequency of another.
         Both successful and failing attempts are introduced.
-        The second task blends images by applying the <i>Gaussian Stack</i> and the <i>Laplacian Stack</i>.
+        The second task blends images by applying the <b>Gaussian Stack</b> and the <b>Laplacian Stack</b>.
     </p>
 </section>
 
@@ -113,19 +113,19 @@
     <p>
         It can be obtained that the resulting edge image shown in Figure 1f still contains unwanted noise.
         To remove the noise, I smoothed the image before edge detection by applying <a href = "https://en.wikipedia.org/wiki/Gaussian_filter">Gaussian Filter</a> with a kernel size of 9 and a sigma of 1.5.
-        The resulting edge image is shown in Figure 2a. In another attempt, I generated a <i>Blurred Finite Difference Filter</i> by 
-        conducting convolution on the <i>Gaussian Filter</i> and the two <i>Finite Difference Filters</i>, and applied the combined filters directly on the original image.
+        The resulting edge image is shown in Figure 2a. In another attempt, I generated a <b>Blurred Finite Difference Filter</b> by 
+        conducting convolution on the Gaussian Filter and the two Finite Difference Filters, and applied the combined filters directly on the original image.
         This result is shown in Figure 2b. 
     </p>
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
                 <img src="media/edge_smoothed_uncombined_filter.png" alt="Figure 2a" width=100%, height=auto>
-                <figcaption>Figure 2a: Noiseless edge image by applying <i>Gaussian Filter</i> before edge detection.</figcaption>
+                <figcaption>Figure 2a: Noiseless edge image by applying Gaussian Filter before edge detection.</figcaption>
             </figure></td>
             <td width = 50%><figure>
                 <img src="media/edge_smoothed_combined_filter.png" alt="Figure 2b" width=100%, height=auto>
-                <figcaption>Figure 2b: Noiseless edge image by combining <i>Gaussian Filter</i> with <i>Finite Difference Filters</i>.</figcaption>
+                <figcaption>Figure 2b: Noiseless edge image by combining Gaussian Filter with Finite Difference Filters.</figcaption>
             </figure></td>
         </tr>
     </table>
@@ -141,8 +141,8 @@
     <p>
         Image sharpening can emphasize the details of the image, making the image "clearer" when observed by human eyes. 
         I sharpened the images using the <a href= "https://en.wikipedia.org/wiki/Unsharp_masking"> Unsharp Masking </a> technic. 
-        First, a <i>Gaussian Filter</i> is applied to the target image to generate a blurred image, which contains the low frequency features of the image.
-        Sigma in the <i>Gaussian Filter</i> is always set as 1/6 of the kernel size.
+        First, a <b>Gaussian Filter</b> is applied to the target image to generate a blurred image, which contains the low frequency features of the image.
+        Sigma in the Gaussian Filter is always set as 1/6 of the kernel size.
         Then, the high-frequency details are obtained by subtracting the low frequency features from the original image. 
         These details are emphasized in the final image by <i>sharpened_img</i> = <i>original_img</i> + <i>high_freq</i> * <i>alpha</i>.
         Figure 3, 4 shows the sharpening result of the <i>taj</i> and <i>forest</i> image.
@@ -379,13 +379,13 @@
     </h3>
     <p>
         When blending two images together, it would seem more natural if the high frequency details are not stacked together 
-        while the low frequency background color change gradually between the images. I implemented <i>Laplacian Stack</i>
-        to obtain the image features under different frequencies. <i>Laplacian Stack</i> is calculated using the <i>Gaussian Stack</i>. 
-        Each layer in the <i>Gaussian Stack</i> blurs the image from the last layer using <i>Gaussian Filter</i>, 
-        using an increasing larger kernel size as the layers go deep. The first layer in the <i>Gaussian Stack</i> is the original image.
-        <i>Laplacian Stack</i> is generated by <i>lstack</i>[<i>i</i>]</i> = <i>gstack</i>[<i>i</i>]</i> - <i>gstack</i>[<i>i</i> + 1]</i>.
-        In this way, only the features in a certain range of frequency are left in each layers of the <i>Laplacian Stack</i>. The last layer of 
-        the <i>Laplacian Stack</i> is the last layer of the image's <i>Gaussian Stack</i>.
+        while the low frequency background color change gradually between the images. I implemented <b>Laplacian Stack</b>
+        to obtain the image features under different frequencies. Laplacian Stack is calculated using the Gaussian Stack. 
+        Each layer in the Gaussian Stack blurs the image from the last layer using Gaussian Filter, 
+        using an increasing larger kernel size as the layers go deep. The first layer in the Gaussian Stack is the original image.
+        Laplacian Stack is generated by <i>lstack</i>[<i>i</i>]</i> = <i>gstack</i>[<i>i</i>]</i> - <i>gstack</i>[<i>i</i> + 1]</i>.
+        In this way, only the features in a certain range of frequency are left in each layers of the Laplacian Stack. The last layer of 
+        the Laplacian Stack is the last layer of the image's Gaussian Stack.
     </p>
     <p>
         The images are blended using a mask image. The mask image is first blurred by different degree using the <i>Gaussian Stack</i>.
@@ -394,8 +394,8 @@
     </p>
     <p>
         Figure 10 shows my attempt of blending the <i>apple</i> image (Figure 10a) and the <i>orange</i> image (Figure 10c) using mask image(Figure 10b).
-        Figure 11 shows the <i>Laplacian Stack</i> of this process, where the left column is the <i>Laplacian Stack</i> of the <i>apple</i> image,
-        the right column is the <i>Laplacian Stack</i> of the <i>orange</i> image, and the middle column is the blending result of each layer, 
+        Figure 11 shows the Laplacian Stack of this process, where the left column is the Laplacian Stack of the <i>apple</i> image,
+        the right column is the Laplacian Stack of the <i>orange</i> image, and the middle column is the blending result of each layer, 
         whose sum is the blended image shown in Figure 10d.
     </p>
     <table class="center" style="margin-left:auto;margin-right:auto;">
@@ -432,7 +432,7 @@
     <figure>
         <img src="media/lstack.png" alt="Figure 11" width=75%, height=auto>
         <figcaption>
-            Figure 11: <i>Laplacian Stack</i> of the <i>Oraple</i> image blending process.
+            Figure 11: Laplacian Stack of the <i>Oraple</i> image blending process.
         </figcaption>
     </figure>
     <p>
@@ -473,21 +473,21 @@
     </figure>
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
-            <td width = 33%><figure>
+            <td width = 30%><figure>
                 <img src="media/mike.jpg" alt="Figure 13a" width=100%, height=auto>
                 <figcaption>
                     Figure 13a: Image of <i>Mike</i>.<br>
                     Contributed the scornful eyes.
                 </figcaption>
             </figure></td>
-            <td width = 33%><figure>
+            <td width = 30%><figure>
                 <img src="media/mikaroo_mask.jpg" alt="Figure 13b" width=100%, height=auto>
                 <figcaption>
                     Figure 13b: Mask image.<br>
                     &nbsp;
                 </figcaption>
             </figure></td>
-            <td width = 33%><figure>
+            <td width = 30%><figure>
                 <img src="media/kangaroo.jpg" alt="Figure 13c" width=100%, height=auto>
                 <figcaption>
                     Figure 13c: Image of a kangaroo.<br>
@@ -497,7 +497,7 @@
         </tr>
     </table>
     <figure>
-        <img src="media/mikaroo.png" alt="Figure 13d" width=50%, height=auto>
+        <img src="media/mikaroo.png" alt="Figure 13d" width=35%, height=auto>
         <figcaption>
             Figure 13d: A <b>scornful</b> kangaroo.
         </figcaption>
