@@ -1,0 +1,200 @@
+<html>
+<head>
+    <title>David Wei's CS180 Project 4</title>
+    <style>
+        h2 {text-align: center;}
+        h3 {text-align: left;}
+        h4 {text-align: left;}
+        p {text-align: left;}
+        div {text-align: center;}
+        nav {text-align: right;}
+        figure {
+            padding: 4px;
+            margin: auto;
+        }
+        figcaption {
+            background-color: white;
+            color: black;
+            padding: 2px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h2>
+        <b>CS180-Proj4: Stitching Photo Mosaics</b>
+    </h2>
+    <div>
+        David Wei<br>
+        <a href= "mailto: david_wei@berkeley.edu"> david_wei@berkeley.edu </a>
+        <hr>
+    <div>
+    <nav>
+        <a href= "https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj4/"> Project Introduction </a> |
+        <a href= "https://github.com/davidpaulwei/cs180/tree/main/proj4/code"> My Code </a> |
+        <a href= "https://davidpaulwei.github.io/cs180"> All My CS180 Projects </a>
+    </nav>
+    
+
+    
+<section>
+    <h3>
+        1. Introduction
+    </h3>
+    <p>
+        Project 4 consists two parts: <b>Image Warping and Mosaicing</b> (Part A) and <b>Feature Matching for Autostitching</b> (Part B).
+        In Part A, I rectified images by warping them using <b>Perspective Transform</b>. 
+        The transformation matrix was calculated by coordinates of correspondences before and after their transformation.
+        I also blended pairs of images into <b>mosaics</b>. This is done by warping one of the images so that its transformed correspondences aligns with the correspondences of the other. 
+        Part B is yet to be finished.
+    </p>
+</section>
+
+<section>
+    <h3>
+        A1. Image Rectification
+    </h3>
+    <p>
+        <a href= "https://en.wikipedia.org/wiki/Image_rectification"> Image rectification</a> is a transformation process that projects images onto a common image plane,
+        where idealy a rectangular object in the image will be wrapped into its original rectangular shape.
+        To do this, I manually selected the corners of a rectangular object in the image as the image's correspondences, these correspondences should make up a geometric rectangle after warpping.
+        Figure 1 shows the correspondences of a sign image and a sheet image.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 55%><figure>
+                <img src="media/sign_pt.png" alt="Figure 1a" width=100%, height=auto>
+                <figcaption>Figure 1a: Sign image correspondences.</figcaption>
+            </figure></td>
+            <td width = 45%><figure>
+                <img src="media/sheet_pt.png" alt="Figure 1b" width=100%, height=auto>
+                <figcaption>Figure 1b: Sheet image correspondences.</figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        The images are warped using <a href="https://en.wikipedia.org/wiki/3D_projection#Perspective_projection"> Perspective Transform</a>.
+        <b>Perspective Transform</b> is denoted as
+        \[
+            \begin{bmatrix} wx' \\ wy' \\ w \end{bmatrix}
+            =
+            \begin{bmatrix} a & b & c \\ d & e & f \\ g & h & 1 \end{bmatrix}
+            \begin{bmatrix} x \\ y \\ 1 \end{bmatrix},
+        \]
+        where (<i>x</i>, <i>y</i>) is the pixel coordinate before the transform, (<i>x'</i>, <i>y'</i>) is its coordinate after the transform,
+        and the middle 3*3 matrix is the <b>Transformation Matrix</b> we wish to obtain.
+    </p>
+    <p>
+        The <b>Transformation matrix</b> can be calculated by solving the equation
+        \[
+            \begin{bmatrix}
+            x & y & 1 & 0 & 0 & 0 & -xx' & -yx' \\
+            0 & 0 & 0 & x & y & 1 & -xy' & -yy' \\
+            \end{bmatrix}
+            \begin{bmatrix} a \\ b \\ c \\ d \\ e \\ f \\ g \\ h \end{bmatrix}
+            =
+            \begin{bmatrix} x' \\ y' \end{bmatrix},
+        \]
+        where (<i>x</i>, <i>y</i>) and (<i>x'</i>, <i>y'</i>) is the coordinate of a correspondence before and after the transform, respectively.
+        The equation should have a single solution when the number of correspondences is fixed to 4. When more than 4 correspondences exist, 
+        an approximate solution is reached by solving the equation using the first four correspondences, 
+        and <a href="https://en.wikipedia.org/wiki/Gradient_descent">Gradient Descent</a> 
+        is applied to adjust the <b>Transformation Matrix</b>. 
+        The loss function is set as the mean-square-loss between the correspondences' coordinates after transformation using the current matrix 
+        and their true coordinates after transformation.
+    </p>
+    <p>
+        Figure 2 shows the rectified image using <b>Perspective Transformation</b>.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 55%><figure>
+                <img src="media/sign_rectificated.png" alt="Figure 2a" width=100%, height=auto>
+                <figcaption>Figure 2a: Rectified sign image.</figcaption>
+            </figure></td>
+            <td width = 45%><figure>
+                <img src="media/sheet_rectificated.png" alt="Figure 2b" width=100%, height=auto>
+                <figcaption>Figure 2b: Rectified sheet image.</figcaption>
+            </figure></td>
+        </tr>
+    </table>
+</section>
+
+<section>
+    <h3>
+        A2. Image Mosaicing
+    </h3>
+    <p>
+        An <a href="https://en.wikipedia.org/wiki/Image_mosaic">Image Mosaic</a>
+        is a compound image created by stitching together a series of adjacent pictures.
+        To create an <b>Image Mosaic</b>, I selected correspondences on two images, 
+        and used <b>Perspective Transform</b> to warp one of the image so its correspondences after transformation
+        match the correspondences of the second image. Figure 3 shows the correspondences of two 
+        <a href="https://en.wikipedia.org/wiki/Sather_Tower">Sather Tower</a> images I filmed and their mosaic image.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/tower_top_pt.png" alt="Figure 3a" width=100%, height=auto>
+                <figcaption>Figure 3a: Correspondences of <i>Sather Tower</i> top.</figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/tower_bottom_pt.png" alt="Figure 3b" width=100%, height=auto>
+                <figcaption>Figure 3b: Correspondences of <i>Sather Tower</i> bottom.</figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <figure>
+        <img src="media/tower_mosaic.png" alt="Figure 3c" width=60%, height=auto>
+        <figcaption>Figure 3c: <i>Sather Tower</i> mosaic image.</figcaption>
+    </figure>
+    <p>
+        I also produced mosaic image of my <b>messy</b> room and a crossroad on my way to school.
+        They are shown in Figure 4 and 5, respectively.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/road_left.png" alt="Figure 4a" width=100%, height=auto>
+                <figcaption>Figure 4a: Crossroad left.</figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/road_right.png" alt="Figure 4b" width=100%, height=auto>
+                <figcaption>Figure 4b: Crossroad right.</figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <figure>
+        <img src="media/road_mosaic.png" alt="Figure 4c" width=100%, height=auto>
+        <figcaption>Figure 4c: Crossroad mosaic image.</figcaption>
+    </figure>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 10%></td>
+            <td width = 40%><figure>
+                <img src="media/room_left.png" alt="Figure 5a" width=100%, height=auto>
+                <figcaption>Figure 5a: My room left.</figcaption>
+            </figure></td>
+            <td width = 40%><figure>
+                <img src="media/room_right.png" alt="Figure 5b" width=100%, height=auto>
+                <figcaption>Figure 5b: My room right.</figcaption>
+            </figure></td>
+            <td width = 10%></td>
+        </tr>
+    </table>
+    <figure>
+        <img src="media/room_mosaic.png" alt="Figure 5c" width=60%, height=auto>
+        <figcaption>Figure 5c: My room mosaic image.</figcaption>
+    </figure>
+</section>
+
+<p>
+    * Part A finished on Oct 14, 2024, Part B is yet to be finished.
+</p>
+
+</body>
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</html>
