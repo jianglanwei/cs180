@@ -114,7 +114,8 @@ def warp_img(img: np.ndarray, # input image.
     return out_img, (offset_y, offset_x)
 
 def alpha_blend(img1: np.ndarray, img2: np.ndarray) -> np.ndarray:
-    """blend image 1 and image 2 using alpha blend."""
+    """blend image 1 and image 2 using alpha blend.
+       - the alpha value for each pixels is obtained by distance transformation."""
     dist1 = ndimage.distance_transform_edt(img1[:,:,0])
     dist2 = ndimage.distance_transform_edt(img2[:,:,0])
     alpha_mask = dist1 / (dist1 + dist2 + 1e-2)
