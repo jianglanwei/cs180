@@ -60,7 +60,7 @@
         <a href= "https://en.wikipedia.org/wiki/Image_rectification"> Image rectification</a> is a transformation process that projects images onto a common image plane,
         where idealy a rectangular object in the image will be wrapped into its original rectangular shape.
         To do this, I manually selected the corners of a rectangular object in the image as the image's correspondences, these correspondences should make up a geometric rectangle after warpping.
-        Figure 1 shows the correspondences of a sign image and a sheet image.
+        Figure 1 shows the correspondences (blue dots) of a sign image and a sheet image.
     </p>
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
@@ -131,7 +131,7 @@
         is a compound image created by stitching together a series of adjacent pictures.
         To create an <b>Image Mosaic</b>, I selected correspondences on two images, 
         and used <b>Perspective Transform</b> to warp one of the image so its correspondences after transformation
-        match the correspondences of the second image. Figure 3 shows the correspondences of two 
+        match the correspondences of the second image. The two images in Figure 3 shows the correspondences (blue dots) of two 
         <a href="https://en.wikipedia.org/wiki/Sather_Tower">Sather Tower</a> images I filmed and their mosaic image.
     </p>
     <table class="center" style="margin-left:auto;margin-right:auto;">
@@ -147,51 +147,66 @@
         </tr>
     </table>
     <figure>
-        <img src="media/tower_mosaic.png" alt="Figure 3c" width=60%, height=auto>
+        <img src="media/tower_mosaic_before_blending.png" alt="Figure 3c" width=60%, height=auto>
         <figcaption>Figure 3c: <i>Sather Tower</i> mosaic image.</figcaption>
     </figure>
     <p>
+        Modern cameras (especially phone cameras) would auto adjust images' brightness, 
+        and it is almost impossible to have the same pixel being the exact same color on two different films.
+        To erase the nasty edge between the two images, I conducted 
+        <a href="https://en.wikipedia.org/wiki/Alpha_compositing">Alpha Compositing</a>
+        to blend the overlapping region. The alpha value for each pixel is denoted as 
+        <i>alpha</i> = d1 / (d1 + d2),
+        where d1 is the pixel's distance to its closest non-overlapping point in image 1, while d2 is that of image 2.
+        The distances are quickly obtained using the <a href="https://en.wikipedia.org/wiki/Distance_transform">Distance Transform</a>
+        algorithm. The mosaic image after blending is shown in Figure 4.
+    </p>
+    <figure>
+        <img src="media/tower_mosaic.png" alt="Figure 4" width=60%, height=auto>
+        <figcaption>Figure 4: <i>Sather Tower</i> mosaic image after blending.</figcaption>
+    </figure>
+    <p>
         I also produced mosaic image of my <b>messy</b> room and a crossroad on my way to school.
-        They are shown in Figure 4 and 5, respectively.
+        They are shown in Figure 5 and 6, respectively.
     </p>
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/road_left.png" alt="Figure 4a" width=100%, height=auto>
-                <figcaption>Figure 4a: Crossroad left.</figcaption>
+                <img src="media/road_left.png" alt="Figure 5a" width=100%, height=auto>
+                <figcaption>Figure 5a: Crossroad left.</figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/road_right.png" alt="Figure 4b" width=100%, height=auto>
-                <figcaption>Figure 4b: Crossroad right.</figcaption>
+                <img src="media/road_right.png" alt="Figure 5b" width=100%, height=auto>
+                <figcaption>Figure 5b: Crossroad right.</figcaption>
             </figure></td>
         </tr>
     </table>
     <figure>
-        <img src="media/road_mosaic.png" alt="Figure 4c" width=100%, height=auto>
-        <figcaption>Figure 4c: Crossroad mosaic image.</figcaption>
+        <img src="media/road_mosaic.png" alt="Figure 5c" width=100%, height=auto>
+        <figcaption>Figure 5c: Crossroad mosaic image.</figcaption>
     </figure>
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 10%></td>
             <td width = 40%><figure>
-                <img src="media/room_left.png" alt="Figure 5a" width=100%, height=auto>
-                <figcaption>Figure 5a: My room left.</figcaption>
+                <img src="media/room_left.png" alt="Figure 6a" width=100%, height=auto>
+                <figcaption>Figure 6a: My room left.</figcaption>
             </figure></td>
             <td width = 40%><figure>
-                <img src="media/room_right.png" alt="Figure 5b" width=100%, height=auto>
-                <figcaption>Figure 5b: My room right.</figcaption>
+                <img src="media/room_right.png" alt="Figure 6b" width=100%, height=auto>
+                <figcaption>Figure 6b: My room right.</figcaption>
             </figure></td>
             <td width = 10%></td>
         </tr>
     </table>
     <figure>
-        <img src="media/room_mosaic.png" alt="Figure 5c" width=60%, height=auto>
-        <figcaption>Figure 5c: My room mosaic image.</figcaption>
+        <img src="media/room_mosaic.png" alt="Figure 6c" width=60%, height=auto>
+        <figcaption>Figure 6c: My room mosaic image.</figcaption>
     </figure>
 </section>
 
 <p>
-    * Part A finished on Oct 14, 2024, Part B is yet to be finished.
+    * Part A finished on Oct 19, 2024, Part B is yet to be finished.
 </p>
 
 </body>
