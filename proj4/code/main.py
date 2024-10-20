@@ -3,9 +3,8 @@ import matplotlib.pyplot as plt
 import pickle
 import torch
 from animator import animator
-from scipy import ndimage
+from scipy import ndimage, interpolate
 import skimage as ski
-import scipy.interpolate
 
 
 
@@ -108,7 +107,7 @@ def warp_img(img: np.ndarray, # input image.
     out_img = np.zeros(img_shape)
     for layer_idx in range(3):
         layer_values = img[:, :, layer_idx].reshape(-1)
-        interpolated_values = scipy.interpolate.griddata(warpped_pixels, layer_values, pixel_range)
+        interpolated_values = interpolate.griddata(warpped_pixels, layer_values, pixel_range)
         for y, x, value in zip(pixel_range[0], pixel_range[1], interpolated_values):
             out_img[y, x, layer_idx] = value
     return out_img, (offset_y, offset_x)
