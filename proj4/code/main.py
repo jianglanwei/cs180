@@ -3,8 +3,10 @@ import matplotlib.pyplot as plt
 import pickle
 import torch
 from animator import animator
+from scipy import ndimage
 import skimage as ski
 import scipy.interpolate
+
 
 
 LR_TOWER = 1e-7
@@ -81,21 +83,21 @@ def compute_mat(img1_pts: np.ndarray, img2_pts: np.ndarray, lr: float = None) ->
 
 def snap(values: np.ndarray, range: tuple) -> list:
     """snap values within range."""
-    for value_idx, value in enumerate(values):
-        if value < range[0]:    values[value_idx] = range[0]
-        elif value > range[1]:  values[value_idx] = range[1]
+    values = np.where(values < range[0], range[0], values)
+    values = np.where(values > range[1], range[1], values)
     return values
 
 def warp_img(img: np.ndarray, # input image.
              mat: np.ndarray, # perspective transform matrix.
              mosaic: bool = False, # when True, output image will save space for the unwarped image.
-             crop_corners: np.ndarray = None # when not None, output image will be cropped based on corners.
+             crop_corners: np.ndarray = None # when not None, cropped based on image's transformed corners.
              ) -> tuple[np.ndarray, tuple]: # returns warpped image and offsets.
-    """warp image according to the given perspective transformation matrix."""
-    if crop_corners is None:  
-        img_corners = np.array([[0, 0], [img.shape[0] - 1, 0], 
-                                [img.shape[0] - 1, img.shape[1] - 1], [0, img.shape[1] - 1]])
-        crop_corners = perspective_trans(mat, img_corners)
+    """warp image according to the given perspective transformation matrix.
+       - outputs: output image; offsets during transformation."""
+    if mosaic:
+        img_corners = np.array([[0, 0], [img.shape[0]-1, 0], 
+                                [img.shape[0]-1, img.shape[1]-1], [0, img.shape[1]-1]])
+        crop_corners = perspective_trans(mat, img_corners) # image transformed corners.
     min_y, max_y = crop_corners[:, 0].min(), crop_corners[:, 0].max()
     min_x, max_x = crop_corners[:, 1].min(), crop_corners[:, 1].max()
     offset_y = 0 if min_y >= 0 and mosaic else -min_y + 1
@@ -103,34 +105,46 @@ def warp_img(img: np.ndarray, # input image.
     pixel_range = ski.draw.polygon(crop_corners[:, 0]+offset_y, crop_corners[:, 1]+offset_x)
     warpped_pixels = perspective_trans(mat, np.argwhere(img[:,:,0] >= 0)) + np.array([offset_y, offset_x])
     img_shape = (max(img.shape[0], max_y) + offset_y + 1, max(img.shape[1], max_x) + offset_x + 1, 3)
-    out_img = np.ones(img_shape)
+    out_img = np.zeros(img_shape)
     for layer_idx in range(3):
         layer_values = img[:, :, layer_idx].reshape(-1)
         interpolated_values = scipy.interpolate.griddata(warpped_pixels, layer_values, pixel_range)
-        for y, x, value in zip(pixel_range[0], pixel_range[1], snap(interpolated_values, (0, 1))):
+        for y, x, value in zip(pixel_range[0], pixel_range[1], interpolated_values):
             out_img[y, x, layer_idx] = value
     return out_img, (offset_y, offset_x)
+
+def alpha_blend(img1: np.ndarray, img2: np.ndarray) -> np.ndarray:
+    """blend image 1 and image 2 using alpha blend."""
+    dist1 = ndimage.distance_transform_edt(img1[:,:,0])
+    dist2 = ndimage.distance_transform_edt(img2[:,:,0])
+    alpha_mask = dist1 / (dist1 + dist2 + 1e-2)
+    alpha_mask = np.expand_dims(alpha_mask, axis=2)
+    out_img = img1 * alpha_mask + img2 * (1 - alpha_mask)
+    return out_img
 
 def mosaic(img1_name: str, img2_name: str, lr: float = None) -> np.ndarray:
     """blend img1 and img2 into a mosaic image according to their correspondences.
        - img1 is the image going to be warpped."""
-    img1 = plt.imread("media/" + img1_name + ".png")[:, :, :3]
-    img2 = plt.imread("media/" + img2_name + ".png")[:, :, :3]
+    img1 = plt.imread("media/" + img1_name + ".png")[:, :, :3] + 1e-4
+    img2 = plt.imread("media/" + img2_name + ".png")[:, :, :3] + 1e-4
     img1_pts, img2_pts = read_points(img1_name), read_points(img2_name)
     mat = compute_mat(img1_pts, img2_pts, lr=lr)
-    out_img, (offset_y, offset_x) = warp_img(img1, mat, mosaic=True)
-    out_img[offset_y:offset_y+img2.shape[0], offset_x:offset_x+img2.shape[1]] = img2
-    return out_img
+    out_img1, (offset_y, offset_x)= warp_img(img1, mat, mosaic=True)
+    out_img2 = np.zeros(out_img1.shape)
+    out_img2[offset_y:offset_y+img2.shape[0], offset_x:offset_x+img2.shape[1]] = img2
+    out_img_blend = alpha_blend(out_img1, out_img2)
+    out_img_blend = snap(np.where(out_img_blend == 0, 1, out_img_blend), (0, 1))
+    return out_img_blend
 
 def rectification(img_name: str) -> np.ndarray:
     """Rectificate image according to its correspondences. 
        - Idealy, the rectangular object in the image 
          will be streched into a rectangle after transformation."""
-    img = plt.imread("media/" + img_name + ".png")
+    img = plt.imread("media/" + img_name + ".png") + 1e-4
     with open("media/" + img_name + "_pt.pickle", "rb") as file:
         img_pts = pickle.load(file)
-    crop_corners = np.array([[0, 0], [0, img.shape[1]],
-                          [img.shape[0], img.shape[1]], [img.shape[0], 0]])
+    crop_corners = np.array([[0, 0], [0, img.shape[1]-1],
+                          [img.shape[0]-1, img.shape[1]-1], [img.shape[0]-1, 0]])
     rectificated_pts = np.array([
         [img.shape[0] / 6, img.shape[1] / 6],
         [img.shape[0] / 6, img.shape[1] * 5 / 6],
@@ -140,6 +154,7 @@ def rectification(img_name: str) -> np.ndarray:
     mat = compute_mat(img_pts, rectificated_pts)
     out_img, (offset_y, offset_x) = warp_img(img, mat, mosaic=False, crop_corners=crop_corners)
     out_img = out_img[offset_y:, offset_x:]
+    out_img = snap(np.where(out_img == 0, 1, out_img), (0, 1))
     return out_img
 
 
