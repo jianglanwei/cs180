@@ -8,8 +8,9 @@
 2. `pickle`
 3. `matplotlib.pyplot`
 4. `skimage`
-5. `scipy.interpolate`
-6. `torch`
+5. `torch`
+6. `scipy.interpolate`
+7. `scipy.ndimage`
 
 Here is a brief introduction of the functions included in `main.py`:
 
