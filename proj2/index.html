@@ -58,11 +58,11 @@
         2. Edge Detection by Blurred Finite Difference
     </h3>
     <p>
-        I detected the edges by applying the <i>dx</i> and <i>dy</i> <a href = "https://en.wikipedia.org/wiki/Finite_difference">Finite Difference</a> Filter,
+        I detected the edges by applying the  <a href = "https://en.wikipedia.org/wiki/Finite_difference">Finite Difference</a> Filters <i>dx</i> and <i>dy</i>,
         denoted by <i>dx</i> = [1, -1], <i>dy</i> = [1, -1]^<i>T</i> respectively. 
-        The horizontal and vertical edges are calculated by conducting convolution on the image and the two filters,
-        and are later combined into a single edge image. 
-        To reduce the unnecessary impact of miner wrinkles, I conducted binaryzation on the edge images. 
+        The horizontal and vertical edges are calculated by conducting convolution on the image using the filters, 
+        and are combined into a single <b>edge image</b> using <a href="https://en.wikipedia.org/wiki/Euclidean_distance">Euclidean Distance</a>.
+        To erase the wrinkles, I conducted <b>binaryzation</b> on the edge image. 
         Figure 1 shows the original <i>Cameraman</i> image and its horizontal, vertical and combined edge image before and after their binaryzation.
     </p>
         
@@ -111,11 +111,12 @@
         </tr>
     </table>
     <p>
-        It can be obtained that the resulting edge image shown in Figure 1f still contains unwanted noise.
-        To remove the noise, I smoothed the image before edge detection by applying <a href = "https://en.wikipedia.org/wiki/Gaussian_filter">Gaussian Filter</a> with a kernel size of 9 and a sigma of 1.5.
-        The resulting edge image is shown in Figure 2a. In another attempt, I generated a <b>Blurred Finite Difference Filter</b> by 
-        conducting convolution on the Gaussian Filter and the two Finite Difference Filters, and applied the combined filters directly on the original image.
-        This result is shown in Figure 2b. 
+        The edge image shown in Figure 1f contains unwanted noise.
+        To remove the noise, I smoothed the original image by applying <a href = "https://en.wikipedia.org/wiki/Gaussian_filter">Gaussian Filter</a> 
+        with a kernel size of 9 and a sigma of 1.5 before edge detection.
+        The edge image produced this time is shown in Figure 2a. In another attempt, I generated a <b>Blurred Finite Difference Filter</b> by 
+        conducting convolution on the <b>Gaussian Filter</b> and the two <b>Finite Difference Filters</b>, and applied the combined filters directly on the original image.
+        The result of this second attempt is shown in Figure 2b.
     </p>
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
@@ -139,7 +140,7 @@
         3. Image Sharpening
     </h3>
     <p>
-        Image sharpening can emphasize the details of the image, making the image "clearer" when observed by human eyes. 
+        <b>Image sharpening</b> can emphasize the details of the image, making the image "clearer" when observed by human eyes. 
         I sharpened the images using the <a href= "https://en.wikipedia.org/wiki/Unsharp_masking"> Unsharp Masking </a> technic. 
         First, a <b>Gaussian Filter</b> is applied to the target image to generate a blurred image, which contains the low frequency features of the image.
         Sigma in the Gaussian Filter is always set as 1/6 of the kernel size.
@@ -189,7 +190,7 @@
 
     <p>
         In order to evaluate my image sharpening approach, I took the <i>tiger</i> image, blurred it, and then sharpened it.
-        By sharpening the blurred image the high frequency details lost in the blurring process should be restored.
+        The high frequency details lost in the blurring process should be restored.
         Figure 5 shows the result.
     </p>
 
@@ -220,7 +221,7 @@
 
     <p>
         The tiger in the sharpened image seems more vivid than the tiger in the blurred image.
-        This indicates that by image sharpening a lower resolution image can show similar effect on human eyes.
+        This indicates that a lower resolution image can show similar visual effects on human eyes using image sharpening.
     </p>
 
 </section>
@@ -233,7 +234,7 @@
         Human eyes can only identify color changes in a range of frequencies. 
         When the colors change too swift or too slow on an image, humans can't identify the change.
         I combined two images by adding the low frequency features of one image and the high frequency details of the other.
-        In this way, ideally, when looked afar, only the low frequency features from the first image would be noticed.
+        In this way, when looked afar, only the low frequency features from the first image would be noticed.
         When looked closely, only the high frequency details of the second image would be noticed.
         The following are three attempts of generating Hybrid Image.
     </p>
@@ -241,7 +242,7 @@
         4.1 Who is <i>Spiderman</i>? Take off your glasses!
     </h4>
     <p>
-        By combining the high frequency details of the <i>Spiderman</i> with mask on and the low frequency features of the face <i>Peter Parker</i> casted by <i>Tobey Maguire</i>,
+        By combining the high frequency details of <i>Spiderman</i> with mask on and the low frequency features of the face <i>Peter Parker</i> casted by <i>Tobey Maguire</i>,
         <i>Spiderman</i> should have mask on when looked closely. However, when look afar (or simply take off your nearsighted glasses like <i>Peter</i> did),
         <i>Spiderman</i> will reveal his true identity!
     </p>
@@ -378,25 +379,34 @@
         5. Multiresolution Blending
     </h3>
     <p>
-        When blending two images together, it would seem more natural if the high frequency details are not stacked together 
-        while the low frequency background color change gradually between the images. I implemented <b>Laplacian Stack</b>
+        When blending two images together, it would seem more natural if the high-frequency patterns are not stacked together 
+        while the low-frequency background color change gradually between the images. I implemented <b>Laplacian Stack</b>
         to obtain the image features under different frequencies. Laplacian Stack is calculated using the Gaussian Stack. 
-        Each layer in the Gaussian Stack blurs the image from the last layer using Gaussian Filter, 
-        using an increasing larger kernel size as the layers go deep. The first layer in the Gaussian Stack is the original image.
-        Laplacian Stack is generated by <i>lstack</i>[<i>i</i>]</i> = <i>gstack</i>[<i>i</i>]</i> - <i>gstack</i>[<i>i</i> + 1]</i>.
-        In this way, only the features in a certain range of frequency are left in each layers of the Laplacian Stack. The last layer of 
-        the Laplacian Stack is the last layer of the image's Gaussian Stack.
+        Each layer in the Gaussian Stack blurs the image from the last layer using the Gaussian Filter, 
+        with an increasing larger kernel size as the layers go deep. The first layer in the Gaussian Stack is the original image.
+        Each layer in the Laplacian Stack is denoted by
+        \[
+            lstack[i] = gstack[i] - gstack[i + 1];
+        \]
+        \[
+            lstack[-1] = gstack[-1].
+        \]
+        Each layer in the Laplacian Stack contains a certain range of frequency, and should be blended in different ways. 
     </p>
     <p>
-        The images are blended using a mask image. The mask image is first blurred by different degree using the <i>Gaussian Stack</i>.
-        The blending result for each layer is denoted by <i>blend</i>[<i>i</i>]</i> = <i>lstack1</i>[<i>i</i>]</i> * <i>mask</i>[<i>i</i>]</i>
-        + <i>lstack2</i>[<i>i</i>]</i> * (1 - <i>mask</i>[<i>i</i>]</i>). The final blended image is the sum of the blending result in each layer.
+        The images are blended under the instruction of a <b>mask image</b>. Each layer is assigned with a blurred version of the mask image.
+        The deeper the layer, the more blurred (using larger <b>Gaussian Filter</b>) the mask image is.
+        First, a blend image for each layer is generated, denoted by 
+        \[
+        blend[i] = lstack1[i] * mask[i] + lstack2[i] * (1 - mask[i]).
+        \]
+        Then, the blended layers are added together, and the result is the blending output.
     </p>
     <p>
-        Figure 10 shows my attempt of blending the <i>apple</i> image (Figure 10a) and the <i>orange</i> image (Figure 10c) using mask image(Figure 10b).
+        Figure 10 shows my attempt of blending the <i>apple</i> image (Figure 10a) and the <i>orange</i> image (Figure 10c) using mask image (Figure 10b).
         Figure 11 shows the Laplacian Stack of this process, where the left column is the Laplacian Stack of the <i>apple</i> image,
-        the right column is the Laplacian Stack of the <i>orange</i> image, and the middle column is the blending result of each layer, 
-        whose sum is the blended image shown in Figure 10d.
+        the right column is the Laplacian Stack of the <i>orange</i> image, and the middle column is the blended layers.
+        The blending output is shown in Figure 10d.
     </p>
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
@@ -547,5 +557,8 @@
 
 <p>* Finished on Sep 23, 2024.</p>
 
+
 </body>
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </html>
