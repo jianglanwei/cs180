@@ -90,7 +90,7 @@
     <p>
         To find the alignment resulting in the lowest loss, I exhaustively searched all the possible candidates
         within a range, where the center of the blue or green layer may be aligned to one of the pixels in a square on the red layer. 
-        The square is defined by its center and its length of side. I initially set the square's center as the red layer's center point, and its side length as 21 pixels.
+        The square is defined by its center and its length of side. I initially set the square at the centre of the red layer, with its sides 21 pixels long.
         After traversing all 441 candidates, the alignment with the lowest loss is chosen. I adapted this process on the three smaller jpg images, 
         <i>cathedral.jpg</i>, <i>monastery.jpg</i> and <i>tobolsk.jpg</i> respectively. In Figure 2, 3, 4, 
         I compare the images stacked directly without the alignment process to the aligned images.
@@ -162,7 +162,7 @@
     </h3>
     <p>
         Although exhaustive search has proven effective on small jpg images, when adapted on larger tif images, 
-        the optimal blue and green shift may exceed the range of (-10, 10) pixels. In order to expand the range, 
+        the optimal blue and green shift may exceed the range of [-10, 10] pixels. In order to expand the range, 
         more time is needed. Time complexity increase dramatically along with the expansion of search range. 
         To improve time efficiency, I adapted the idea of <a href= "https://en.wikipedia.org/wiki/Pyramid_(image_processing)">Image Pyramid</a>.
         For every large tif image, I downsample it using average pooling with a factor of 3 along each direction,
