@@ -145,7 +145,10 @@
         First, a <b>Gaussian Filter</b> is applied to the target image to generate a blurred image, which contains the low frequency features of the image.
         Sigma in the Gaussian Filter is always set as 1/6 of the kernel size.
         Then, the high-frequency details are obtained by subtracting the low frequency features from the original image. 
-        These details are emphasized in the final image by <i>sharpened_img</i> = <i>original_img</i> + <i>high_freq</i> * <i>alpha</i>.
+        These details are emphasized in the final image by 
+        \[
+            IMG_{sharpened} = IMG_{original} + \alpha \times IMG_{high-frequency}.
+        \]
         Figure 3, 4 shows the sharpening result of the <i>taj</i> and <i>forest</i> image.
     </p>
 
