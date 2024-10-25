@@ -33,17 +33,19 @@
         <li>
             <b><a href= "https://davidpaulwei.github.io/cs180/proj1/">Project 1</a>
             : Colorizing the <i>Prokudin-Gorskii</i> Photo Collection<br></b>
-            <i>Prokudin-Gorskii</i> photographed the Russian Empire using black-and-white negatives with red, green and blue filters,
+            &nbsp;<i>Prokudin-Gorskii</i> photographed the Russian Empire using black-and-white negatives with red, green and blue filters,
             hoping future technologies could stack the three layers to produce colored image.
             I took the digitized negatives of <i>Prokudin-Gorskii</i>'s work to produce the RGB color image.
             The original three color layers from <i>Prokudin-Gorskii</i>'s work were not accurately aligned, 
             so I designed an alignment algorithm using <b>Image Pyramid</b> and <b>Edge Detection</b> to preprocess the layers before stacking them together. 
 
         </li>
+    </ol>
+    <ol>
         <li>
             <b><a href= "https://davidpaulwei.github.io/cs180/proj2/">Project 2</a>
             : Fun with Filters and Frequencies<br></b>
-            By applying filters and analyzing frequencies, images can be processed and combined in interesting ways.
+            &nbsp;By applying filters and analyzing frequencies, images can be processed and combined in interesting ways.
             In the first part of this project, edge detection is conducted by applying the <b>Finite Difference Filter</b>. 
             <b>Gaussian Filter</b> is applied to get rid of the unnecessary wrinkles. 
             Then, images are sharpened by stacking its edges onto itself.
@@ -52,55 +54,55 @@
             Both successful and failing attempts are introduced.
             The second task blends images by applying the <b>Gaussian Stack</b> and the <b>Laplacian Stack</b>.
         </li>
+    </ol>
+    <ol>
         <li>
             <b><a href= "https://davidpaulwei.github.io/cs180/proj3/">Project 3</a>
             : Face Morphing and Modelling a Photo Collection<br></b>
-            In the first part of this project, I morphed two face images using <b>Affine Transformation</b>.
+            &nbsp;In the first part of this project, I morphed two face images using <b>Affine Transformation</b>.
             I obtained 100 correspondences for each of the two faces and computed their average coordinates.
             <b>Triangulation</b> was conducted on the correspondences and for each triangle, <b>Affine Matrixes</b> were generated to stretch the triangles from the original image to the Midway image.
             I used <b>Cross Dissolve</b> to bind the color. I furtherly generated a sequence of 51 morphed images using different <b>Morph Weight</b> to produce the morphing GIF.
             In the second part, I computed the mean face of 12 Brazilian faces, and stretched my face into the shape of the mean face.
             I also computed the mean face of 12 smiling Brazilian faces to add a smile on my grim portrait.
         </li>
+    </ol>
+    <ol>
         <li>
-            <p>
-                Project 4 consists two parts: <b>Image Warping and Mosaicing</b> 
-                (Part A) and <b>Feature Matching for Autostitching</b> (Part B).
-            </p>
-            <p>
-                In Part A, I rectified images using <b>Perspective Transform</b>. 
-                I manually selected correspondences on the images, and warped them
-                so that their transformed correspondences form a rectangle.
-                I also produced <b>mosaics images</b> by blending pairs of images that 
-                overlap with each other. First, I manually matched a few pixels that 
-                represent the same corner of an object on the two images. Then, I 
-                treated these pixel matches as correspondences, and warped the first 
-                image so that after warping, the correspondences on the first image 
-                aligns with the correspondences on the second images. In this way, 
-                the same objects on the two images would match. Finally, I conducted 
-                <b>Alpha Blend</b> on the output mosaic to erase the edge between the 
-                two images. 
-            </p>
-            <p>
-                In Part B, I also produced mosaic images, 
-                only this time instead of manually matching the pixels, the pixel 
-                matches are automatically detected and selected.
-                Corners serve as great symbols of objects on an image, so I used 
-                <b>Harris Corner Detector</b> to find the corners on the images, and 
-                treat them as interest points. Then, I used 
-                <b>Adaptive Non-Maximal Suppression (ANMS)</b> to select a few interest 
-                points that are not only high in "corner strength", but also as 
-                uniformly distributed in the image as possible. They are the potential 
-                correspondences. Later, I matched the potential correspondences using 
-                <b>Feature Descriptors</b>. If the best match of a 
-                potential correspondence did not score significantly higher than its 
-                second-best match, I would abandon this pixel. The matched pixels
-                still may contain error. I found the optimal set of matches using the 
-                idea of <b>Random Sample Consensus (RANSAC)</b>. At last, 
-                similar to Part A, I used the optimal matches to conduct perspective 
-                transform on the first image so that it aligns with the second image, 
-                and blended the overlapping region to erase the edge.
-            </p>
+            <b><a href= "https://davidpaulwei.github.io/cs180/proj3/">Project 4</a>
+            : Autostitching and Phoro Mosaic<br></b>
+            &nbsp;Project 4 consists two parts: <b>Image Warping and Mosaicing</b> 
+            (Part A) and <b>Feature Matching for Autostitching</b> (Part B).<br>
+            &nbsp;In Part A, I rectified images using <b>Perspective Transform</b>. 
+            I manually selected correspondences on the images, and warped them
+            so that their transformed correspondences form a rectangle.
+            I also produced <b>mosaics images</b> by blending pairs of images that 
+            overlap with each other. First, I manually matched a few pixels that 
+            represent the same corner of an object on the two images. Then, I 
+            treated these pixel matches as correspondences, and warped the first 
+            image so that after warping, the correspondences on the first image 
+            aligns with the correspondences on the second images. In this way, 
+            the same objects on the two images would match. Finally, I conducted 
+            <b>Alpha Blend</b> on the output mosaic to erase the edge between the 
+            two images.<br>
+            &nbsp;In Part B, I also produced mosaic images, 
+            only this time instead of manually matching the pixels, the pixel 
+            matches are automatically detected and selected.
+            Corners serve as great symbols of objects on an image, so I used 
+            <b>Harris Corner Detector</b> to find the corners on the images, and 
+            treat them as interest points. Then, I used 
+            <b>Adaptive Non-Maximal Suppression (ANMS)</b> to select a few interest 
+            points that are not only high in "corner strength", but also as 
+            uniformly distributed in the image as possible. They are the potential 
+            correspondences. Later, I matched the potential correspondences using 
+            <b>Feature Descriptors</b>. If the best match of a 
+            potential correspondence did not score significantly higher than its 
+            second-best match, I would abandon this pixel. The matched pixels
+            still may contain error. I found the optimal set of matches using the 
+            idea of <b>Random Sample Consensus (RANSAC)</b>. At last, 
+            similar to Part A, I used the optimal matches to conduct perspective 
+            transform on the first image so that it aligns with the second image, 
+            and blended the overlapping region to erase the edge.
         </li>
     </ol>
 </section>
