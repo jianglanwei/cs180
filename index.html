@@ -40,8 +40,6 @@
             so I designed an alignment algorithm using <b>Image Pyramid</b> and <b>Edge Detection</b> to preprocess the layers before stacking them together. 
 
         </li>
-    </ol>
-    <ol>
         <li>
             <b><a href= "https://davidpaulwei.github.io/cs180/proj2/">Project 2</a>
             : Fun with Filters and Frequencies<br></b>
@@ -54,8 +52,6 @@
             Both successful and failing attempts are introduced.
             The second task blends images by applying the <b>Gaussian Stack</b> and the <b>Laplacian Stack</b>.
         </li>
-    </ol>
-    <ol>
         <li>
             <b><a href= "https://davidpaulwei.github.io/cs180/proj3/">Project 3</a>
             : Face Morphing and Modelling a Photo Collection<br></b>
@@ -66,21 +62,50 @@
             In the second part, I computed the mean face of 12 Brazilian faces, and stretched my face into the shape of the mean face.
             I also computed the mean face of 12 smiling Brazilian faces to add a smile on my grim portrait.
         </li>
-    </ol>
-    <ol>
         <li>
-            <b><a href= "https://davidpaulwei.github.io/cs180/proj4/">Project 4</a>
-            : Stitching Photo Mosaics<br></b>
-            Project 4 consists two parts: <b>Image Warping and Mosaicing</b> (Part A) and <b>Feature Matching for Autostitching</b> (Part B).
-            In Part A, I rectified images by warping them using <b>Perspective Transform</b>. 
-            The transformation matrix was calculated by coordinates of correspondences before and after their transformation.
-            I also blended pairs of images into <b>mosaics</b>. This is done by warping one of the images so that its transformed correspondences aligns with the correspondences of the other. 
-            Part B is yet to be finished.
+            <p>
+                Project 4 consists two parts: <b>Image Warping and Mosaicing</b> 
+                (Part A) and <b>Feature Matching for Autostitching</b> (Part B).
+            </p>
+            <p>
+                In Part A, I rectified images using <b>Perspective Transform</b>. 
+                I manually selected correspondences on the images, and warped them
+                so that their transformed correspondences form a rectangle.
+                I also produced <b>mosaics images</b> by blending pairs of images that 
+                overlap with each other. First, I manually matched a few pixels that 
+                represent the same corner of an object on the two images. Then, I 
+                treated these pixel matches as correspondences, and warped the first 
+                image so that after warping, the correspondences on the first image 
+                aligns with the correspondences on the second images. In this way, 
+                the same objects on the two images would match. Finally, I conducted 
+                <b>Alpha Blend</b> on the output mosaic to erase the edge between the 
+                two images. 
+            </p>
+            <p>
+                In Part B, I also produced mosaic images, 
+                only this time instead of manually matching the pixels, the pixel 
+                matches are automatically detected and selected.
+                Corners serve as great symbols of objects on an image, so I used 
+                <b>Harris Corner Detector</b> to find the corners on the images, and 
+                treat them as interest points. Then, I used 
+                <b>Adaptive Non-Maximal Suppression (ANMS)</b> to select a few interest 
+                points that are not only high in "corner strength", but also as 
+                uniformly distributed in the image as possible. They are the potential 
+                correspondences. Later, I matched the potential correspondences using 
+                <b>Feature Descriptors</b>. If the best match of a 
+                potential correspondence did not score significantly higher than its 
+                second-best match, I would abandon this pixel. The matched pixels
+                still may contain error. I found the optimal set of matches using the 
+                idea of <b>Random Sample Consensus (RANSAC)</b>. At last, 
+                similar to Part A, I used the optimal matches to conduct perspective 
+                transform on the first image so that it aligns with the second image, 
+                and blended the overlapping region to erase the edge.
+            </p>
         </li>
     </ol>
 </section>
 
-<p><br><br><br>* Last updated on Oct 14, 2024.</p>
+<p><br><br><br>* Last updated on Oct 24, 2024.</p>
 
 
 </body>
