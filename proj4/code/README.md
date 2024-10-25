@@ -33,7 +33,7 @@ Run the project in `main.py`, run it within this folder. `proj4a_func.py` and `p
 12. `dist2()`: Calculate squared distance between two sets of points.
 13. `anms()`: Conduct Adaptive Non-Maximum Suppression (ANMS) on interest points.
 14. `match()`: Match potential correspondences on two images.
-15. `ransac()`: Use Random Sample Consensus (RANSAC) to calculate transformation matrix
+15. `ransac()`: Use Random Sample Consensus (RANSAC) to calculate transformation matrix.
 16. `auto_mosaic()`: Blend image1 and image2 into a mosaic image automatically.
 17. `warp_img()`: Warp image using perspective transformation.
 18. `show_matches()`: Show potential correspondences and their matches.
