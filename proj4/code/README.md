@@ -23,7 +23,7 @@ Run the project in `main.py`, run it within this folder. `proj4a_func.py` and `p
 5.  `perspective_trans()`: Use given matrix to conduct perspective transformation on pixels.
 6. `compute_mat()`: Compute perspective transformation matrix using given correspondences. When number of correspondences on each image exceeds 4, an additional gradient descent will be applied to adjust the matrix.
 7. `warp_img()`: Warp image using perspective transformation.
-8. `alpha_blend()`: Blend the overlapping region of images using alpha blend. The alpha value for each pixels is obtained by distance transofrmation.
+8. `alpha_blend()`: Blend the overlapping region of images using alpha blend. The alpha value for each pixels is obtained by distance transformation.
 10. `mosaic()`: Blend two images into a mosaic image according to their correspondences.
 11. `rectification()`: Rectificate image according to its correspondences. Idealy, the rectangular object in the image will be streched into a rectangle after transformation.""
 
