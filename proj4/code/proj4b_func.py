@@ -29,7 +29,7 @@ ALIGN_THRESHOLD = 3 # when distance between correspondences is under threshold,
 
 def get_harris_corners(im: np.ndarray, edge_discard: int = 20
                        ) -> tuple[np.ndarray, np.ndarray]:
-    """ finds harris corners in the image. 
+    """ find harris corners in the image. 
         - harris corners near the edge are discarded. 
         - a 2d array (h) containing the h value of every pixel is also returned.
         - adapted from sample code given by course staff."""
@@ -47,15 +47,15 @@ def get_harris_corners(im: np.ndarray, edge_discard: int = 20
 
 
 def dist2(x: np.ndarray, c: np.ndarray) -> np.ndarray:
-    """ calculates squared distance between two sets of points.
+    """ calculate squared distance between two sets of points.
         - adapted from sample code given by course staff."""
     return (np.ones((c.shape[0], 1)) * np.sum((x**2).T, axis=0)).T + \
             np.ones((x.shape[0], 1)) * np.sum((c**2).T, axis=0)    - \
             2 * np.inner(x, c)
 
 def anms(points: np.ndarray, r: int = ANMS_LOCAL_RADIUS) -> np.ndarray:
-    """conduct adaptive non-maximum suppression (anms) on coordinates.
-       - return retained coordinates."""
+    """conduct adaptive non-maximum suppression (anms) on interest points.
+       - return retained interest points."""
     r2, dist2_mat = r ** 2, dist2(points, points)
     retained_pts = []
     for pt_idx in range(points.shape[0]):
@@ -74,7 +74,7 @@ def match(img1: np.ndarray, # input b&w image 1.
           points1: np.ndarray, # interest points for image 1.
           points2: np.ndarray # intereset points for image 2.
     ) -> np.ndarray: # point/correspondences matches.
-    """match interest points on two images."""
+    """match potential correspondences on two images."""
     patch_size = 2 * PATCH_RADIUS // PATCH_STEP
     patches1 = np.zeros((len(points1), patch_size, patch_size))
     patches2 = np.zeros((len(points2), patch_size, patch_size))
@@ -142,8 +142,8 @@ def show_matches(img1: np.ndarray, img2: np.ndarray, # input images.
                  img1_pts: np.ndarray, img2_pts: np.ndarray, # image interest points.
                  matches: np.ndarray): # interest-point-matches/correspondences.
     """show:
-       - interest points on images (blue dots);
-       - interest-point-matches/correspondences between images (red line/dot)."""
+       - potential correspondences on images (blue dots);
+       - matches of correspondences between images (red line/dot)."""
     fig = plt.figure()
     ax1 = fig.add_subplot(121)
     ax1.imshow(img1)
@@ -162,55 +162,3 @@ def show_matches(img1: np.ndarray, img2: np.ndarray, # input images.
                               coordsB="data", axesA=ax2, axesB=ax1, color="red")
         ax2.add_artist(con)
     plt.show()
-
-
-# out_img = auto_mosaic("hub_left", "hub_right")
-# plt.imshow(out_img) 
-# plt.show()
-
-
-
-
-
-
-# img2 = plt.imread("media/moffitt_right.png")
-# h2, points2 = get_harris_corners(img2[:,:,0])
-# retained_points2 = anms(points2)
-# plt.imsave("media/harris_matrix.png", h2)
-# plt.imshow(img2)
-# plt.plot(points2[:, 1], points2[:, 0], 'o', color='b', markersize=2)
-# plt.plot(retained_points2[:, 1], retained_points2[:, 0], 'o', color='pink', markersize=2)
-# plt.show()
-
-
-# matches = match(img1[:,:,0], img2[:,:,0], retained_points1, retained_points2)
-# mat = ransac(matches)
-
-
-# fig = plt.figure()
-# ax1 = fig.add_subplot(121)
-# ax2 = fig.add_subplot(122)
-
-
-# ax1.imshow(img1)
-# ax1.plot(retained_points1.T[1], retained_points1.T[0], 'o', color='b', markersize=1)
-# ax2.imshow(img2)
-# ax2.plot(retained_points2.T[1], retained_points2.T[0], 'o', color='b', markersize=1)
-
-# for (y1, x1), (y2, x2) in matches:
-#     con = ConnectionPatch(xyA=(x2, y2), xyB=(x1, y1), coordsA="data", coordsB="data", 
-#                         axesA=ax2, axesB=ax1, color="red")
-#     ax2.add_artist(con)
-# plt.show()
-
-
-
-
-# plt.subplot(121)
-# plt.imshow(h)
-# plt.subplot(122)
-# plt.imshow(img)
-# plt.plot(points.T[1], points.T[0], 'o', color='b', markersize=3)
-# plt.plot(retained_points.T[1], retained_points.T[0], 'o', color='r', markersize=3)
-# plt.show()
-# print(h[points[0], points[1]])
