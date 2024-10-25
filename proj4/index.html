@@ -32,9 +32,12 @@
         <hr>
     <div>
     <nav>
-        <a href= "https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj4/"> Project Introduction </a> |
-        <a href= "https://github.com/davidpaulwei/cs180/tree/main/proj4/code"> My Code </a> |
-        <a href= "https://davidpaulwei.github.io/cs180"> All My CS180 Projects </a>
+        <a href= "https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj4/"> 
+            Project Introduction </a> |
+        <a href= "https://github.com/davidpaulwei/cs180/tree/main/proj4/code"> 
+            My Code </a> |
+        <a href= "https://davidpaulwei.github.io/cs180"> 
+            All My CS180 Projects </a>
     </nav>
     
 
@@ -44,11 +47,42 @@
         1. Introduction
     </h3>
     <p>
-        Project 4 consists two parts: <b>Image Warping and Mosaicing</b> (Part A) and <b>Feature Matching for Autostitching</b> (Part B).
-        In Part A, I rectified images by warping them using <b>Perspective Transform</b>. 
-        The transformation matrix was calculated by coordinates of correspondences before and after their transformation.
-        I also blended pairs of images into <b>mosaics</b>. This is done by warping one of the images so that its transformed correspondences aligns with the correspondences of the other. 
-        Part B is yet to be finished.
+        Project 4 consists two parts: <b>Image Warping and Mosaicing</b> 
+        (Part A) and <b>Feature Matching for Autostitching</b> (Part B).
+    </p>
+    <p>
+        In Part A, I rectified images using <b>Perspective Transform</b>. 
+        I manually selected correspondences on the images, and warped them
+        so that their transformed correspondences form a rectangle.
+        I also produced <b>mosaics images</b> by blending pairs of images that 
+        overlap with each other. First, I manually matched a few pixels that 
+        represent the same corner of an object on the two images. Then, I 
+        treated these pixel matches as correspondences, and warped the first 
+        image so that after warping, the correspondences on the first image 
+        aligns with the correspondences on the second images. In this way, 
+        the same objects on the two images would match. Finally, I conducted 
+        <b>Alpha Blend</b> on the output mosaic to erase the edge between the 
+        two images. 
+    </p>
+    <p>
+        In Part B, I also produced mosaic images, 
+        only this time instead of manually matching the pixels, the pixel 
+        matches are automatically detected and selected.
+        Corners serve as great symbols of objects on an image, so I used 
+        <b>Harris Corner Detector</b> to find the corners on the images, and 
+        treat them as interest points. Then, I used 
+        <b>Adaptive Non-Maximal Suppression (ANMS)</b> to select a few interest 
+        points that are not only high in "corner strength", but also as 
+        uniformly distributed in the image as possible. They are the potential 
+        correspondences. Later, I matched the potential correspondences using 
+        <b>Feature Descriptors</b>. If the best match of a 
+        potential correspondence did not score significantly higher than its 
+        second-best match, I would abandon this pixel. The matched pixels
+        still may contain error. I found the optimal set of matches using the 
+        idea of <b>Random Sample Consensus (RANSAC)</b>. At last, 
+        similar to Part A, I used the optimal matches to conduct perspective 
+        transform on the first image so that it aligns with the second image, 
+        and blended the overlapping region to erase the edge.
     </p>
 </section>
 
@@ -57,37 +91,28 @@
         A1. Image Rectification
     </h3>
     <p>
-        <a href= "https://en.wikipedia.org/wiki/Image_rectification"> Image rectification</a> is a transformation process that projects images onto a common image plane,
-        where idealy a rectangular object in the image will be wrapped into its original rectangular shape.
-        To do this, I manually selected the corners of a rectangular object in the image as the image's correspondences, these correspondences should make up a geometric rectangle after warpping.
-        Figure 1 shows the correspondences (blue dots) of a sign image and a sheet image.
-    </p>
-    <table class="center" style="margin-left:auto;margin-right:auto;">
-        <tr>
-            <td width = 55%><figure>
-                <img src="media/sign_pt.png" alt="Figure 1a" width=100%, height=auto>
-                <figcaption>Figure 1a: Sign image correspondences.</figcaption>
-            </figure></td>
-            <td width = 45%><figure>
-                <img src="media/sheet_pt.png" alt="Figure 1b" width=100%, height=auto>
-                <figcaption>Figure 1b: Sheet image correspondences.</figcaption>
-            </figure></td>
-        </tr>
-    </table>
-    <p>
-        The images are warped using <a href="https://en.wikipedia.org/wiki/3D_projection#Perspective_projection"> Perspective Transform</a>.
-        <b>Perspective Transform</b> is denoted as
+        <a href= "https://en.wikipedia.org/wiki/Image_rectification"> 
+        Image rectification</a> is a transformation process that projects images
+        onto a plane that faces directly towards a rectangular object in the 
+        image. To do this, I manually selected the corners of a rectangular 
+        object in the image as the correspondences. I conducted 
+        <a href="https://en.wikipedia.org/wiki/3D_projection#
+        Perspective_projection"> Perspective Transform</a> on the image so that
+        after transformation, these correspondences would form a rectangle.
+        Perspective Transform is denoted as 
         \[
             \begin{bmatrix} wx' \\ wy' \\ w \end{bmatrix}
             =
             \begin{bmatrix} a & b & c \\ d & e & f \\ g & h & 1 \end{bmatrix}
             \begin{bmatrix} x \\ y \\ 1 \end{bmatrix},
         \]
-        where (<i>x</i>, <i>y</i>) is the pixel coordinate before the transform, (<i>x'</i>, <i>y'</i>) is its coordinate after the transform,
-        and the middle 3*3 matrix is the <b>Transformation Matrix</b> we wish to obtain.
+        where (<i>x</i>, <i>y</i>) is the pixel coordinate before the transform, 
+        (<i>x'</i>, <i>y'</i>) is its coordinate after the transform, and the 
+        middle 3*3 matrix is the <b>Transformation Matrix</b> we wish to obtain.
     </p>
     <p>
-        The <b>Transformation matrix</b> can be calculated by solving the equation
+        The transformation matrix can be calculated by solving the 
+        equation
         \[
             \begin{bmatrix}
             x & y & 1 & 0 & 0 & 0 & -xx' & -yx' \\
@@ -97,25 +122,47 @@
             =
             \begin{bmatrix} x' \\ y' \end{bmatrix},
         \]
-        where (<i>x</i>, <i>y</i>) and (<i>x'</i>, <i>y'</i>) is the coordinate of a correspondence before and after the transform, respectively.
-        The equation should have a single solution when the number of correspondences is fixed to 4. When more than 4 correspondences exist, 
-        an approximate solution is reached by solving the equation using the first four correspondences, 
-        and <a href="https://en.wikipedia.org/wiki/Gradient_descent">Gradient Descent</a> 
-        is applied to adjust the <b>Transformation Matrix</b>. 
-        The loss function is set as the mean-square-loss between the correspondences' coordinates after transformation using the current matrix 
-        and their true coordinates after transformation.
+        where (<i>x</i>, <i>y</i>) and (<i>x'</i>, <i>y'</i>) is the coordinates 
+        of a correspondence before and after its transform, respectively.
+        The equation should have a single solution when the number of 
+        correspondences is fixed to 4. When more than 4 correspondences exist, 
+        an approximate solution is reached by solving the equation using the 
+        first four correspondences, and <a href="https://en.wikipedia.org/wiki/
+        Gradient_descent">Gradient Descent</a> is applied on the transformation 
+        matrix to adjust it according to the rest of the correspondences. 
+        The loss function is set as the mean-square-loss between the 
+        correspondences' desired coordinates after transform and their true
+        post-transform coordinates using the current matrix.
     </p>
     <p>
-        Figure 2 shows the rectified image using <b>Perspective Transformation</b>.
+        Figure 1 shows the correspondences (blue dots) of a sign image and a 
+        sheet image. Their rectified image using these correspondences are shown
+        in Figure 2.
     </p>
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 55%><figure>
-                <img src="media/sign_rectificated.png" alt="Figure 2a" width=100%, height=auto>
+                <img src="media/sign_pt.png" alt="Figure 1a" 
+                    width=100%, height=auto>
+                <figcaption>Figure 1a: Sign image correspondences.</figcaption>
+            </figure></td>
+            <td width = 45%><figure>
+                <img src="media/sheet_pt.png" alt="Figure 1b" 
+                    width=100%, height=auto>
+                <figcaption>Figure 1b: Sheet image correspondences.</figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 55%><figure>
+                <img src="media/sign_rectificated.png" alt="Figure 2a" 
+                    width=100%, height=auto>
                 <figcaption>Figure 2a: Rectified sign image.</figcaption>
             </figure></td>
             <td width = 45%><figure>
-                <img src="media/sheet_rectificated.png" alt="Figure 2b" width=100%, height=auto>
+                <img src="media/sheet_rectificated.png" alt="Figure 2b" 
+                    width=100%, height=auto>
                 <figcaption>Figure 2b: Rectified sheet image.</figcaption>
             </figure></td>
         </tr>
@@ -124,92 +171,371 @@
 
 <section>
     <h3>
-        A2. Image Mosaicing
+        A2. Image Mosaic and Blending
     </h3>
     <p>
         An <a href="https://en.wikipedia.org/wiki/Image_mosaic">Image Mosaic</a>
-        is a compound image created by stitching together a series of adjacent pictures.
-        To create an <b>Image Mosaic</b>, I selected correspondences on two images, 
-        and used <b>Perspective Transform</b> to warp one of the image so its correspondences after transformation
-        match the correspondences of the second image. The two images in Figure 3 shows the correspondences (blue dots) of two 
-        <a href="https://en.wikipedia.org/wiki/Sather_Tower">Sather Tower</a> images I filmed and their mosaic image.
+        is a compound image created by stitching together a series of adjacent 
+        pictures, where between each adjacent images, an overlapping region
+        displaying the same objects should exist. In this project, I created
+        mosaic images formed by two overlapping images. I manually matched a 
+        number of pixels (no less than 4) on the two images overlapping 
+        region. Figure 3 shows the matching pixels on two 
+        <a href="https://en.wikipedia.org/wiki/Sather_Tower">Sather Tower</a> 
+        images I filmed. I used these pixel matches as correspondences, and 
+        warped the first image using perspective transform so that its 
+        post-transform correspondences aligns with the correspondences on the 
+        second image. In this way, the same object in the overlapping region 
+        would match. The <i>Sather Tower</i> mosaic image is shown in Figure 4.
+    </p>
+    <figure>
+        <img src="media/tower_matches.png" alt="Figure 3" 
+            width=100%, height=auto>
+        <figcaption>
+            Figure 3: Matching pixels on two <i>Sather Tower</i> images.
+        </figcaption>
+    </figure>
+    <figure>
+        <img src="media/tower_mosaic_before_blending.png" alt="Figure 4" 
+            width=60%, height=auto>
+        <figcaption>Figure 4: <i>Sather Tower</i> mosaic image.</figcaption>
+    </figure>
+    <p>
+        Modern cameras (especially phone cameras) would auto-adjust images' 
+        brightness, and it is almost impossible to have the same pixel being the 
+        exact same color on two different films. To erase the nasty edge between 
+        the two images, I conducted 
+        <a href="https://en.wikipedia.org/wiki/Alpha_compositing">Alpha 
+        Compositing</a> to blend the overlapping region. The alpha value for 
+        each pixel is denoted as
+        \[
+            \alpha = \frac{d_1}{d_1 + d_2},
+        \]
+        where d1 is the pixel's Euclidean Distance to its closest non-overlapping 
+        point in image 1, while d2 is that of image 2. The distances are 
+        quickly obtained using the 
+        <a href="https://en.wikipedia.org/wiki/Distance_transform">Distance 
+        Transform</a> algorithm. The mosaic image after blending is shown in 
+        Figure 5.
+    </p>
+    <figure>
+        <img src="media/tower_mosaic.png" alt="Figure 5" width=60%, height=auto>
+        <figcaption>
+            Figure 5: <i>Sather Tower</i> mosaic image <b>after</b> blending.
+        </figcaption>
+    </figure>
+    <p>
+        I also produced mosaic image of my messy room and a crossroad on 
+        my way to school. They are shown in Figure 6 and 7, respectively.
     </p>
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/tower_top_pt.png" alt="Figure 3a" width=100%, height=auto>
-                <figcaption>Figure 3a: Correspondences of <i>Sather Tower</i> top.</figcaption>
+                <img src="media/road_left.png" alt="Figure 6a" 
+                    width=100%, height=auto>
+                <figcaption>Figure 6a: Crossroad left.</figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/tower_bottom_pt.png" alt="Figure 3b" width=100%, height=auto>
-                <figcaption>Figure 3b: Correspondences of <i>Sather Tower</i> bottom.</figcaption>
+                <img src="media/road_right.png" alt="Figure 6b" 
+                    width=100%, height=auto>
+                <figcaption>Figure 6b: Crossroad right.</figcaption>
             </figure></td>
         </tr>
     </table>
     <figure>
-        <img src="media/tower_mosaic_before_blending.png" alt="Figure 3c" width=60%, height=auto>
-        <figcaption>Figure 3c: <i>Sather Tower</i> mosaic image.</figcaption>
-    </figure>
-    <p>
-        Modern cameras (especially phone cameras) would auto adjust images' brightness, 
-        and it is almost impossible to have the same pixel being the exact same color on two different films.
-        To erase the nasty edge between the two images, I conducted 
-        <a href="https://en.wikipedia.org/wiki/Alpha_compositing">Alpha Compositing</a>
-        to blend the overlapping region. The alpha value for each pixel is denoted as 
-        <i>alpha</i> = d1 / (d1 + d2),
-        where d1 is the pixel's distance to its closest non-overlapping point in image 1, while d2 is that of image 2.
-        The distances are quickly obtained using the <a href="https://en.wikipedia.org/wiki/Distance_transform">Distance Transform</a>
-        algorithm. The mosaic image after blending is shown in Figure 4.
-    </p>
-    <figure>
-        <img src="media/tower_mosaic.png" alt="Figure 4" width=60%, height=auto>
-        <figcaption>Figure 4: <i>Sather Tower</i> mosaic image after blending.</figcaption>
-    </figure>
-    <p>
-        I also produced mosaic image of my <b>messy</b> room and a crossroad on my way to school.
-        They are shown in Figure 5 and 6, respectively.
-    </p>
-    <table class="center" style="margin-left:auto;margin-right:auto;">
-        <tr>
-            <td width = 50%><figure>
-                <img src="media/road_left.png" alt="Figure 5a" width=100%, height=auto>
-                <figcaption>Figure 5a: Crossroad left.</figcaption>
-            </figure></td>
-            <td width = 50%><figure>
-                <img src="media/road_right.png" alt="Figure 5b" width=100%, height=auto>
-                <figcaption>Figure 5b: Crossroad right.</figcaption>
-            </figure></td>
-        </tr>
-    </table>
-    <figure>
-        <img src="media/road_mosaic.png" alt="Figure 5c" width=100%, height=auto>
-        <figcaption>Figure 5c: Crossroad mosaic image.</figcaption>
+        <img src="media/road_mosaic.png" alt="Figure 6c" 
+            width=100%, height=auto>
+        <figcaption>Figure 6c: Crossroad mosaic image.</figcaption>
     </figure>
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 10%></td>
             <td width = 40%><figure>
-                <img src="media/room_left.png" alt="Figure 6a" width=100%, height=auto>
-                <figcaption>Figure 6a: My room left.</figcaption>
+                <img src="media/room_left.png" alt="Figure 7a" 
+                    width=100%, height=auto>
+                <figcaption>Figure 7a: My room left.</figcaption>
             </figure></td>
             <td width = 40%><figure>
-                <img src="media/room_right.png" alt="Figure 6b" width=100%, height=auto>
-                <figcaption>Figure 6b: My room right.</figcaption>
+                <img src="media/room_right.png" alt="Figure 7b" 
+                    width=100%, height=auto>
+                <figcaption>Figure 7b: My room right.</figcaption>
             </figure></td>
             <td width = 10%></td>
         </tr>
     </table>
     <figure>
-        <img src="media/room_mosaic.png" alt="Figure 6c" width=60%, height=auto>
-        <figcaption>Figure 6c: My room mosaic image.</figcaption>
+        <img src="media/room_mosaic.png" alt="Figure 7c" 
+            width=60%, height=auto>
+        <figcaption>Figure 7c: My room mosaic image.</figcaption>
     </figure>
 </section>
 
-<p>
-    * Part A finished on Oct 19, 2024, Part B is yet to be finished.
-</p>
+<section>
+    <h3>
+        B1. Harris Corner Detector
+    </h3>
+    <p>
+        In Part B, instead of manually matching the pixel's on the two images,
+        I would rely on the computer to find these matching pixels. Corners can 
+        be great symbol of objects on an image, as the pixels around a corner 
+        can have identical color distribution. I used 
+        <a href="https://en.wikipedia.org/wiki/Harris_corner_detector">Harris 
+        Corner Detector</a> to extract the corner strength of each pixel. 
+        The higher the pixel's corner strength, the more likely the pixel 
+        represents a corner in the image. The corner strength of each pixel in 
+        an image featuring 
+        <a href="https://en.wikipedia.org/wiki/Moffitt_Library">Moffitt 
+        Library</a> (Figure 8a) is shown in Figure 8b.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/moffitt_right.png" alt="Figure 8a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 8a: <i>Moffitt Library</i> image.
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/moffitt_corner_strength.png" alt="Figure 8b" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 8b: Pixel's Corner Strength.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+</section>
+<section>
+    <h3>
+        B2. Adaptive Non-Maximal Suppression (ANMS)
+    </h3>
+    <p>
+        Pixels with higher corner strength are more likely to have an identical 
+        color distribution nearby, which may boost the accuracy of matching.
+        However, an optimal set of correspondences for Perspective Transform 
+        should also cover as many spaces on the image as possible, and a 
+        clustered set of correspondences would often lead to an unsuccessful
+        mosaic. In order to find the pixels that are not only high in 
+        corner strength but also not clustering, I used
+        <b>Adaptive Non-Maximal Suppression (ANMS)</b>. I ordered the pixels
+        into a list according to their corner strength, and start selecting the 
+        potential correspondences from the front of the ordered list. I would 
+        only select a pixel if it is no closer than 18 pixels with any of the 
+        pixels already selected. The 5000 pixels with the highest corner
+        strength (interest points) are shown as blue dots in Figure 9, 
+        along with the selected interest points (potential correspondences) shown 
+        as red dots in the image.
+    </p>
+    <figure>
+        <img src="media/moffitt_anms_dots.png" alt="Figure 9" 
+            width=60%, height=auto>
+        <figcaption>
+            Figure 9: Interest points (blue dots) and potential correspondences
+            (red dots) in the <i>Moffitt Library</i> image.
+        </figcaption>
+    </figure>
+</section>
+<section>
+    <h3>
+        B3. Figure Descriptor and Pixel Matching
+    </h3>
+    <p>
+        With potential correspondences selected on both adjacent images, it is 
+        time to match them. Within each match, the potential correspondences 
+        should point to the same corner of the same object on the image (the 
+        same corner of a building, the same treetop, etc.). Researches have 
+        suggested that when the neighbouring pixels of the same part of an 
+        object is blurred, the blurring result should remain similar even if the 
+        filming angle rotates within a small range. Therefore, sampled the 
+        pixels from a patch of radius <i>r</i> = 20 (size 40 * 40) with spacing 
+        <i>s</i> = 5 (Feature Descriptor size 8 * 8). The sampled pixels are 
+        normalized to a mean of 0 and a standard division of 1. The 
+        correspondences with their Feature Descriptor achieving the highest 
+        inner product are matched.
+    </p>
+    <p>
+        When there are similar objects in an image (e.g. similar windows in 
+        a building, leaves on a tree), it is easy to match the wrong 
+        corner. So I abandoned all pixels whose best match is not significantly 
+        higher than its second-best match (The inner product achieved with its 
+        second-best match is not at least 40% smaller than that achieved with
+        the best match). The potential correspondences (pink dots) and the 
+        selected pixel matches (red dots and lines) in the two adjacent <i>
+        moffitt library</i> images are shown in Figure 10.
+    </p>
+    <figure>
+        <img src="media/moffitt_matches.png" alt="Figure 10" 
+            width=100%, height=auto>
+        <figcaption>
+            Figure 10: Potential correspondence (pink dots) and selected 
+            matches (red dots and lines) in the two adjacent 
+            <i>moffitt library</i> images.
+        </figcaption>
+    </figure>
+</section>
+<section>
+    <h3>
+        B4. Random Sample Consensus (RANSAC)
+    </h3>
+    <p>
+        The matched pixels may still contain errors. I adapted the idea of 
+        <a href="https://en.wikipedia.org/wiki/Random_sample_consensus">
+        Random Sample Consensus (RANSAC)</a> to find the optimal set of matches
+        to conduct perspective transform. For every approach in 1000 approaches,
+        I would calculate the transformation matrix according to a randomly 
+        selected 4 pixel matches, and record the number of <b>outliers</b> for 
+        each obtained matrix. An outlier is any correspondences in all the 
+        matched pixels that after transform does not align with its match on the 
+        second image. Here, having a distance larger than 3 pixels is not
+        considered aligned. The transformation matrix with the least outliers
+        is the optimal transformation matrix.
+    </p>
+</section> 
+<section>
+    <h3>
+        B5. Image Mosaic and Blending
+    </h3>
+    <p>
+        Using the same technic introduced in Part A, I produced <b>Mosaics</b>
+        of the <i>Moffitt Library</i> (Figure 11),
+        <a href="https://en.wikipedia.org/wiki/California_Institute_for_
+Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 12), and the
+        <a href="https://en.wikipedia.org/wiki/Fu_(character)">FU</a> on my
+        roommate's door (Figure 13). I also generated mosaics using the same
+        source images based on manually selected matches. I presented them 
+        alongside the fully-automatically-generated mosaics. In my opinion, 
+        the mosaics with computer-generated matches seems to be more accurately
+        aligned.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/moffitt_left.png" alt="Figure 12a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 11a: <i>Moffitt Library</i> left.
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/moffitt_right.png" alt="Figure 11b" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Figure 11b: <i>Moffitt Library</i> right.
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/moffitt_mosaic_manual.png" alt="Figure 11c" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 11c: <i>Moffitt Library</i> mosaic based on 
+                    <b>manually selected</b> matches.
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/moffitt_mosaic_auto.png" alt="Figure 11d" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Figure 11d: <i>Moffitt Library</i> mosaic based on 
+                        <b>computer-generated</b> matches.
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/hub_left.png" alt="Figure 12a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 12a: <i>Baker Bioenginuity Hub</i> left.
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/hub_right.png" alt="Figure 12b" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Figure 12b: <i>Baker Bioenginuity Hub</i> right.
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/hub_mosaic_manual.png" alt="Figure 12c" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 12c: <i>Baker Bioenginuity Hub</i> mosaic based 
+                    on <b>manually selected</b> matches.
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/hub_mosaic_auto.png" alt="Figure 12d" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Figure 12d: <i>Baker Bioenginuity Hub</i> mosaic based 
+                        on <b>computer-generated</b> matches.
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 10%></td>
+            <td width = 40%><figure>
+                <img src="media/door_left.png" alt="Figure 13a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 13a: <i>FU</i> left.
+                </figcaption>
+            </figure></td>
+            <td width = 40%><figure>
+                <img src="media/door_right.png" alt="Figure 13b" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Figure 13b: <i>FU</i> right.
+                    </figcaption>
+            </figure></td>
+            <td width = 10%></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 10%></td>
+            <td width = 40%><figure>
+                <img src="media/door_mosaic_manual.png" alt="Figure 13c" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 12c: <i>FU</i> mosaic based 
+                    on <b>manually selected</b> matches.
+                </figcaption>
+            </figure></td>
+            <td width = 40%><figure>
+                <img src="media/door_mosaic_auto.png" alt="Figure 13d" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Figure 13d: <i>FU</i> mosaic based 
+                        on <b>computer-generated</b> matches.
+                    </figcaption>
+            </figure></td>
+            <td width = 10%></td>
+        </tr>
+    </table>
 
+</section>
+
+
+
+<p>
+    * Part A finished on Oct 19, 2024; Part B finished on Oct 24, 2024.
+</p>
 </body>
 
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3
+/es5/tex-mml-chtml.js"></script>
 </html>
