@@ -14,7 +14,7 @@ Run the project in `main.py`, run it within this folder. `proj4a_func.py` and `p
 8. `scipy.interpolate`
 9. `scipy.ndimage`
 
-**Introduction of the functions included in `proj4a_func.py`:**
+**Introduction of the functions included in `proj4a_func.py`:**   
 
 1. `get_points()`: Used to manually select correspondences of image. Since the correspondences are already selected and stored in `xxx_pt.pickle` files, this function is not called.
 2. `read_points()`: Read recorded correspondences from file.
@@ -27,7 +27,7 @@ Run the project in `main.py`, run it within this folder. `proj4a_func.py` and `p
 9. `mosaic()`: Blend two images into a mosaic image according to their correspondences.
 10. `rectification()`: Rectificate image according to its correspondences. Idealy, the rectangular object in the image will be streched into a rectangle after transformation.
 
-**Introduction of the functions included in `proj4b_func.py`:**
+**Introduction of the functions included in `proj4b_func.py`:**   
 
 11. `get_harris_corners`: Find harris corners in the image. 
 12. `dist2()`: Calculate squared distance between two sets of points.
@@ -38,7 +38,7 @@ Run the project in `main.py`, run it within this folder. `proj4a_func.py` and `p
 17. `warp_img()`: Warp image using perspective transformation.
 18. `show_matches()`: Show potential correspondences and their matches.
     
-**Acknowledgement**
+**Acknowledgement**   
 Functions `get_points()`, `read_points()`, `show_points()`, `snap()` are mostly or entirely from [Project 3](https://github.com/davidpaulwei/cs180/tree/main/proj3/code); Functions `get_harris_corners` and `dist2()` are adapted from sample code given by course staff.
 
 Finished on Oct 24, 2024.
