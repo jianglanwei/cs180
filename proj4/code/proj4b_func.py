@@ -71,8 +71,8 @@ def anms(points: np.ndarray, r: int = ANMS_LOCAL_RADIUS) -> np.ndarray:
 
 def match(img1: np.ndarray, # input b&w image 1.
           img2: np.ndarray, # input b&w image 2.
-          points1: np.ndarray, # interest points for image 1.
-          points2: np.ndarray # intereset points for image 2.
+          points1: np.ndarray, # potential correspondences for image 1.
+          points2: np.ndarray # potential correspondences for image 2.
     ) -> np.ndarray: # point/correspondences matches.
     """match potential correspondences on two images."""
     patch_size = 2 * PATCH_RADIUS // PATCH_STEP
@@ -139,8 +139,8 @@ def auto_mosaic(img1_name: str, img2_name: str) -> np.ndarray:
     return out_img_blend
 
 def show_matches(img1: np.ndarray, img2: np.ndarray, # input images.
-                 img1_pts: np.ndarray, img2_pts: np.ndarray, # image interest points.
-                 matches: np.ndarray): # interest-point-matches/correspondences.
+                 img1_pts: np.ndarray, img2_pts: np.ndarray, # potential correspondences.
+                 matches: np.ndarray): # matches of correspondences between images.
     """show:
        - potential correspondences on images (blue dots);
        - matches of correspondences between images (red line/dot)."""
