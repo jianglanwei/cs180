@@ -39,6 +39,6 @@ Run the project in `main.py`, run it within this folder. `proj4a_func.py` and `p
 18. `show_matches()`: Show potential correspondences and their matches.
     
 **Acknowledgement**   
-Functions `get_points()`, `read_points()`, `show_points()`, `snap()` are mostly or entirely from [Project 3](https://github.com/davidpaulwei/cs180/tree/main/proj3/code); Functions `get_harris_corners` and `dist2()` are adapted from sample code given by course staff.
+Functions `get_points()`, `read_points()`, `show_points()`, `snap()` are mostly or entirely from [Project 3](https://github.com/davidpaulwei/cs180/tree/main/proj3/code); Functions `get_harris_corners()` and `dist2()` are adapted from sample code given by course staff.
 
 Finished on Oct 24, 2024.
