@@ -186,7 +186,7 @@
         warped the first image using perspective transform so that its 
         post-transform correspondences aligns with the correspondences on the 
         second image. In this way, the same object in the overlapping region 
-        would match. The <i>Sather Tower</i> mosaic image is shown in Figure 4.
+        would match. The <i>Sather Tower</i> mosaic image is shown in Figure 4a.
     </p>
     <figure>
         <img src="media/tower_matches.png" alt="Figure 3" 
@@ -194,11 +194,6 @@
         <figcaption>
             Figure 3: Matching pixels on two <i>Sather Tower</i> images.
         </figcaption>
-    </figure>
-    <figure>
-        <img src="media/tower_mosaic_before_blending.png" alt="Figure 4" 
-            width=60%, height=auto>
-        <figcaption>Figure 4: <i>Sather Tower</i> mosaic image.</figcaption>
     </figure>
     <p>
         Modern cameras (especially phone cameras) would auto-adjust images' 
@@ -216,57 +211,71 @@
         quickly obtained using the 
         <a href="https://en.wikipedia.org/wiki/Distance_transform">Distance 
         Transform</a> algorithm. The mosaic image after blending is shown in 
-        Figure 5.
+        Figure 4b.
     </p>
-    <figure>
-        <img src="media/tower_mosaic.png" alt="Figure 5" width=60%, height=auto>
-        <figcaption>
-            Figure 5: <i>Sather Tower</i> mosaic image <b>after</b> blending.
-        </figcaption>
-    </figure>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/tower_mosaic_before_blending.png" alt="Figure 4a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 4a: <i>Sather Tower</i> mosaic image <b>before</b> 
+                    blending.
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/tower_mosaic.png" alt="Figure 4b" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 4b: <i>Sather Tower</i> mosaic image <b>after</b>
+                    blending.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
     <p>
         I also produced mosaic image of my messy room and a crossroad on 
-        my way to school. They are shown in Figure 6 and 7, respectively.
+        my way to school. They are shown in Figure 5 and 6, respectively.
     </p>
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/road_left.png" alt="Figure 6a" 
+                <img src="media/road_left.png" alt="Figure 5a" 
                     width=100%, height=auto>
-                <figcaption>Figure 6a: Crossroad left.</figcaption>
+                <figcaption>Figure 5a: Crossroad left.</figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/road_right.png" alt="Figure 6b" 
+                <img src="media/road_right.png" alt="Figure 5b" 
                     width=100%, height=auto>
-                <figcaption>Figure 6b: Crossroad right.</figcaption>
+                <figcaption>Figure 5b: Crossroad right.</figcaption>
             </figure></td>
         </tr>
     </table>
     <figure>
-        <img src="media/road_mosaic.png" alt="Figure 6c" 
+        <img src="media/road_mosaic.png" alt="Figure 5c" 
             width=100%, height=auto>
-        <figcaption>Figure 6c: Crossroad mosaic image.</figcaption>
+        <figcaption>Figure 5c: Crossroad mosaic image.</figcaption>
     </figure>
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 10%></td>
             <td width = 40%><figure>
-                <img src="media/room_left.png" alt="Figure 7a" 
+                <img src="media/room_left.png" alt="Figure 6a" 
                     width=100%, height=auto>
-                <figcaption>Figure 7a: My room left.</figcaption>
+                <figcaption>Figure 6a: My room left.</figcaption>
             </figure></td>
             <td width = 40%><figure>
-                <img src="media/room_right.png" alt="Figure 7b" 
+                <img src="media/room_right.png" alt="Figure 6b" 
                     width=100%, height=auto>
-                <figcaption>Figure 7b: My room right.</figcaption>
+                <figcaption>Figure 6b: My room right.</figcaption>
             </figure></td>
             <td width = 10%></td>
         </tr>
     </table>
     <figure>
-        <img src="media/room_mosaic.png" alt="Figure 7c" 
+        <img src="media/room_mosaic.png" alt="Figure 6c" 
             width=60%, height=auto>
-        <figcaption>Figure 7c: My room mosaic image.</figcaption>
+        <figcaption>Figure 6c: My room mosaic image.</figcaption>
     </figure>
 </section>
 
@@ -285,22 +294,22 @@
         represents a corner in the image. The corner strength of each pixel in 
         an image featuring 
         <a href="https://en.wikipedia.org/wiki/Moffitt_Library">Moffitt 
-        Library</a> (Figure 8a) is shown in Figure 8b.
+        Library</a> (Figure 7a) is shown in Figure 7b.
     </p>
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/moffitt_right.png" alt="Figure 8a" 
+                <img src="media/moffitt_right.png" alt="Figure 7a" 
                     width=100%, height=auto>
                 <figcaption>
-                    Figure 8a: <i>Moffitt Library</i> image.
+                    Figure 7a: <i>Moffitt Library</i> image.
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/moffitt_corner_strength.png" alt="Figure 8b" 
+                <img src="media/moffitt_corner_strength.png" alt="Figure 7b" 
                     width=100%, height=auto>
                 <figcaption>
-                    Figure 8b: Pixel's Corner Strength.
+                    Figure 7b: Pixel's Corner Strength.
                 </figcaption>
             </figure></td>
         </tr>
@@ -323,15 +332,15 @@
         potential correspondences from the front of the ordered list. I would 
         only select a pixel if it is no closer than 18 pixels with any of the 
         pixels already selected. The 5000 pixels with the highest corner
-        strength (interest points) are shown as blue dots in Figure 9, 
+        strength (interest points) are shown as blue dots in Figure 8, 
         along with the selected interest points (potential correspondences) shown 
         as red dots in the image.
     </p>
     <figure>
-        <img src="media/moffitt_anms_dots.png" alt="Figure 9" 
+        <img src="media/moffitt_anms_dots.png" alt="Figure 8" 
             width=60%, height=auto>
         <figcaption>
-            Figure 9: Interest points (blue dots) and potential correspondences
+            Figure 8: Interest points (blue dots) and potential correspondences
             (red dots) in the <i>Moffitt Library</i> image.
         </figcaption>
     </figure>
@@ -362,13 +371,13 @@
         second-best match is not at least 40% smaller than that achieved with
         the best match). The potential correspondences (pink dots) and the 
         selected pixel matches (red dots and lines) in the two adjacent <i>
-        moffitt library</i> images are shown in Figure 10.
+        moffitt library</i> images are shown in Figure 9.
     </p>
     <figure>
-        <img src="media/moffitt_matches.png" alt="Figure 10" 
+        <img src="media/moffitt_matches.png" alt="Figure 9" 
             width=100%, height=auto>
         <figcaption>
-            Figure 10: Potential correspondence (pink dots) and selected 
+            Figure 9: Potential correspondence (pink dots) and selected 
             matches (red dots and lines) in the two adjacent 
             <i>moffitt library</i> images.
         </figcaption>
@@ -398,11 +407,11 @@
     </h3>
     <p>
         Using the same technic introduced in Part A, I produced <b>Mosaics</b>
-        of the <i>Moffitt Library</i> (Figure 11),
+        of the <i>Moffitt Library</i> (Figure 10),
         <a href="https://en.wikipedia.org/wiki/California_Institute_for_
-Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 12), and the
+Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 11), and the
         <a href="https://en.wikipedia.org/wiki/Fu_(character)">FU</a> on my
-        roommate's door (Figure 13). I also generated mosaics using the same
+        roommate's door (Figure 12). I also generated mosaics using the same
         source images based on manually selected matches. I presented them 
         alongside the fully-automatically-generated mosaics. In my opinion, 
         the mosaics with computer-generated matches seems to be more accurately
@@ -411,17 +420,17 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 12), and the
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/moffitt_left.png" alt="Figure 12a" 
+                <img src="media/moffitt_left.png" alt="Figure 10a" 
                     width=100%, height=auto>
                 <figcaption>
-                    Figure 11a: <i>Moffitt Library</i> left.
+                    Figure 10a: <i>Moffitt Library</i> left.
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/moffitt_right.png" alt="Figure 11b" 
+                <img src="media/moffitt_right.png" alt="Figure 10b" 
                     width=100%, height=auto>
                     <figcaption>
-                        Figure 11b: <i>Moffitt Library</i> right.
+                        Figure 10b: <i>Moffitt Library</i> right.
                     </figcaption>
             </figure></td>
         </tr>
@@ -429,18 +438,18 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 12), and the
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/moffitt_mosaic_manual.png" alt="Figure 11c" 
+                <img src="media/moffitt_mosaic_manual.png" alt="Figure 10c" 
                     width=100%, height=auto>
                 <figcaption>
-                    Figure 11c: <i>Moffitt Library</i> mosaic based on 
+                    Figure 10c: <i>Moffitt Library</i> mosaic based on 
                     <b>manually selected</b> matches.
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/moffitt_mosaic_auto.png" alt="Figure 11d" 
+                <img src="media/moffitt_mosaic_auto.png" alt="Figure 10d" 
                     width=100%, height=auto>
                     <figcaption>
-                        Figure 11d: <i>Moffitt Library</i> mosaic based on 
+                        Figure 10d: <i>Moffitt Library</i> mosaic based on 
                         <b>computer-generated</b> matches.
                     </figcaption>
             </figure></td>
@@ -449,17 +458,17 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 12), and the
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/hub_left.png" alt="Figure 12a" 
+                <img src="media/hub_left.png" alt="Figure 11a" 
                     width=100%, height=auto>
                 <figcaption>
-                    Figure 12a: <i>Baker Bioenginuity Hub</i> left.
+                    Figure 11a: <i>Baker Bioenginuity Hub</i> left.
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/hub_right.png" alt="Figure 12b" 
+                <img src="media/hub_right.png" alt="Figure 11b" 
                     width=100%, height=auto>
                     <figcaption>
-                        Figure 12b: <i>Baker Bioenginuity Hub</i> right.
+                        Figure 11b: <i>Baker Bioenginuity Hub</i> right.
                     </figcaption>
             </figure></td>
         </tr>
@@ -467,18 +476,18 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 12), and the
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/hub_mosaic_manual.png" alt="Figure 12c" 
+                <img src="media/hub_mosaic_manual.png" alt="Figure 11c" 
                     width=100%, height=auto>
                 <figcaption>
-                    Figure 12c: <i>Baker Bioenginuity Hub</i> mosaic based 
+                    Figure 11c: <i>Baker Bioenginuity Hub</i> mosaic based 
                     on <b>manually selected</b> matches.
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/hub_mosaic_auto.png" alt="Figure 12d" 
+                <img src="media/hub_mosaic_auto.png" alt="Figure 11d" 
                     width=100%, height=auto>
                     <figcaption>
-                        Figure 12d: <i>Baker Bioenginuity Hub</i> mosaic based 
+                        Figure 11d: <i>Baker Bioenginuity Hub</i> mosaic based 
                         on <b>computer-generated</b> matches.
                     </figcaption>
             </figure></td>
@@ -488,17 +497,17 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 12), and the
         <tr>
             <td width = 10%></td>
             <td width = 40%><figure>
-                <img src="media/door_left.png" alt="Figure 13a" 
+                <img src="media/door_left.png" alt="Figure 12a" 
                     width=100%, height=auto>
                 <figcaption>
-                    Figure 13a: <i>FU</i> left.
+                    Figure 12a: <i>FU</i> left.
                 </figcaption>
             </figure></td>
             <td width = 40%><figure>
-                <img src="media/door_right.png" alt="Figure 13b" 
+                <img src="media/door_right.png" alt="Figure 12b" 
                     width=100%, height=auto>
                     <figcaption>
-                        Figure 13b: <i>FU</i> right.
+                        Figure 12b: <i>FU</i> right.
                     </figcaption>
             </figure></td>
             <td width = 10%></td>
@@ -508,7 +517,7 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 12), and the
         <tr>
             <td width = 10%></td>
             <td width = 40%><figure>
-                <img src="media/door_mosaic_manual.png" alt="Figure 13c" 
+                <img src="media/door_mosaic_manual.png" alt="Figure 12c" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 12c: <i>FU</i> mosaic based 
@@ -516,10 +525,10 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 12), and the
                 </figcaption>
             </figure></td>
             <td width = 40%><figure>
-                <img src="media/door_mosaic_auto.png" alt="Figure 13d" 
+                <img src="media/door_mosaic_auto.png" alt="Figure 12d" 
                     width=100%, height=auto>
                     <figcaption>
-                        Figure 13d: <i>FU</i> mosaic based 
+                        Figure 12d: <i>FU</i> mosaic based 
                         on <b>computer-generated</b> matches.
                     </figcaption>
             </figure></td>
