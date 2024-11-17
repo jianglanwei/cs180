@@ -94,14 +94,13 @@ if TRAIN_MODE: # train UNet with class conditioning
             loss.mean().backward()
             optimizer.step()
             grf.add(step, loss.mean().item())
-            grf.save("cs180/class_cond_loss_graph.pdf")
+            grf.save("media/class_cond_loss_graph.pdf")
             print(f"epoch {epoch} step {step}: loss {loss.mean().item(): .4f}")
             step += 1
-        torch.save(net, "cs180/class_cond_nets/class_cond_net" + str(epoch) + ".pth")
-        torch.save(grf, "cs180/class_conditioned_grf.pth")
+        torch.save(net, "class_cond_nets/class_cond_net" + str(epoch) + ".pth")
         scheduler.step()
 else: # load trained UNet and generate MNIST image.
-    net = torch.load("cs180/class_cond_nets/class_cond_net4.pth", weights_only=False).cpu()
+    net = torch.load("class_cond_nets/class_cond_net4.pth", weights_only=False).cpu()
     alphas = ddpm_consts['alphas']
     betas = ddpm_consts['betas']
     alpha_bars = ddpm_consts['alpha_bars']
@@ -122,4 +121,4 @@ else: # load trained UNet and generate MNIST image.
             + torch.sqrt(betas[t]) * z
     spreaded_img = spread_imgs(img, num_rows=NUM_ROWS, num_cols=10).numpy()
     out_img = (spreaded_img > BI_THRESHOLD) * spreaded_img
-    plt.imsave('cs180/class_cond_generated_img4.png', out_img, cmap='gray')
+    plt.imsave('media/class_cond_generated_img.png', out_img, cmap='gray')

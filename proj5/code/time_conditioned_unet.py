@@ -82,11 +82,10 @@ if TRAIN_MODE:
             grf.save("media/time_cond_loss_graph.pdf")
             print(f"epoch {epoch} step {step}: loss {loss.mean().item(): .4f}")
             step += 1
-        torch.save(net, "media/time_cond_nets/time_cond_net" + str(epoch) + ".pth")
-        torch.save(grf, "media/time_conditioned_grf.pth") # save loss graph to file.
+        torch.save(net, "time_cond_nets/time_cond_net" + str(epoch) + ".pth")
         scheduler.step()
 else: # load trained UNet and generate MNIST image.
-    net = torch.load("media/time_cond_nets/time_cond_net19.pth").cpu()
+    net = torch.load("time_cond_nets/time_cond_net19.pth").cpu()
     alphas = ddpm_consts['alphas']
     betas = ddpm_consts['betas']
     alpha_bars = ddpm_consts['alpha_bars']
@@ -102,4 +101,4 @@ else: # load trained UNet and generate MNIST image.
             + torch.sqrt(betas[t]) * z
     spreaded_img = spread_imgs(img, num_rows=NUM_ROWS, num_cols=NUM_COLS).numpy()
     out_img = (spreaded_img > BI_THRESHOLD) * spreaded_img
-    plt.imsave('media/time_cond_generated_img19.png', out_img, cmap='gray')
+    plt.imsave('media/time_cond_generated_img.png', out_img, cmap='gray')

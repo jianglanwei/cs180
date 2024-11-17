@@ -52,12 +52,12 @@ if TRAIN_MODE: # train UNet.
             loss.mean().backward()
             optimizer.step()
             grf.add(step, loss.mean().item())
-            grf.save("media/graph.pdf") # save loss curve to file.
+            grf.save("media/uncond_loss_graph.pdf") # save loss curve to file.
             print(f"epoch {epoch} step {step}: loss {loss.mean().item(): .4f}")
             step += 1
-        torch.save(net, "media/uncond_nets/uncond_net" + str(epoch) + ".pth")
+        torch.save(net, "uncond_nets/uncond_net" + str(epoch) + ".pth")
 else:
-    net = torch.load("media/uncond_nets/uncond_net4.pth").cpu() # load UNet
+    net = torch.load("uncond_nets/uncond_net4.pth").cpu() # load UNet
     NUM_TEST_SAMPLES = 4 # number of test samples.
     for img, label in test_loader:
         img = img[:NUM_TEST_SAMPLES]
