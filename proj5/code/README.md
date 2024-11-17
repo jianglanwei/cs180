@@ -3,7 +3,7 @@
 
 **Fun with Diffusion Models**&emsp;[Webpage](https://davidpaulwei.github.io/cs180/proj5/)
 
-Code for Part A is stored in `proj5b.ipynb`, it is based on the starter code given by course staff. For Part B, implementation code for _Unconditional UNet_, _Time-Conditioned UNet_, _Class-Conditioned UNet_ are stored in `unconditioned_unet.py`, `time_conditioned_unet.py`, `class_conditioned_unet.py`, respectively. They can be run separately. Set `TRAINING_MODE` as `True` to train UNet, as `False` to load trained UNet to denoise or generate MNIST images. The net modules are stored in `module.py`. `animator.py` contains an animator class that virtulizes the training loss curve. For both Part A and B, GPU with CUDA compatibility are required.    
+Code for Part A is stored in `proj5b.ipynb`, it is based on the [starter code](https://colab.research.google.com/drive/1RiLmbbnhr4YsogD3dWZ39asPVNKuPsah?usp=sharing) given by course staff. For Part B, implementation code for _Unconditional UNet_, _Time-Conditioned UNet_, _Class-Conditioned UNet_ are stored in `unconditioned_unet.py`, `time_conditioned_unet.py`, `class_conditioned_unet.py`, respectively. They can be run separately. Set `TRAINING_MODE` as `True` to train UNet, as `False` to load trained UNet to denoise or generate MNIST images. The net modules are stored in `module.py`. `animator.py` contains an animator class that virtulizes the training loss curve. For both Part A and B, GPU with CUDA compatibility are required.    
 
 The following libraries are required to run Part B:    
 
