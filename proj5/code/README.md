@@ -28,4 +28,4 @@ The following libraries are required to run Part B:
 **Acknowledgement**   
 Part A is run on [Google Colab](https://colab.research.google.com/)'s NVIDIA Tesla T4, while part B is run on [Berkeley Hybrid Robotics](https://hybrid-robotics.berkeley.edu)'s NVIDIA RTX A4500.
 
-Finished on Nov 17, 2024.
+Finished on Nov 16, 2024.
