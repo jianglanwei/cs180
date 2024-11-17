@@ -1,0 +1,1233 @@
+<html>
+<head>
+    <title>David Wei's CS180 Project 5</title>
+    <style>
+        h2 {text-align: center;}
+        h3 {text-align: left;}
+        h4 {text-align: left;}
+        p {text-align: left;}
+        div {text-align: center;}
+        nav {text-align: right;}
+        figure {
+            padding: 4px;
+            margin: auto;
+        }
+        figcaption {
+            background-color: white;
+            color: black;
+            padding: 2px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h2>
+        <b>CS180-Proj5: Fun with Diffusion Models</b>
+    </h2>
+    <div>
+        David Wei<br>
+        <a href= "mailto: david_wei@berkeley.edu"> david_wei@berkeley.edu </a>
+        <hr>
+    <div>
+    <nav>
+        <a href= "https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj5/"> 
+            Project Introduction </a> |
+        <a href= "https://github.com/davidpaulwei/cs180/tree/main/proj5/code"> 
+            My Code </a> |
+        <a href= "https://davidpaulwei.github.io/cs180"> 
+            All My CS180 Projects </a>
+    </nav>
+    
+
+    
+<section>
+    <h3>
+        1. Introduction
+    </h3>
+    <p>
+        Project 5 consists two parts: <b>The power of Diffusion Models</b> 
+        (Part A) and <b>Diffusion Models from Scratch</b> (Part B).
+    </p>
+    <p>
+        In Part A, I mainly played around with a pretrained diffusion model
+        called <b>DeepFloyd IF</b>. First, I used the model to conduct
+        <b>denoising</b>. I blurred a sample image using random noise, 
+        and used the model to predict that noise. I also denoised the image using
+        <b>Gaussian Blur</b> and compared the denoised results. Then, I denoised 
+        a random noise image to obtain a computer-generated image. I adapted the
+        <b>Classifier-Free Guidance</b> technic. Later, I conducted image-to-image 
+        translation, where images are translated into similar images either based 
+        on masks or text prompts. At last, I produced <b>Visual Anagrams</b>, 
+        <b>Hybrid Images</b>, and a course logo.
+    </p>
+    <p>
+        In Part B, I built and trained a diffusion model from scratch. First, 
+        I trained a UNet to denoise half-noisy <b>MNIST</b> images (original 
+        image + 50% pure noise). Then, to denoise images with different
+        amount of noise, I added <b>Time Conditioning</b> to the UNet, where the 
+        UNet is told how noisy each images are. The trained UNet can accurately 
+        predict the noise that had been added to the images. Using the 
+        trained UNet denoiser, I generated MNIST-like images by denoising 
+        pure noise in 300 steps, only to find the computer 
+        generated images looks little like human-written numbers. To boost the 
+        result, I added <b>Class Conditioning</b> to the UNet, where the UNet 
+        is not only told how noisy the images are, but also the labels (0 to 9) 
+        of the images. 10% of the images are not provided with a label. I adapted 
+        <b>Classifier-Free Guidance</b> to generate MNIST-like images. The results
+        are much better compared the previous attempt.
+    </p>
+
+</section>
+
+<section>
+    <h3>
+        A1. Denoising using Diffusion Model
+    </h3>
+    <p>
+        In part A, I played around <a href="https://huggingface.co/docs/diffusers
+/api/pipelines/deepfloyd_if">DeepFloyd IF</a> diffusion model. DeepFloyd is a 
+        text-to-image model trained by Stability AI. It takes text prompts as 
+        input and outputs images that are aligned with the text. Figure 1 shows
+        three images I generated with DeepFloyd IF.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 33%><figure>
+                <img src="media/sample1.png" alt="Figure 1a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 1a: An oil painting of a snowy mountain.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/sample2.png" alt="Figure 1b" 
+                    width=100%, height=auto>
+                <figcaption>Figure 1b: A man wearing a hat.<br>&nbsp</figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/sample3.png" alt="Figure 1c" 
+                    width=100%, height=auto>
+                <figcaption>Figure 1c: A rocket ship.<br>&nbsp</figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        Diffusion models generate images by predicting the noise in the images,
+        and "denoise" it by subtracting the noise. The resulting "clean" image 
+        is often a different image, or a computer-generated image. To test this, 
+        I added different amount of random noise to the Sather Tower sample image,
+        and tried to restore the image using the noisy image and the model's 
+        noise prediction. Figure 2 shows the result.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 25%>
+                Add 25% noise:
+            </td>
+            <td width = 25%><figure>
+                <img src="media/test_im.png" alt="Figure 2a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Original image.
+                </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/noise_im_250.png" alt="Figure 2b" 
+                    width=100%, height=auto>
+                <figcaption>25% noisy image.</figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/restore_im_250.png" alt="Figure 2c" 
+                    width=100%, height=auto>
+                <figcaption>Restored image.</figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 25%>
+                Add 50% noise:
+            </td>
+            <td width = 25%><figure>
+                <img src="media/test_im.png" alt="Figure 2d" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Original image.
+                </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/noise_im_500.png" alt="Figure 2e" 
+                    width=100%, height=auto>
+                <figcaption>50% noisy image.</figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/restore_im_500.png" alt="Figure 2f" 
+                    width=100%, height=auto>
+                <figcaption>Restored image.</figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 25%>
+                Add 75% noise:
+            </td>
+            <td width = 25%><figure>
+                <img src="media/test_im.png" alt="Figure 2g" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Original image.
+                </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/noise_im_750.png" alt="Figure 2h" 
+                    width=100%, height=auto>
+                <figcaption>75% noisy image.</figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/restore_im_750.png" alt="Figure 2i" 
+                    width=100%, height=auto>
+                <figcaption>Restored image.</figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        Denoising becomes harder when more noise are added. I used <b>Iterative
+        Denoising</b> to produce better result. Figure 3 shows the restored image 
+        using Iterative Denoising, One-Step Denoising, and 
+        <a href="https://en.wikipedia.org/wiki/Gaussian_blur">Gaussian Blur</a>,
+        respectively. 
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 20%><figure>
+                <img src="media/test_im.png" alt="Figure 3a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Original image.
+                </figcaption>
+            </figure></td>
+            <td width = 20%><figure>
+                <img src="media/noise_img_iterative_denoise.png" alt="Figure 3b" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Noisy image.
+                </figcaption>
+            </figure></td>
+            <td width = 20%><figure>
+                <img src="media/restore_im_iterative_denoise.png" alt="Figure 3c" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Iterative Denoising.
+                </figcaption>
+            </figure></td>
+            <td width = 20%><figure>
+                <img src="media/restore_im_one_step.png" alt="Figure 3d" 
+                    width=100%, height=auto>
+                <figcaption>
+                    One-Step Denoising.
+                </figcaption>
+            </figure></td>
+            <td width = 20%><figure>
+                <img src="media/restore_im_gaussian_blur.png" alt="Figure 3e" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Gaussian Blur.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+
+</section>
+
+<section>
+    <h3>
+        A2. Generate Random Image using Diffusion Model
+    </h3>
+    <p>
+        When denoising a 100%-noisy image (pure noise) using diffusion model, 
+        we get random "denoised" images. These images are unique and does not 
+        come from the natural world, so we can also call them "computer-generated"
+        images. Figure 4 shows some of these randomly generated images.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 16%><figure>
+                <img src="media/random_im1.png" alt="Figure 4a" 
+                    width=100%, height=auto>
+            </figure></td>
+            <td width = 16%><figure>
+                <img src="media/random_im2.png" alt="Figure 4b" 
+                    width=100%, height=auto>
+            </figure></td>
+            <td width = 16%><figure>
+                <img src="media/random_im3.png" alt="Figure 4c" 
+                    width=100%, height=auto>
+            </figure></td>
+            <td width = 16%><figure>
+                <img src="media/random_im4.png" alt="Figure 4d" 
+                    width=100%, height=auto>
+            </figure></td>
+            <td width = 16%><figure>
+                <img src="media/random_im5.png" alt="Figure 4e" 
+                    width=100%, height=auto>
+            </figure></td>
+            <td width = 16%><figure>
+                <img src="media/random_im6.png" alt="Figure 4f" 
+                    width=100%, height=auto>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        Most of these images are not good. To improve the quality of the images,
+        I used a technic called <a href="https://arxiv.org/abs/2207.12598">
+        Classifier-Free Guidance</a>. Figure 5 shows the images generated using
+        CFG.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 16%><figure>
+                <img src="media/random_cfg_im1.png" alt="Figure 5a" 
+                    width=100%, height=auto>
+            </figure></td>
+            <td width = 16%><figure>
+                <img src="media/random_cfg_im2.png" alt="Figure 5b" 
+                    width=100%, height=auto>
+            </figure></td>
+            <td width = 16%><figure>
+                <img src="media/random_cfg_im3.png" alt="Figure 5c" 
+                    width=100%, height=auto>
+            </figure></td>
+            <td width = 16%><figure>
+                <img src="media/random_cfg_im4.png" alt="Figure 5d" 
+                    width=100%, height=auto>
+            </figure></td>
+            <td width = 16%><figure>
+                <img src="media/random_cfg_im5.png" alt="Figure 5e" 
+                    width=100%, height=auto>
+            </figure></td>
+            <td width = 16%><figure>
+                <img src="media/random_cfg_im6.png" alt="Figure 5f" 
+                    width=100%, height=auto>
+            </figure></td>
+        </tr>
+    </table>
+</section>
+<section>
+    <h3>
+        A3. Image to Image Translation
+    </h3>
+    <p>
+        By adding a certain amount of noise to an image, and then denoise it 
+        using diffusion model, we can produce similar images with different 
+        details. These details are generated by the computer. The more noise 
+        added to the image, the more "computer-creativity" there are in the 
+        restored image. Here are some examples.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 14%><figure>
+                <img src="media/tower_96.png" alt="Figure 6a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 96% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/tower_90.png" alt="Figure 6b" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 90% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/tower_84.png" alt="Figure 6c" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 84% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/tower_78.png" alt="Figure 6d" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 78% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/tower_69.png" alt="Figure 6e" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 69% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/tower_39.png" alt="Figure 6f" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 39% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/test_im.png" alt="Figure 6g" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Original image
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 14%><figure>
+                <img src="media/face_96.png" alt="Figure 6h" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 96% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/face_90.png" alt="Figure 6i" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 90% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/face_84.png" alt="Figure 6j" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 84% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/face_78.png" alt="Figure 6k" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 78% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/face_69.png" alt="Figure 6l" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 69% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/face_39.png" alt="Figure 6m" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 39% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/random_cfg_im1.png" alt="Figure 6n" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Original image
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 14%><figure>
+                <img src="media/crane_96.png" alt="Figure 6o" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 96% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/crane_90.png" alt="Figure 6p" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 90% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/crane_84.png" alt="Figure 6q" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 84% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/crane_78.png" alt="Figure 6r" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 78% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/crane_69.png" alt="Figure 6s" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 69% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/crane_39.png" alt="Figure 6t" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 39% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/random_cfg_im2.png" alt="Figure 6u" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Original image
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        The same can be conducted on web image and two of my hand-drawn images
+        (which are suppose to be a portrait of myself and the Apple logo. But to be
+        fair, I'm not a good drawer, and sometimes I don't recognize my own 
+        drawing). 
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 14%><figure>
+                <img src="media/fruit_96.png" alt="Figure 7a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 96% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/fruit_90.png" alt="Figure 7b" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 90% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/fruit_84.png" alt="Figure 7c" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 84% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/fruit_78.png" alt="Figure 7d" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 78% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/fruit_69.png" alt="Figure 7e" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 69% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/fruit_39.png" alt="Figure 7f" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 39% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/fruit.png" alt="Figure 7g" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Original image
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 14%><figure>
+                <img src="media/draw1_96.png" alt="Figure 7h" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 96% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/draw1_90.png" alt="Figure 7i" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 90% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/draw1_84.png" alt="Figure 7j" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 84% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/draw1_78.png" alt="Figure 7k" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 78% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/draw1_69.png" alt="Figure 7l" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 69% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/draw1_39.png" alt="Figure 7m" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 39% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/draw1.png" alt="Figure 7n" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Original image
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 14%><figure>
+                <img src="media/draw2_96.png" alt="Figure 7o" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 96% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/draw2_90.png" alt="Figure 7p" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 90% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/draw2_84.png" alt="Figure 7q" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 84% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/draw2_78.png" alt="Figure 7r" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 78% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/draw2_69.png" alt="Figure 7s" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 69% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/draw2_39.png" alt="Figure 7t" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 39% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 14%><figure>
+                <img src="media/draw2.png" alt="Figure 7u" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Original image
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>I also produced <b>inpaintings</b>, where a certain part of the image is 
+        preserved, but the rest is generated by the diffusion model. 
+        They are shown in the follwing.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 25%><figure>
+                <img src="media/test_im.png" alt="Figure 8a" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Original image
+                    </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/mask1.png" alt="Figure 8b" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Mask
+                    </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/toreplace1.png" alt="Figure 8c" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        To replace
+                    </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/inpaint1.png" alt="Figure 8d" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Inpainting
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 25%><figure>
+                <img src="media/inpaint_original2.png" alt="Figure 8e" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Original image
+                    </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/mask2.png" alt="Figure 8f" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Mask
+                    </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/toreplace2.png" alt="Figure 8g" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        To replace
+                    </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/inpaint2.png" alt="Figure 8h" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Inpainting
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 25%><figure>
+                <img src="media/inpaint_original3.png" alt="Figure 8i" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Original image
+                    </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/mask3.png" alt="Figure 8j" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Mask
+                    </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/toreplace3.png" alt="Figure 8k" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        To replace
+                    </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/inpaint3.png" alt="Figure 8l" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Inpainting
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        The following shows my attempts of conducting <b>Text-Conditioned 
+        Image-to-Image Translation</b>. The images are generated by trying to
+        denoise a noisy image (e.g. a tower) in the direction of the text prompt 
+        (e.g. a rocket). Here are the results.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 12.5%>
+                text: a rocket ship
+            </td>
+            <td width = 12.5%><figure>
+                <img src="media/rocket_tower_96.png" alt="Figure 9a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 96% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/rocket_tower_90.png" alt="Figure 9b" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 90% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/rocket_tower_84.png" alt="Figure 9c" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 84% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/rocket_tower_78.png" alt="Figure 9d" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 78% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/rocket_tower_69.png" alt="Figure 9e" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 69% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/rocket_tower_39.png" alt="Figure 9f" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 39% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/test_im.png" alt="Figure 9g" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Original image
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 12.5%>
+                text: a photo of a man
+            </td>
+            <td width = 12.5%><figure>
+                <img src="media/man_woman_96.png" alt="Figure 9h" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 96% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/man_woman_90.png" alt="Figure 9i" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 90% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/man_woman_84.png" alt="Figure 9j" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 84% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/man_woman_78.png" alt="Figure 9k" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 78% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/man_woman_69.png" alt="Figure 9l" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 69% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/man_woman_39.png" alt="Figure 9m" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 39% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/woman.png" alt="Figure 9n" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Original image
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 12.5%>
+                text: a lithograph of waterfalls
+            </td>
+            <td width = 12.5%><figure>
+                <img src="media/waterfall_view_96.png" alt="Figure 9o" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 96% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/waterfall_view_90.png" alt="Figure 9p" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Add 90% noise then denoise
+                </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/waterfall_view_84.png" alt="Figure 9q" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 84% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/waterfall_view_78.png" alt="Figure 9r" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 78% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/waterfall_view_69.png" alt="Figure 9s" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 69% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/waterfall_view_39.png" alt="Figure 9t" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Add 39% noise then denoise
+                    </figcaption>
+            </figure></td>
+            <td width = 12.5%><figure>
+                <img src="media/view.png" alt="Figure 9u" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Original image
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+
+</section>
+<section>
+    <h3>
+        A4. Visual Anagrams and Hybrid Images
+    </h3>
+    <p>
+        I generated <b>Visual Anagrams</b>, where the object in the image is a 
+        different object when flipped upside-down.
+        Here are the images.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 25%>
+                Unflipped:
+            </td>
+            <td width = 25%><figure>
+                <img src="media/dog.png" alt="Figure 10a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    A photo of a dog.
+                </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/campfire.png" alt="Figure 10b" 
+                    width=100%, height=auto>
+                <figcaption>
+                    An oil painting of people around a campfire.
+                </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/waterfall.png" alt="Figure 10c" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        A lithograph of waterfalls.
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 25%>
+                Flipped:
+            </td>
+            <td width = 25%><figure>
+                <img src="media/man.png" alt="Figure 10d" 
+                    width=100%, height=auto>
+                <figcaption>
+                    A photo of a man.
+                </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/oldman.png" alt="Figure 10e" 
+                    width=100%, height=auto>
+                <figcaption>
+                    An oil painting of old man under a light bulb.
+                </figcaption>
+            </figure></td>
+            <td width = 25%><figure>
+                <img src="media/skull.png" alt="Figure 10f" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        A lithograph of a skull.
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        I also generated <b>Hybrid images</b>, where a image may appear as 
+        different objects when looked closely and afar. Here are the images.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 33%><figure>
+                <img src="media/waterfall_skull_hybrid.png" alt="Figure 11a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Waterfall + Skull
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/snow_campfire_hybrid.png" alt="Figure 11b" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Snow mountain villege + Campfire
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/man_dog_hybrid.png" alt="Figure 11c" 
+                    width=100%, height=auto>
+                    <figcaption>
+                        Man + Dog
+                    </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        Besides the successful Waterfull-Skull Hybrid, the other Hybrid
+        images just seems to be simply stacking the elements of the two objects. 
+        The Snow-mountain-villege-Camfire Hybrid just protraits people having 
+        campfire on a snowy mountain.
+    </p>
+</section>
+<section>
+    <h3>
+        A5. Bells and Whistles: Class Logo
+    </h3>
+    <p>
+        Along all the class logos I generated using diffusion model, the following
+        two logos are my favourates, which showcased both 'computer' (robot)
+        and 'vision' (camera).
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/logo1.png" alt="Figure 12a" 
+                    width=100%, height=auto>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/logo2.png" alt="Figure 12b" 
+                    width=100%, height=auto>
+            </figure></td>
+        </tr>
+    </table>
+</section>
+
+<section>
+    <h3>
+        B1. UNet implementation
+    </h3>
+    <p>
+        I implemented a UNet denoiser to denoise MNIST images at different noise 
+        level. Noisy images are generated by adding pure noise to the original 
+        image. The pure noise used in this project has a standard normal 
+        distribution. Different levels of noisy MNIST images are shown here. The 
+        images are noised at 0%, 20%, 40%, 50%, 60%, 80%, 100%, respectively.
+    </p>
+    <figure>
+        <img src="media/uncond_denoise3.pdf" alt="Figure 13" 
+            width=100%, height=auto>
+    </figure>
+    <p>
+        The Unet denoiser is implemented with the following structure.
+    </p>
+    <figure>
+        <img src="media/unet_structure.png" alt="Figure 14" 
+            width=100%, height=auto>
+    </figure>
+    <p>
+        I trained the UNet on 50%-noisy MNIST images (original image + 50% 
+        pure noise), and used the 
+        <a href="https://en.wikipedia.org/wiki/Mean_squared_error">Mean Square 
+        Error (MSE)</a> between the UNet's predicted image and the 
+        real clean image as loss function. The UNet can denoise the noisy image
+        effectively. Here are the training loss curve and the denoised images.
+    </p>
+    <figure>
+        <img src="media/uncond_loss_graph.pdf" alt="Figure 15" 
+            width=100%, height=auto>
+    </figure>
+    <figure>
+        <img src="media/uncond_denoise1.pdf" alt="Figure 16" 
+            width=100%, height=auto>
+    </figure>
+    <p>
+        Even though the UNet is trained to denoise a 50%-noisy image, I tried to 
+        use it to denoise noiser and cleaner
+        images. Here are the noised images (first row, noised at 0%, 20%, 40%, 
+        50%, 60%, 80%, 100%, respectively) and the images denoised 
+        by the UNet (second row).
+    </p>
+    <figure>
+        <img src="media/uncond_denoise2.pdf" alt="Figure 17" 
+            width=100%, height=auto>
+    </figure>
+    <p>
+        The UNet denoiser can denoise the images well, even when the amount of 
+        noise changes.
+    </p>
+</section>
+
+<section>
+    <h3>
+        B2. Time-Conditioned UNet
+    </h3>
+    <p>
+        To improve the UNet's ability to denoise an image when different amount
+        of noise is given, I use <i>t</i> to tell the UNet how much noise is
+        added in each image during training. The UNet predicts the noise that
+        had been added to the image. The following shows the training algorithm.
+    <figure>
+        <img src="media/algo1.png" alt="Figure 18" 
+            width=100%, height=auto>
+    </figure>
+    <p>
+        I trained the UNet using 20 epochs, the Adam optimizer for gradiant 
+        descent and an initial learning rate of 1e-3. I set the batch size 
+        as 128 and the number of hidden layers as 128 (two times as advised in ). Here is the training
+        loss curve.
+    </p>
+    <figure>
+        <img src="media/time_cond_loss_graph.pdf" alt="Figure 19" 
+            width=100%, height=auto>
+    </figure>
+    <p>
+        Ideally, when feeding the UNet a pure noise image to denoise, the UNet
+        would generate a "human-written" number image using its own understanding.
+        This process is called Sampling. The sampling process is defined as
+        follows.
+    </p>
+    <figure>
+        <img src="media/algo2.png" alt="Figure 20" 
+            width=100%, height=auto>
+    </figure>
+    <p>
+        I preprocessed the sampled images by setting all pixels under a certain 
+        threshold as black. In this way minor noise are further eliminated. 
+        The computer-generated MNIST images after 5 and 20 training epochs are
+        shown here. 
+    </p>
+    <figure>
+        <img src="media/time_cond_generated_img4.png" alt="Figure 21" 
+            width=100%, height=auto>
+        </figcaptain>
+            Computer-Generated MNIST images using Time-Conditioned UNet 
+            after 5 training epochs.
+        </figcaption>
+    </figure>
+    <figure>
+        <img src="media/time_cond_generated_img19.png" alt="Figure 22" 
+            width=100%, height=auto>
+        </figcaptain>
+            Computer-Generated MNIST images using Time-Conditioned UNet 
+            after 20 training epochs.
+        </figcaption>
+    </figure>
+    <p>
+        It's clear that the generated images are not satisfying, as many of them
+        are hardly readable.
+    </p>
+</section>
+
+<section>
+    <h3>
+        B3. Class-Conditioned UNet
+    </h3>
+    <p>
+        The unsatisfying results generated by the Time-Conditioned UNet is
+        probably due to the lack of image labels. The computer didn't know
+        which number it should generate, so it generated a combination of all 
+        numbers. To fix this, I added <b>Class-Conditioning</b> to the Unet.
+        The Unet is told which number each image represent during training, and
+        in sampling, we would tell the UNet which number we would want it to
+        generate. <b>Classifier-Free Guidance</b> is applied in the sampling 
+        process. Algorithm 3 and 4 shows the training and sampling process
+        for Class-Conditioned UNet, respectively.
+    </p>
+    <figure>
+        <img src="media/algo3.png" alt="Figure 23" 
+            width=100%, height=auto>
+    </figure>
+    <figure>
+        <img src="media/algo4.png" alt="Figure 23" 
+            width=100%, height=auto>
+    </figure>
+    <p>
+        The hyperparams used for training are identical to the previous training 
+        of the Time-Conditioned UNet. Here is the training loss curve.
+    </p>
+    <figure>
+        <img src="media/class_cond_loss_graph.pdf" alt="Figure 24" 
+            width=100%, height=auto>
+    </figure>
+    <p>
+        Here are the results after 5 and 20 training epochs.
+    </p>
+    <figure>
+        <img src="media/class_cond_generated_img4.png" alt="Figure 21" 
+            width=100%, height=auto>
+        </figcaptain>
+            Computer-Generated MNIST images using Class-Conditioned UNet 
+            after 5 training epochs.
+        </figcaption>
+    </figure>
+    <figure>
+        <img src="media/class_cond_generated_img19.png" alt="Figure 22" 
+            width=100%, height=auto>
+        </figcaptain>
+            Computer-Generated MNIST images using Class-Conditioned UNet 
+            after 20 training epochs.
+        </figcaption>
+    </figure>
+    <p>
+       Given enough training, the results improved dramatically compared to the 
+       Time-Conditioning attempt.
+    </p>
+</section>
+
+
+<p>
+    * Part A finished on Nov 6, 2024; Part B finished on Nov 16, 2024.
+</p>
+</body>
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3
+/es5/tex-mml-chtml.js"></script>
+</html>
