@@ -11,12 +11,12 @@ NUM_STEPS = 2000
 LR = 1e-2
 SAVE_FREQ = 50
 
-ROOT_DIR = ""
-NET_DIR = "2d_nets/"
-GEN_IMG_DIR = "pred_2d_imgs/"
-IMG_PATH = "animal.jpg"
+ROOT_DIR = "final_proj/"
+NET_DIR = "final_proj/2d_nets_lena/"
+GEN_IMG_DIR = "final_proj/pred_lenas/"
+IMG_PATH = "final_proj/lena.png"
 
-TRAIN_MODE = True
+TRAIN_MODE = False
 
 
 def sinusoidal_position(pos: torch.Tensor, L: int) -> torch.Tensor:
@@ -32,7 +32,7 @@ def sinusoidal_position(pos: torch.Tensor, L: int) -> torch.Tensor:
     out_pos = out_pos.reshape(pos.shape[0], -1)
     return out_pos
 
-def psnr(mse: torch.Tensor) -> torch.Tensor:
+def psnr(mse: torch.Tensor):
     """calculate the Peak Signal-to-Noise Ratio (PSNR) given 
        the input Mean Square Error (MSE).
        - mse: Mean Square Error with shape [N].
@@ -41,10 +41,10 @@ def psnr(mse: torch.Tensor) -> torch.Tensor:
 
 
 class img_iter:
-    """an image iterator class that randomly iterates through an image,
-       returns pixel coordinates and their corresponding rgb color."""
+    """an image iterator class that returns random sinusoidal positions and 
+       their desired color output."""
     def __init__(self, img, batch_size: int, num_steps: int):
-        """img pixels should be inside the range of [0, 1]"""
+        """img pixels should be inside the range of [0, 1]."""
         self.img = torch.tensor(img)
         self.num_steps = num_steps
         self.current_step = 0
@@ -54,8 +54,7 @@ class img_iter:
         return self
     
     def __next__(self):
-        """returns sinusoidal positional encoded pixel coordinates and their 
-           corresponding rgb color."""
+        """returns sinusoidal positional input and pixel color."""
         if self.current_step == self.num_steps: raise StopIteration
         rand_rows = torch.randint(0, self.img.shape[0], (self.batch_size,))
         rand_cols = torch.randint(0, self.img.shape[1], (self.batch_size,))
@@ -66,8 +65,11 @@ class img_iter:
         self.current_step += 1
         return pe_pos.float(), values.float()
 
+
+
 img = plt.imread(IMG_PATH)[:,:,:3]
 img = img / img.max()
+
 
 if TRAIN_MODE:
     net = nn.Sequential(
@@ -103,7 +105,7 @@ if TRAIN_MODE:
 else:
     MODEL_NO = 1950 # which trained net to use.
     with torch.no_grad():
-        net = torch.load(NET_DIR + f"net{MODEL_NO}.pth")
+        net = torch.load(NET_DIR + "net{MODEL_NO}.pth")
         img = torch.Tensor(img)
         pred_img = torch.zeros(img.shape).cuda()
         for row in range(img.shape[0]): # predict img by row due to gpu memory limit.
