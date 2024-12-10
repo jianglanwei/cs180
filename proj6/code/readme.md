@@ -21,7 +21,7 @@ The following libraries are required to run `NeRF.py`:
 **Functions:**
 1. `sinusoidal_position(pos: torch.Tensor, L: int) -> torch.Tensor`: Conduct Sinusoidal Positional Encoding (PE) on given position.
 2. `psnr(mse: torch.Tensor) -> torch.Tensor`: Calculate the Peak Signal-to-Noise Ratio (PSNR) given 
-the input Mean Square Error (MSE).
+the input Mean Square Error (MSE).   
 **Class:**
 3. `img_iter`: An image iterator class that randomly iterates through an image.
     - `__init__(self, img: array_like, batch_size: int, num_steps: int)`: Initilize class.
@@ -37,7 +37,7 @@ the input Mean Square Error (MSE).
 5. `vol_rend(rgbs: torch.Tensor, densities: torch.Tensor, step_size: float, background_rgb: torch.Tensor = torch.zeros(3)) -> torch.Tensor`: Volume rendering for NeRF.
 6. `sinusoidal_position(x: torch.Tensor, L: int) -> torch.Tensor`: Conduct sinusoidal positional encoding (PE) on x.
 7. `psnr(mse: torch.Tensor) -> float`: Calculate the Peak Signal-to-Noise Ratio (PSNR) given the input Mean Square Error (MSE).
-8. `to_gpu(gpu: torch.device, *objs) -> Tuple`: Converts iterable objects into Tensor and move them to selected GPU.
+8. `to_gpu(gpu: torch.device, *objs) -> Tuple`: Converts iterable objects into Tensor and move them to selected GPU.   
 **Class:**
 9. `nerf_iter`: A sample iterator class that samples random rays from image batch, and fetch sample locations on those rays.
     - `__init__(self, imgs: np.ndarray, c2ws: np.ndarray, focal: int, batch_size: int, num_steps: int, near: float, far: float, num_samples_per_ray: int, perturbation_width: float = 0.)`: Initilize class.
