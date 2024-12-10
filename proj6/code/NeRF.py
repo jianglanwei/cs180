@@ -6,22 +6,29 @@ import torchsummary
 from typing import Tuple
 import matplotlib.pyplot as plt
 
-ROOT_DIR = ""
-NET_DIR = "nerf_nets/"
-GEN_IMG_DIR = "pred_3d_objs/"
+ROOT_DIR = "final_proj/"
+NET_DIR = "final_proj/nerf_nets_larger/"
+GEN_IMG_DIR = "final_proj/pred_lego/"
 
 SAMPLE_NEAR = 2.
 SAMPLE_FAR = 6.
-NUM_SAMPLES_PER_RAY = 32
+# NUM_SAMPLES_PER_RAY = 32
+NUM_SAMPLES_PER_RAY = 64
 PERTURBATION_WIDTH = .02
 
-NUM_INPUT_FREQ_LEVELS = 10
-NUM_HIDDEN = 256
-BATCH_SIZE = 10_000
-LR = 5e-4
-NUM_STEPS = 2000
+# NUM_INPUT_FREQ_LEVELS = 10
+# NUM_HIDDEN = 256
+# BATCH_SIZE = 10_000
+# LR = 5e-4
+# NUM_STEPS = 2000
 
-TRAIN_MODE = True
+NUM_INPUT_FREQ_LEVELS = 20
+NUM_HIDDEN = 1024
+BATCH_SIZE = 5_000
+LR = 5e-4
+NUM_STEPS = 4000
+
+TRAIN_MODE = False
 SAVE_FREQ = 50
 GEN_IMG_BACKGROUND_RGB = torch.tensor([0, 0, 1])
 
@@ -53,10 +60,10 @@ focal = data["focal"]  # float
 
 def camera2world(x: np.ndarray, c2ws: np.ndarray) -> np.ndarray:
     """transform 3d coordinates in camera view (x) to world view (out)
-       using transformation matrix T.
+       using transformation matrix T.\n
        inputs:
        - x: 3d camera coordinates with shape: [N, 3];
-       - c2ws: camera to world transformation matrix with shape [N, 4, 4].
+       - c2ws: camera to world transformation matrix with shape [N, 4, 4].\n 
        output: 3d world coordinates with shape [N, 3]."""
     x = np.concatenate((x, np.ones((len(x), 1))), axis=1)[:,np.newaxis,:]
     out = x @ np.swapaxes(c2ws, 1, 2)
@@ -64,11 +71,11 @@ def camera2world(x: np.ndarray, c2ws: np.ndarray) -> np.ndarray:
 
 def pixel2camera(uv: np.ndarray, K: np.ndarray, s: np.ndarray) -> np.ndarray:
     """map pixel coordinates (uv) to 3d camera-view coordinates (out)
-       using intrinsic matrix K.
+       using intrinsic matrix K.\n
        inputs:
        - uv: 2d pixel coordinates with shape [N, 2];
        - K: intrinsic matrix with shape [3, 3];
-       - s: depth of point along the optical axis with shape [N].
+       - s: depth of point along the optical axis with shape [N].\n
        output: 3d camera coordinates with shape [N, 3]."""
     uv = np.concatenate((uv, np.ones((len(uv), 1))), axis=1)
     out = (uv * s[:,np.newaxis]) @ np.linalg.inv(K).T
@@ -76,11 +83,11 @@ def pixel2camera(uv: np.ndarray, K: np.ndarray, s: np.ndarray) -> np.ndarray:
 
 def pixel2ray(uv: np.ndarray, K: np.ndarray, c2ws: np.ndarray
               ) -> Tuple[np.ndarray, np.ndarray]:
-    """map pixel coordinates (uv) to rays with origin and normalized direction.
+    """map pixel coordinates (uv) to rays with origin and normalized direction.\n
        inputs:
        - uv: 2d pixel coordinates with shape [N, 2];
        - K: intrinsic matrix with shape [3, 3];
-       - c2ws: camera to world transformation matrix with shape [N, 4, 4].
+       - c2ws: camera to world transformation matrix with shape [N, 4, 4].\n
        outputs: 
        - ray origin with shape [N, 3]; 
        - normalized ray direction with shape [N, 3]."""
@@ -93,11 +100,11 @@ def pixel2ray(uv: np.ndarray, K: np.ndarray, c2ws: np.ndarray
 
 class nerf_iter:
     """a sample iterator class that samples random rays from image batch,
-       and fetch sample locations on those rays."""
+       and obtain samples on those rays."""
     def __init__(self, imgs: np.ndarray, c2ws: np.ndarray, focal: int, 
                  batch_size: int, num_steps: int, near: float, far: float,
                  num_samples_per_ray: int, perturbation_width: float = 0.):
-        """initialize sample iterator class.
+        """initialize sample iterator class. \n
            inputs:
            - imgs: all images with shape [num_imgs, img_height, img_width];
            - c2ws: camera to world transformation matrix with shape [num_imgs, 4, 4];
@@ -128,7 +135,7 @@ class nerf_iter:
         return self
     
     def __next__(self):
-        """fetch samples on random rays.
+        """obtain samples on random rays.\n
            outputs:
            - 3d samples' coordinates with shape [N, num_samples_per_ray, 3];
            - normalized ray direction with shape [N, 3];
@@ -166,14 +173,14 @@ class nerf_iter:
 def ray_samples(ray_ori: np.ndarray, ray_dir_norm: np.ndarray,
                 near: float, far: float, num_samples_per_ray: int, 
                 perturbation_width: float = 0) -> np.ndarray:
-    """sample 3d points along a given ray.
+    """sample 3d points along a given ray.\n
        inputs:
        - ray_ori: origin of ray with shape [N, 3];
        - ray_dir_norm: normalized direction of ray with shape [N, 3];
        - near: distance of nearest sample to ray origin;
        - far: distance of furthest sample to ray origin;
        - num_samples_per_ray: number of samples obtained on each ray;
-       - perturbation_width: range of perturbation added to samples' coordinates.
+       - perturbation_width: range of perturbation added to samples' coordinates.\n
        output: 3d samples' coordinates with shape [N, num_samples_per_ray, 3]."""
     distance_to_origin = np.linspace(near, far, num_samples_per_ray)[:,np.newaxis]
     perturbation = (np.random.rand(num_samples_per_ray, 1) - 1/2) * perturbation_width
@@ -184,12 +191,12 @@ def ray_samples(ray_ori: np.ndarray, ray_dir_norm: np.ndarray,
 
 def vol_rend(rgbs: torch.Tensor, densities: torch.Tensor, step_size: float,
              background_rgb: torch.Tensor = torch.zeros(3)) -> torch.Tensor:
-    """volume rendering for nerf.
+    """volume rendering for nerf.\n
        inputs:
        - rgbs: rgb color at the sample points with shape [N, num_samples_per_ray, 3];
        - density: color densities (sigmas) with shape [N, num_samples_per_ray, 1];
        - step size: length between sample points on the ray.
-       - background_rgb: background color of the rendered image with shape [3].
+       - background_rgb: background color of the rendered image with shape [3].\n
        output: rendered color with shape [N, 3]."""
     terminate_prob = 1 - torch.exp(-densities * step_size)
     arrive_prob = torch.exp(-torch.cumsum(densities * step_size, dim=1))
@@ -202,10 +209,10 @@ def vol_rend(rgbs: torch.Tensor, densities: torch.Tensor, step_size: float,
     return rendered_color
 
 def sinusoidal_position(x: torch.Tensor, L: int) -> torch.Tensor:
-    """conduct sinusoidal positional encoding (pe) on x.
+    """conduct sinusoidal positional encoding (pe) on x.\n
        inputs:
        - x: object with shape [N, num_samples_per_ray, D].
-       - L: highest frequency level.
+       - L: highest frequency level.\n
        output: position encoded 'x' (pe_x) with shape
                [N, num_samples_per_ray, (2 * L + 1) * D]."""
     pe_shape = (x.shape[0], x.shape[1], (2 * L + 1), x.shape[2])
@@ -219,15 +226,14 @@ def sinusoidal_position(x: torch.Tensor, L: int) -> torch.Tensor:
 
 def psnr(mse: torch.Tensor) -> float:
     """calculate the Peak Signal-to-Noise Ratio (psnr) given 
-       the input Mean Square Error (mse).
-       input: mse, Mean Square Error with shape [1].
+       the input Mean Square Error (mse).\n
+       input: mse, Mean Square Error with shape [1].\n
        output: psnr."""
     return (-10 * torch.log10(mse)).item()
 
-
 class nerf_net(nn.Module):
-    """multilayer perceptron (mlp) network designed for nerf task."""
-    def __init__(self, num_hidden: int) -> None:
+    """multipayer perceptron network (mlp) designed for nerf task."""
+    def __init__(self, num_hidden: int):
         super().__init__()
         self.pe = sinusoidal_position
         pe_len = 6 * NUM_INPUT_FREQ_LEVELS + 3
@@ -248,11 +254,11 @@ class nerf_net(nn.Module):
 
     def forward(self, sample_coords: torch.Tensor, ray_dir: torch.Tensor
                 ) -> Tuple[torch.Tensor, torch.Tensor]:
-        """forward function for nerf net.
+        """forward function for nerf net.\n
            inputs: 
            - 3d coordinates of sample points with shape [N, num_samples_per_ray, 3],
              the coordinates need to be normalized to approximately [0, 1];
-           - ray direction with shape [N, 1, 3].
+           - ray direction with shape [N, 1, 3].\n
            outputs:
            - predicted color density with shape [N, num_samples_per_ray, 1];
            - predicted rgb color with shape [N, num_samples_per_ray, 3]."""
@@ -319,7 +325,7 @@ if TRAIN_MODE:
             torch.save(net, NET_DIR + f"net{step}.pth")
             torch.save(grf, ROOT_DIR + "nerf_loss_grf.pth")
 else:
-    MODEL_NO = 1950 # which trained net to use.
+    MODEL_NO = 3950 # which trained net to use.
     with torch.no_grad():
         net = torch.load(NET_DIR + f"net{MODEL_NO}.pth")
         train_iter = nerf_iter(train_imgs, train_c2ws, focal, BATCH_SIZE, NUM_STEPS,
@@ -344,5 +350,5 @@ else:
                 rendered_rgbs = vol_rend(pred_rgbs, pred_densities, 
                                          step_size, GEN_IMG_BACKGROUND_RGB)
                 pred_img[row] = rendered_rgbs.detach().cpu().numpy()
-            plt.imsave(GEN_IMG_DIR + f"img{img_idx}.png", pred_img)
             print(f"image {img_idx} generated.")
+            plt.imsave(GEN_IMG_DIR + f"img{img_idx}.png", pred_img)
