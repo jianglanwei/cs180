@@ -39,7 +39,7 @@ the input Mean Square Error (MSE).
     - `__init__(self, imgs: np.ndarray, c2ws: np.ndarray, focal: int, batch_size: int, num_steps: int, near: float, far: float, num_samples_per_ray: int, perturbation_width: float = 0.)`: Initilize class.
     - `__iter__(self)`: Returns self as generator.
     - `__next__(self)`: Fetch samples on random rays.
-    - `find_sample_range(self)`: find the maximum and minimum world-view coordinates on each axis. they are used to normalize the input 3D world-view coordinates.
+    - `find_sample_range(self)`: Find the maximum and minimum world-view coordinates on each axis. They are used to normalize the input 3D world-view coordinates.
 10. `nerf_net(nn.Module)`: Multilayer Perceptron (MLP) network desgned for NeRF task.
     - `__init__(self, num_hidden: int)`: Initilize class.
     - `forward(self, sample_coords: torch.Tensor, ray_dir: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]`: Forward function for NeRF net.
