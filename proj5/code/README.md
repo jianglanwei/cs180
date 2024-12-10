@@ -1,4 +1,3 @@
-
 ## CS 180 Project 5 Code
 
 **Fun with Diffusion Models**&emsp;[Webpage](https://davidpaulwei.github.io/cs180/proj5/)
