@@ -1,0 +1,709 @@
+<html>
+<head>
+    <title>David Wei's CS180 Final Project</title>
+    <style>
+        h2 {text-align: center;}
+        h3 {text-align: left;}
+        h4 {text-align: left;}
+        p {text-align: left;}
+        div {text-align: center;}
+        nav {text-align: right;}
+        figure {
+            padding: 4px;
+            margin: auto;
+        }
+        figcaption {
+            background-color: white;
+            color: black;
+            padding: 2px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h2>
+        <b>CS180 Final Project: Neural Radiance Field (NeRF)</b>
+    </h2>
+    <div>
+        David Wei<br>
+        <a href= "mailto: david_wei@berkeley.edu"> david_wei@berkeley.edu </a>
+        <hr>
+    <div>
+    <nav>
+        <a href= "https://inst.eecs.berkeley.edu/~cs180/fa23/hw/proj5/"> 
+            Project Introduction </a> |
+        <a href= "https://github.com/davidpaulwei/cs180/tree/main/proj6/code"> 
+            My Code </a> |
+        <a href= "https://davidpaulwei.github.io/cs180"> 
+            All My CS180 Projects </a>
+    </nav>
+    
+
+    
+<section>
+    <h3>
+        1. Introduction
+    </h3>
+    <p>
+        My final project consists two parts: Fit a Neural Field to a 2D Image
+        (Part A), and Fit a Neural Radiance Field from Multi-view Images (Part B).
+    </p>
+    <p>
+        In Part A, I built a Multiplayer Perceptron (MLP) network to fit a single 
+        2D image so that given any pixel's coordinate, the network can predict the 
+        pixel's RGB color. When the image's shape is provided, the network can 
+        reconstruct the whole image. In Part B, I trained a larger MLP network, 
+        or a Neural Radiance Field (NeRF), to fit a 3D <i>Lego</i> object through 
+        inverse rendering from multi-view calibrated images. The pixels on the 
+        images were bounded with rays represented in 3D world coordinate system. 
+        Sample locations were gathered along the rays, and their volume rendering 
+        results were used to fit the RGB colors on the images' pixels. In this 
+        way the <i>Lego</i> object was modeled into the NeRF. Using the trained 
+        NeRF, I'm able to predict the images of the <i>Lego</i> taken from any 
+        given perspectives. I rendered these images into a video to create a 
+        rotating effect of the <i>Lego</i>.
+    </p>
+
+</section>
+
+<section>
+    <h3>
+        Part A: Fit a Neural Field to a 2D Image
+    </h3>
+    <p>
+        In Part A, I trained a Neural Field to fit a single 2D image. This means
+        that given any pixel's coordinate, the network can predict the pixels' 
+        RGB color. When the image's shape is provided, the network can
+        reconstruct the whole image.
+    </p>
+    <p>
+        In order to map 2D pixel coordinates to RGB colors, I built a <a href=
+        "https://en.wikipedia.org/wiki/Multilayer_perceptron">Multilayer 
+        Perceptron</a> (MLP) network defined as follows.
+    </p>
+    <figure>
+        <img src="media/2dmlp.jpg" alt="Figure 1" 
+            width=100%, height=auto>
+        <figcaption>
+            Figure 1: Architecture of MLP network to fit a 2D image.
+        </figcaption>
+    </figure>
+    <p>
+        The Sinusoidal Positional Encoding (PE) is conducted to expand the 
+        dimensionality of the input coordinates. Here the PE operation is defined
+        as 
+        \[
+        PE(x) = \{x, sin(2^0\pi x), cos(2^0\pi x),
+            sin(2^1\pi x), cos(2^1\pi x), ..., 
+            sin(2^{L-1}\pi x), cos(2^{L-1}\pi x)\},
+        \]
+        where <i>L</i> is the highest frequency level.
+    </p>
+    <p>
+        It is not feasible to train the network with all the pixels in each
+        iteration due to the GPU memory limit, so I implemented a dataloader
+        that randomly samples a batch size of <i>N</i> pixels at every iteration 
+        of training. I normalized the pixel coordinates into [0, 1] before 
+        feeding it to PE encoding.
+    </p>
+    <p>
+        I trained my model on an animal image and the famous <i>Lenna</i> image
+        shown in Figure 2.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/animal.jpg" alt="Figure 2a" 
+                    width=100%, height=auto>
+                <figcaption>Figure 2a: The animal image.</figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/lena.png" alt="Figure 2b" 
+                    width=100%, height=auto>
+                <figcaption>Figure 2b: The <i>Lenna</i> image.</figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        The model is trained for 2,000 steps on both images, with each step 
+        learning from a batch size of <i>N</i> = 10,000 pixels. I used the 
+        Adam optimizer with an initial learning rate of 1e-2 for gradient descent.
+        I set the number of hidden layers in the MLP net as 256, and the highest 
+        frequency level in PE encoding as <i>L</i> = 10, which would map a 2 
+        dimension coordinate into a 42 dimension vector. I chose the
+        <a href="https://en.wikipedia.org/wiki/Mean_squared_error">Mean Squared 
+        Error</a> (MSE) between the predicted image and the real image as the 
+        loss function, and used
+        <a href="https://en.wikipedia.org/wiki/Peak_signal-to-noise_ratio">
+        Peak Signal-to-Noise Ratio (PSNR)</a> to measure the reconstruction of 
+        the image. PSNR is defined as 
+        \[
+            PSNR = 10 \cdot log_{10}\left(\frac{1}{MSE}\right).
+        \]
+        The MSE/PSNR graphs for both trainings are shown in Figure 3.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/loss_graph_animal.pdf" alt="Figure 3a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 3a: The MSE/PSNR graph for the training 
+                    on the animal image.
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/loss_graph_lena.pdf" alt="Figure 3b" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 3b: The MSE/PSNR graph for the training
+                    on the <i>Lenna</i> image.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        The predicted images after different number of training steps are shown
+        in Figure 4.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 33%><figure>
+                <img src="media/pred_animal0.png" alt="Figure 4a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 4a: Predicted animal image after 0 training steps.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/pred_animal100.png" alt="Figure 4b" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 4b: Predicted animal image after 100 training steps.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/pred_animal250.png" alt="Figure 4c" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 4c: Predicted animal image after 250 training steps.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 33%><figure>
+                <img src="media/pred_animal500.png" alt="Figure 4d" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 4d: Predicted animal image after 500 training steps.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/pred_animal1000.png" alt="Figure 4e" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 4e: Predicted animal image after 1000 training steps.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/pred_animal1950.png" alt="Figure 4f" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 4f: Predicted animal image after 1950 training steps.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 33%><figure>
+                <img src="media/pred_lena0.png" alt="Figure 4g" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 4g: Predicted <i>Lenna</i> image after 
+                    0 training steps.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/pred_lena100.png" alt="Figure 4h" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 4h: Predicted <i>Lenna</i> image after 
+                    100 training steps.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/pred_lena250.png" alt="Figure 4i" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 4i: Predicted <i>Lenna</i> image after 
+                    250 training steps.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 33%><figure>
+                <img src="media/pred_lena500.png" alt="Figure 4j" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 4j: Predicted <i>Lenna</i> image after 
+                    500 training steps.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/pred_lena1000.png" alt="Figure 4k" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 4k: Predicted <i>Lenna</i> image after 
+                    1000 training steps.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/pred_lena1950.png" alt="Figure 4l" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 4l: Predicted <i>Lenna</i> image after 
+                    1950 training steps.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        I reduced the highest frequency level in PE encoding to <i>L</i> = 5
+        and the number of hidden layers to 128, and train the MLP network on the 
+        animal images again. Figure 5 shows the result comparison between the 
+        reduced network and the original network.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/pred_img_reduced.png" alt="Figure 5a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 5a: Predicted animal image on reduced MLP net.
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/pred_animal1950.png" alt="Figure 5b" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 5b: Predicted animal image on original MLP net.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        The predicted image generated by the reduced MLP net is hardly accurate.
+        This indicates that an abundant network size is necessary to yield good
+        result.
+    </p>
+
+</section>
+
+<section>
+    <h3>
+        Part B: Fit a Neural Radiance Field from Multi-view Images
+    </h3>
+    <p>
+        In Part B, I was given 100 images of the same <i>Lego</i> object taken 
+        at different viewpoint, along with the camera's coordinates and angles
+        when the images were taken. I modeled the 3D <i>Lego</i> object 
+        using a Neural Radiance Field, and use it to predict images of the 
+        <i>Lego</i> object taken at new perspectives.
+    </p>
+    <h3>
+        B1. Transform 2D Pixel Coordinates to Rays in 3D World Coordinates
+    </h3>
+    <p>
+        To generate a model that represents a 3D object via multi-view calibrated
+        images, I need to transform a 2D pixel coordinate in the camera 
+        space to a ray in 3D space represented by world space coordinate. The 
+        real world correspondences that caused in the RGB color of that pixel
+        should be located along that ray. 
+    </p>
+    <p>
+        First, I used the intrinsic matrix \(\mathbf{K}\) to transform 2D pixel
+        coordinate to 3D coordinate in camera space. The intrinsic matrix in
+        defined as 
+        \[
+            \begin{align}
+            \mathbf{K} = \begin{bmatrix} f_x & 0 & o_x \\ 0 & f_y & o_y \\ 0 & 0 
+            & 1 \end{bmatrix} \end{align},
+        \]
+        where \((f_x, f_y)\) is the camera's focal length, and \((o_x, o_y)\)
+        is the camera's principal point, defined as 
+        \[
+            o_x = \text{image_width} / 2;
+        \]
+        \[
+            o_y = \text{image_height} / 2.
+        \]
+        The projection from a 2D location \((u, v)\) in pixel coordinate to a 3D 
+        point \((x_c, y_c, z_c)\) in the camera coordinate system is denoted as 
+        \[
+            \begin{align} s \begin{bmatrix} u \\ v \\ 1 \end{bmatrix} = \mathbf{K}
+            \begin{bmatrix} x_c \\ y_c \\ z_c \end{bmatrix} \end{align},
+        \]
+        in which \(s=z_c\) is the depth of this point along the optical axis.
+    </p>
+    <p>
+        Then, I used the rotation matrix 
+        \(\mathbf{R}_{3\times3}\) and a translation vector \(\mathbf{t}\) to transform 
+        3D camera space coordinate \(\mathbf{X_c} = (x_c, y_c, z_c)\) to 3D world 
+        space coordinate \(\mathbf{X_w} = (x_w, y_w, z_w)\), denoted as 
+        \[
+            \begin{align} \begin{bmatrix} x_c \\ y_c \\ z_c \\ 1 \end{bmatrix} = 
+            \begin{bmatrix} \mathbf{R}_{3\times3} & \mathbf{t} \\ 
+            \mathbf{0}_{1\times3} & 1 \end{bmatrix} \begin{bmatrix} x_w \\ y_w 
+            \\ z_w \\ 1 \end{bmatrix} \end{align}.
+        \]
+    </p>
+    <p>
+        A ray can be defined by an origin \(\mathbf{r}_o \in R^3\) vector and 
+        a direction \(\mathbf{r}_d \in R^3\) vector. I want to know the 
+        \(\{\mathbf{r}_o, \mathbf{r}_d\}\) for every pixel \((u, v)\). The origin
+        \(\mathbf{r}_o\), or the location of the camera, is 
+        \[
+            \begin{align} \mathbf{r}_o =
+            -\mathbf{R}_{3\times3}^{-1}\mathbf{t} \end{align}.
+        \]
+        To calculate the ray direction for pixel \((u, v)\), I chose a point 
+        along this ray with depth equals 1 \((s=1)\) and find its coordinate in 
+        the world space \(\mathbf{X_w} = (x_w, y_w, z_w)\). Then the normalized
+        ray direction can be computed by
+        \[
+            \begin{align} \mathbf{r}_d = \frac{\mathbf{X_w} - 
+            \mathbf{r}_o}{||\mathbf{X_w} - \mathbf{r}_o||_2} \end{align}.
+        \]
+        In this way, I got to compute the corresponding ray 
+        \(\{\mathbf{r}_o, \mathbf{r}_d\}\) for every pixel \((u, v)\) in each 
+        camera.
+    </p>
+</section>
+
+<section>
+    <h3>
+        B2. Sampling along the Ray
+    </h3>
+    <p>
+        Similar to part A, I randomly sampled a batch size of <i>N</i> rays
+        from different cameras. I discretized each ray into a number of 3D 
+        points. The points are sampled uniformly along each ray between a 
+        "near point" and a "far point". During training, I would add a minor 
+        perturbation to the points' coordinates. Figure 6 shows the sampled rays 
+        (black line) and points (red dot) during each step of training. Their 
+        coordinates will be fed to the MLP net as inputs. I reduced the batch 
+        size (number of rays sampled) to <i>N</i> = 10 to produce a less crowded 
+        figure.
+    </p>
+    <figure>
+        <img src="media/ray_samples.png" alt="Figure 6" 
+            width=100%, height=auto>
+        <figcaption>
+            Figure 6: Sampled rays and points during each step of training.
+        </figcaption>
+    </figure>
+
+
+</section>
+
+<section>
+    <h3>
+        B3. Volume Rendering
+    </h3>
+    <p>
+        The pixel's color captured by the camera is the combined effort of all 
+        objects along the pixel's corresponding ray. The color can be represented
+        by the volume rendering equation 
+        \[
+            \begin{align} C(\mathbf{r})=\int_{t_n}^{t_f} T(t) 
+            \sigma(\mathbf{r}(t))\mathbf{c}(\mathbf{r}(t), \mathbf{d}) d t, 
+            \text { where } T(t)=\exp \left(-\int_{t_n}^t \sigma(\mathbf{r}(s)) 
+            d s\right)\end{align}.
+        \]
+        The discrete approximation of this equation can be stated as 
+        \[
+            \begin{align} \hat{C}(\mathbf{r})=\sum_{i=1}^N T_i\left(1-\exp 
+            \left(-\sigma_i \delta_i\right)\right) \mathbf{c}_i, \text { where } 
+            T_i=\exp\left(-\sum_{j=1}^{i-1} \sigma_j \delta_j\right) \end{align},
+        \]
+        where \(\textbf{c}_i\) is the RGB color obtained at location \(i\),
+        \(T_i\) is the probability of a ray not terminating before sample 
+        location \(i\), and \(1 - e^{-\sigma_i \delta_i}\) is the probability 
+        of a ray terminating at sample location \(i\), in which \(\sigma_i\) 
+        is the color density at location \(i\), and \(\delta_i\) is the step 
+        size, or the distance between each sample location.
+    </p>
+    <p>
+        I wish to train a Neural Radiance Field where the rendered color along
+        a ray would match the color the camera captured. The smaller the 
+        difference between the rendered color and its corresponding true pixel
+        color, the better the model fits the 3D object.
+
+    </p>
+</section>
+
+<section>
+    <h3>
+        B4. Training a NeRF Net.
+    </h3>
+    <p>
+        I built a larger MLP network to fit a Neural Radiance Field to a 3D
+        object. It takes the 3D world coordinates and the normalized ray 
+        direction as inputs, and predicts the RGB color of that sample location 
+        and its density. Figure 7 shows the architecture of the MLP net.
+    </p>
+    <figure>
+        <img src="media/3dmlp.png" alt="Figure 7" 
+            width=100%, height=auto>
+        <figcaption>
+            Figure 7: Architecture of MLP network to fit a 3D object.
+        </figcaption>
+    </figure>
+    <p>
+        I trained the model two times, one with 256 hidden layers and 2,000 steps,
+        one with 1,024 hidden layers and 4,000 steps. For each training step, the 
+        first approach randomly samples 10,000 rays with 32 sample locations on 
+        each ray, and the second approach randomly samples 5,000 rays with 64 sample 
+        locations on each ray. The highest frequency level for PE encoding is set
+        as <i>L</i> = 10 for the first approach, and <i>L</i> = 20 for the second 
+        approach. For both approaches, I used the Adam optimizer with an initial 
+        learning rate of 5e-4 for gradient descent. Similar to part A, I chose 
+        MSE between the rendered color and the true pixel color as loss function, 
+        and used PSNR to measure the reconstruction of the 3D object. The MSE/PSNR 
+        graphs for the two approaches are as follows.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/nerf_loss_graph256.pdf" alt="Figure 8a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 8a: The MSE/PSNR graph for the first 
+                    training approach (256 hidden layers).
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/nerf_loss_graph1024.pdf" alt="Figure 8b" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 8b: The MSE/PSNR graph for the second 
+                    training approach (1,024 hidden layers).
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        The PSNR of the first approach reached 23, while the second reached 27.
+    </p>
+    <p>
+        Figure 9 shows the net's predicted image of the <i>Lego</i> object when 
+        looked from behind, after different numbers of training steps.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 33%><figure>
+                <img src="media/net256img100.png" alt="Figure 9a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 9a: Predicted <i>Lego</i> image after 100 training 
+                    steps using the MLP net with 256 hidden layers.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/net256img250.png" alt="Figure 9b" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 9b: Predicted <i>Lego</i> image after 250 training 
+                    steps using the MLP net with 256 hidden layers.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/net256img500.png" alt="Figure 9c" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 9c: Predicted <i>Lego</i> image after 500 training 
+                    steps using the MLP net with 256 hidden layers.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 33%><figure>
+                <img src="media/net256img1000.png" alt="Figure 9d" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 9d: Predicted <i>Lego</i> image after 1000 training 
+                    steps using the MLP net with 256 hidden layers.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/net256img1500.png" alt="Figure 9e" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 9e: Predicted <i>Lego</i> image after 1500 training 
+                    steps using the MLP net with 256 hidden layers.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/net256img1950.png" alt="Figure 9f" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 9f: Predicted <i>Lego</i> image after 1950 training 
+                    steps using the MLP net with 256 hidden layers.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 33%><figure>
+                <img src="media/net1024img100.png" alt="Figure 9g" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 9g: Predicted <i>Lego</i> image after 100 training 
+                    steps using the MLP net with 1024 hidden layers.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/net1024img250.png" alt="Figure 9h" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 9h: Predicted <i>Lego</i> image after 250 training 
+                    steps using the MLP net with 1024 hidden layers.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/net1024img500.png" alt="Figure 9i" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 9i: Predicted <i>Lego</i> image after 500 training 
+                    steps using the MLP net with 1024 hidden layers.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 33%><figure>
+                <img src="media/net1024img1000.png" alt="Figure 9j" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 9j: Predicted <i>Lego</i> image after 1000 training 
+                    steps using the MLP net with 1024 hidden layers.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/net1024img2000.png" alt="Figure 9k" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 9k: Predicted <i>Lego</i> image after 2000 training 
+                    steps using the MLP net with 1024 hidden layers.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/net1024img3950.png" alt="Figure 9l" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 9l: Predicted <i>Lego</i> image after 3950 training 
+                    steps using the MLP net with 1024 hidden layers.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        I used the trained NeRF to predict images taken at 60 perspectives, and 
+        rendered them into a video to show the <i>Lego</i> rotating. They are 
+        shown in Figure 10.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 50%><figure>
+                <img src="media/lego_rotate_net256.gif" alt="Figure 10a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 10a: Rendered video of the <i>Lego</i> rotating 
+                    generated by the MLP net with 256 hidden layers.
+                </figcaption>
+            </figure></td>
+            <td width = 50%><figure>
+                <img src="media/lego_rotate_net1024.gif" alt="Figure 10b" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 10b: Rendered video of the <i>Lego</i> rotating 
+                    generated by the MLP net with 1024 hidden layers.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+    <p>
+        It can be obtained that the larger MLP net produces clearer pictures, 
+        although it took much longer to train.
+    </p>
+</section>
+<section>
+    <h3>
+        B5. Change Background Color (Bells & Whistles)
+    </h3>
+    <p>
+        To change the background color of the predicted images, I modified the 
+        volume rendering equation to
+        \[
+            \begin{align} \hat{C}(\mathbf{r})=\sum_{i=1}^N T_i\left(1-\exp 
+            \left(-\sigma_i \delta_i\right)\right) \mathbf{c}_i + 
+            T_{i+1}\mathbf{c}_{back}, \text { where } T_i=\exp
+            \left(-\sum_{j=1}^{i-1} \sigma_j \delta_j\right) \end{align}.
+        \]
+        In this way, when the color densities of all sample locations along a 
+        ray are low, and the ray gets to arrive at the background, the
+        rendered color would be the background color \(\mathbf{c}_{back}\).
+        Figure 11 shows the rendered rotation video with a red, green, blue
+        background, respectively.
+    </p>
+    <table class="center" style="margin-left:auto;margin-right:auto;">
+        <tr>
+            <td width = 33%><figure>
+                <img src="media/lego_rotate_red.gif" alt="Figure 11a" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 10a: Rendered video of the <i>Lego</i> rotating with 
+                    red background.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/lego_rotate_green.gif" alt="Figure 10b" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 10b: Rendered video of the <i>Lego</i> rotating with 
+                    green background.
+                </figcaption>
+            </figure></td>
+            <td width = 33%><figure>
+                <img src="media/lego_rotate_blue.gif" alt="Figure 10c" 
+                    width=100%, height=auto>
+                <figcaption>
+                    Figure 10c: Rendered video of the <i>Lego</i> rotating with 
+                    blue background.
+                </figcaption>
+            </figure></td>
+        </tr>
+    </table>
+</section>
+
+
+
+<p>
+    * Finished on Dec 9, 2024.
+</p>
+</body>
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3
+/es5/tex-mml-chtml.js"></script>
+</html>
