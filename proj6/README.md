@@ -1,6 +1,6 @@
 ## Final Project
 
-**Neural Radiance Field (NeRF)**&emsp;[Webpage](https://davidpaulwei.github.io/cs180/proj5/) | [My Code](https://github.com/davidpaulwei/cs180/tree/main/proj5/code)  
+**Neural Radiance Field (NeRF)**&emsp;[Webpage](https://davidpaulwei.github.io/cs180/proj6/) | [My Code](https://github.com/davidpaulwei/cs180/tree/main/proj6/code)  
 &emsp;    
 My final project consists two parts: Fit a Neural Field to a 2D Image (Part A), and Fit a Neural Radiance Field from Multi-view Images (Part B).      
 &emsp;   
