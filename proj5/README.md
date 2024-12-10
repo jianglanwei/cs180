@@ -1,6 +1,6 @@
-## Project 4
+## Project 5
 
-**Stitching Photo Mosaics**&emsp;[Webpage](https://davidpaulwei.github.io/cs180/proj5/) | [My Code](https://github.com/davidpaulwei/cs180/tree/main/proj5/code)  
+**Fun with Diffusion Models**&emsp;[Webpage](https://davidpaulwei.github.io/cs180/proj5/) | [My Code](https://github.com/davidpaulwei/cs180/tree/main/proj5/code)  
 &emsp;    
 Project 5 consists two parts: <b>The power of Diffusion Models</b> (Part A) and <b>Diffusion Models from Scratch</b> (Part B).    
 &emsp;   
