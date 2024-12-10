@@ -32,7 +32,7 @@ def sinusoidal_position(pos: torch.Tensor, L: int) -> torch.Tensor:
     out_pos = out_pos.reshape(pos.shape[0], -1)
     return out_pos
 
-def psnr(mse: torch.Tensor):
+def psnr(mse: torch.Tensor) -> torch.Tensor:
     """calculate the Peak Signal-to-Noise Ratio (PSNR) given 
        the input Mean Square Error (MSE).
        - mse: Mean Square Error with shape [N].
@@ -41,8 +41,8 @@ def psnr(mse: torch.Tensor):
 
 
 class img_iter:
-    """an image iterator class that returns random sinusoidal positions and 
-       their desired color output."""
+    """an image iterator class that randomly iterates through an image,
+       returns pixel coordinates and their corresponding rgb color."""
     def __init__(self, img, batch_size: int, num_steps: int):
         """img pixels should be inside the range of [0, 1]"""
         self.img = torch.tensor(img)
@@ -54,7 +54,8 @@ class img_iter:
         return self
     
     def __next__(self):
-        """returns sinusoidal positional input and pixel color."""
+        """returns sinusoidal positional encoded pixel coordinates and their 
+           corresponding rgb color."""
         if self.current_step == self.num_steps: raise StopIteration
         rand_rows = torch.randint(0, self.img.shape[0], (self.batch_size,))
         rand_cols = torch.randint(0, self.img.shape[1], (self.batch_size,))
