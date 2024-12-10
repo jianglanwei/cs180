@@ -28,7 +28,7 @@ the input Mean Square Error (MSE).
     - `__iter__(self)`: Returns self as generator.
     - `__next__(self)`: Returns sinusoidal positional encoded pixel coordinates and their corresponding rgb color.
   
-**Introduction of the functions and class included in `NeRF.py`:**  
+**Introduction of the functions and classes included in `NeRF.py`:**  
 **Functions:**
 1. `camera2world(x: np.ndarray, c2ws: np.ndarray) -> np.ndarray`: Transform 3D coordinates in camera view (x) to world view (out) using transformation matrix T.
 2. `pixel2camera(uv: np.ndarray, K: np.ndarray, s: np.ndarray) -> np.ndarray`: Map pixel coordinates (uv) to 3D camera-view coordinates (out) using intrinsic matrix K.
@@ -38,7 +38,7 @@ the input Mean Square Error (MSE).
 6. `sinusoidal_position(x: torch.Tensor, L: int) -> torch.Tensor`: Conduct sinusoidal positional encoding (PE) on x.
 7. `psnr(mse: torch.Tensor) -> float`: Calculate the Peak Signal-to-Noise Ratio (PSNR) given the input Mean Square Error (MSE).
 8. `to_gpu(gpu: torch.device, *objs) -> Tuple`: Converts iterable objects into Tensor and move them to selected GPU.   
-**Class:**
+**Classes:**
 9. `nerf_iter`: A sample iterator class that samples random rays from image batch, and fetch sample locations on those rays.
     - `__init__(self, imgs: np.ndarray, c2ws: np.ndarray, focal: int, batch_size: int, num_steps: int, near: float, far: float, num_samples_per_ray: int, perturbation_width: float = 0.)`: Initilize class.
     - `__iter__(self)`: Returns self as generator.
