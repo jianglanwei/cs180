@@ -17,29 +17,38 @@ The following libraries are required to run `NeRF.py`:
 4. `torchsummary`
 5. `matplotlib.pyplot`
 
-**Introduction of the functions and class included in Part A:**  
+**Introduction of the functions and class included in `neural_field_2d.py`:**  
 **Functions:**
 1. `sinusoidal_position(pos: torch.Tensor, L: int) -> torch.Tensor`: Conduct Sinusoidal Positional Encoding (PE) on given position.
 2. `psnr(mse: torch.Tensor) -> torch.Tensor`: Calculate the Peak Signal-to-Noise Ratio (PSNR) given 
 the input Mean Square Error (MSE).
 **Class:**
 3. `img_iter`: An image iterator class that randomly iterates through an image.
-    - `__init__(self, img, batch_size: int, num_steps: int)`: Initilize class.
+    - `__init__(self, img: array_like, batch_size: int, num_steps: int)`: Initilize class.
     - `__iter__(self)`: Returns self as generator.
     - `__next__(self)`: Returns sinusoidal positional encoded pixel coordinates and their corresponding rgb color.
-
-
-**Introduction of the functions included in Part B:**   
-
-1. `load_data()`: Load data from MNIST dataset.
-2. `add_noise`: Add noise to image.
-3. `ddpm_schedule()`: Compute constants for DDPM training and sampling.
-4. `init_weights()`: Initialize net weights.
-5.  `one_hot_vec()`: Generate One-hot vectors for network input.
-6. `spread_imgs()`: spread 4d image tensor into a 2d image for better virtualization.
+  
+**Introduction of the functions and class included in `NeRF.py`:**  
+**Functions:**
+1. `camera2world(x: np.ndarray, c2ws: np.ndarray) -> np.ndarray`: Transform 3D coordinates in camera view (x) to world view (out) using transformation matrix T.
+2. `pixel2camera(uv: np.ndarray, K: np.ndarray, s: np.ndarray) -> np.ndarray`: Map pixel coordinates (uv) to 3D camera-view coordinates (out) using intrinsic matrix K.
+3. `pixel2ray(uv: np.ndarray, K: np.ndarray, c2ws: np.ndarray) -> Tuple[np.ndarray, np.ndarray]`: Map pixel coordinates (uv) to rays with origin and normalized direction.
+4. `ray_samples(ray_ori: np.ndarray, ray_dir_norm: np.ndarray, near: float, far: float, num_samples_per_ray: int, perturbation_width: float = 0) -> np.ndarray`: Sample 3D points along a given ray.
+5. `vol_rend(rgbs: torch.Tensor, densities: torch.Tensor, step_size: float, background_rgb: torch.Tensor = torch.zeros(3)) -> torch.Tensor`: Volume rendering for NeRF.
+6. `sinusoidal_position(x: torch.Tensor, L: int) -> torch.Tensor`: Conduct sinusoidal positional encoding (PE) on x.
+7. `psnr(mse: torch.Tensor) -> float`: Calculate the Peak Signal-to-Noise Ratio (PSNR) given the input Mean Square Error (MSE).
+8. `to_gpu(gpu: torch.device, *objs) -> Tuple`: Converts iterable objects into Tensor and move them to selected GPU.
+**Class:**
+9. `nerf_iter`: A sample iterator class that samples random rays from image batch, and fetch sample locations on those rays.
+    - `__init__(self, imgs: np.ndarray, c2ws: np.ndarray, focal: int, batch_size: int, num_steps: int, near: float, far: float, num_samples_per_ray: int, perturbation_width: float = 0.)`: Initilize class.
+    - `__iter__(self)`: Returns self as generator.
+    - `__next__(self)`: Fetch samples on random rays.
+10. `nerf_net(nn.Module)`: Multilayer Perceptron (MLP) network desgned for NeRF task.
+    - `__init__(self, num_hidden: int)`: Initilize class.
+    - `forward(self, sample_coords: torch.Tensor, ray_dir: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]`: Forward function for NeRF net.
+    
     
 **Acknowledgement**   
-Part A is run on [Google Colab](https://colab.research.google.com/)'s NVIDIA Tesla T4, while part B is run on [Berkeley Hybrid Robotics](https://hybrid-robotics.berkeley.edu)'s NVIDIA RTX A4500.
+Both parts are run on [Berkeley Hybrid Robotics](https://hybrid-robotics.berkeley.edu)'s server with four NVIDIA RTX A4500.
 
-Finished on Nov 16, 2024.
-
+Finished on Dec 9, 2024.
