@@ -93,7 +93,7 @@ def pixel2ray(uv: np.ndarray, K: np.ndarray, c2ws: np.ndarray
 
 class nerf_iter:
     """a sample iterator class that samples random rays from image batch,
-       and obtain samples on those rays."""
+       and fetch sample locations on those rays."""
     def __init__(self, imgs: np.ndarray, c2ws: np.ndarray, focal: int, 
                  batch_size: int, num_steps: int, near: float, far: float,
                  num_samples_per_ray: int, perturbation_width: float = 0.):
@@ -128,7 +128,7 @@ class nerf_iter:
         return self
     
     def __next__(self):
-        """obtain samples on random rays.
+        """fetch samples on random rays.
            outputs:
            - 3d samples' coordinates with shape [N, num_samples_per_ray, 3];
            - normalized ray direction with shape [N, 3];
@@ -226,7 +226,7 @@ def psnr(mse: torch.Tensor) -> float:
 
 
 class nerf_net(nn.Module):
-    """multipayer perceptron network (mlp) designed for nerf task."""
+    """multilayer perceptron (mlp) network designed for nerf task."""
     def __init__(self, num_hidden: int) -> None:
         super().__init__()
         self.pe = sinusoidal_position
