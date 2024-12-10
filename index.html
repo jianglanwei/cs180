@@ -23,45 +23,65 @@
         <hr>
     </div>
     <nav>
-        <a href= "https://github.com/davidpaulwei/cs180/tree/main"> My CS180 Project Repository on Github</a> |
+        <a href= "https://github.com/davidpaulwei/cs180/tree/main">
+            My CS180 Project Repository on Github
+        </a> 
+        &nbsp;|&nbsp;
         <a href= "https://davidpaulwei.github.io"> My Personal Webpage </a>
     </nav>
 
 
 <section>
-    <ol>
+    <ol reversed>
         <li>
-            <b><a href= "https://davidpaulwei.github.io/cs180/proj1/">Project 1</a>
-            : Colorizing the <i>Prokudin-Gorskii</i> Photo Collection<br></b>
-            <i>Prokudin-Gorskii</i> photographed the Russian Empire using black-and-white negatives with red, green and blue filters,
-            hoping future technologies could stack the three layers to produce colored image.
-            I took the digitized negatives of <i>Prokudin-Gorskii</i>'s work to produce the RGB color image.
-            The original three color layers from <i>Prokudin-Gorskii</i>'s work were not accurately aligned, 
-            so I designed an alignment algorithm using <b>Image Pyramid</b> and <b>Edge Detection</b> to preprocess the layers before stacking them together.
+            <b><a href= "https://davidpaulwei.github.io/cs180/proj6/">Final Project</a>
+            : Neural Radiance Field (NeRF)<br></b>
+            My final project consists two parts: Fit a Neural Field to a 2D Image
+            (Part A), and Fit a Neural Radiance Field from Multi-view Images (Part B).<br>
+            &emsp;In Part A, I built a Multiplayer Perceptron (MLP) network to fit a single 
+            2D image so that given any pixel's coordinate, the network can predict the 
+            pixel's RGB color. When the image's shape is provided, the network can 
+            reconstruct the whole image. In Part B, I trained a larger MLP network, 
+            or a Neural Radiance Field (NeRF), to fit a 3D <i>Lego</i> object through 
+            inverse rendering from multi-view calibrated images. The pixels on the 
+            images were bounded with rays represented in 3D world coordinate system. 
+            Sample locations were gathered along the rays, and their volume rendering 
+            results were used to fit the RGB colors on the images' pixels. In this 
+            way the <i>Lego</i> object was modeled into the NeRF. Using the trained 
+            NeRF, I'm able to predict the images of the <i>Lego</i> taken from any 
+            given perspectives. I rendered these images into a video to create a 
+            rotating effect of the <i>Lego</i>.
             <br>&emsp;
         </li>
         <li>
-            <b><a href= "https://davidpaulwei.github.io/cs180/proj2/">Project 2</a>
-            : Fun with Filters and Frequencies<br></b>
-            By applying filters and analyzing frequencies, images can be processed and combined in interesting ways.
-            In the first part of this project, edge detection is conducted by applying the <b>Finite Difference Filter</b>. 
-            <b>Gaussian Filter</b> is applied to get rid of the unnecessary wrinkles. 
-            Then, images are sharpened by stacking its edges onto itself.
-            The second part of this project consists of two image binding tasks. 
-            The first task generates Hybrid Image by adding the high frequency of one image to the low frequency of another.
-            Both successful and failing attempts are introduced.
-            The second task blends images by applying the <b>Gaussian Stack</b> and the <b>Laplacian Stack</b>.
-            <br>&emsp;
-        </li>
-        <li>
-            <b><a href= "https://davidpaulwei.github.io/cs180/proj3/">Project 3</a>
-            : Face Morphing and Modelling a Photo Collection<br></b>
-            In the first part of this project, I morphed two face images using <b>Affine Transformation</b>.
-            I obtained 100 correspondences for each of the two faces and computed their average coordinates.
-            <b>Triangulation</b> was conducted on the correspondences and for each triangle, <b>Affine Matrixes</b> were generated to stretch the triangles from the original image to the Midway image.
-            I used <b>Cross Dissolve</b> to bind the color. I furtherly generated a sequence of 51 morphed images using different <b>Morph Weight</b> to produce the morphing GIF.
-            In the second part, I computed the mean face of 12 Brazilian faces, and stretched my face into the shape of the mean face.
-            I also computed the mean face of 12 smiling Brazilian faces to add a smile on my grim portrait.
+            <b><a href= "https://davidpaulwei.github.io/cs180/proj5/">Project 5</a>
+            : Fun with Diffusion Models<br></b>    
+            Project 5 consists two parts: <b>The power of Diffusion Models</b> 
+            (Part A) and <b>Diffusion Models from Scratch</b> (Part B).<br>    
+            &emsp; In Part A, I mainly played around with a pretrained diffusion model
+            called <b>DeepFloyd IF</b>. First, I used the model to conduct
+            <b>denoising</b>. I blurred a sample image using random noise, 
+            and used the model to predict that noise. I also denoised the image using
+            <b>Gaussian Blur</b> and compared the denoised results. Then, I denoised 
+            a random noise image to obtain a computer-generated image. I adapted the
+            <b>Classifier-Free Guidance</b> technic. Later, I conducted image-to-image 
+            translation, where images are translated into similar images either based 
+            on masks or text prompts. At last, I produced <b>Visual Anagrams</b>, 
+            <b>Hybrid Images</b>, and a course logo.<br>    
+            &emsp; In Part B, I built and trained a diffusion model from scratch. First, 
+            I trained a UNet to denoise half-noisy <b>MNIST</b> images (original 
+            image + 50% pure noise). Then, to denoise images with different
+            amount of noise, I added <b>Time Conditioning</b> to the UNet, where the 
+            UNet is told how noisy each images are. The trained UNet can accurately 
+            predict the noise that had been added to the images. Using the 
+            trained UNet denoiser, I generated MNIST-like images by denoising 
+            pure noise in 300 steps, only to find the computer 
+            generated images looks little like human-written numbers. To boost the 
+            result, I added <b>Class Conditioning</b> to the UNet, where the UNet 
+            is not only told how noisy the images are, but also the labels (0 to 9) 
+            of the images. 10% of the images are not provided with a label. I adapted 
+            <b>Classifier-Free Guidance</b> to generate MNIST-like images. The results
+            are much better compared the previous attempt.    
             <br>&emsp;
         </li>
         <li>
@@ -102,40 +122,53 @@
             <br>&emsp;
         </li>
         <li>
-            <b><a href= "https://davidpaulwei.github.io/cs180/proj5/">Project 5</a>
-            : Fun with Diffusion Models<br></b>    
-            Project 5 consists two parts: <b>The power of Diffusion Models</b> 
-            (Part A) and <b>Diffusion Models from Scratch</b> (Part B).<br>    
-            &emsp; In Part A, I mainly played around with a pretrained diffusion model
-            called <b>DeepFloyd IF</b>. First, I used the model to conduct
-            <b>denoising</b>. I blurred a sample image using random noise, 
-            and used the model to predict that noise. I also denoised the image using
-            <b>Gaussian Blur</b> and compared the denoised results. Then, I denoised 
-            a random noise image to obtain a computer-generated image. I adapted the
-            <b>Classifier-Free Guidance</b> technic. Later, I conducted image-to-image 
-            translation, where images are translated into similar images either based 
-            on masks or text prompts. At last, I produced <b>Visual Anagrams</b>, 
-            <b>Hybrid Images</b>, and a course logo.<br>    
-            &emsp; In Part B, I built and trained a diffusion model from scratch. First, 
-            I trained a UNet to denoise half-noisy <b>MNIST</b> images (original 
-            image + 50% pure noise). Then, to denoise images with different
-            amount of noise, I added <b>Time Conditioning</b> to the UNet, where the 
-            UNet is told how noisy each images are. The trained UNet can accurately 
-            predict the noise that had been added to the images. Using the 
-            trained UNet denoiser, I generated MNIST-like images by denoising 
-            pure noise in 300 steps, only to find the computer 
-            generated images looks little like human-written numbers. To boost the 
-            result, I added <b>Class Conditioning</b> to the UNet, where the UNet 
-            is not only told how noisy the images are, but also the labels (0 to 9) 
-            of the images. 10% of the images are not provided with a label. I adapted 
-            <b>Classifier-Free Guidance</b> to generate MNIST-like images. The results
-            are much better compared the previous attempt.    
+            <b><a href= "https://davidpaulwei.github.io/cs180/proj3/">Project 3</a>
+            : Face Morphing and Modelling a Photo Collection<br></b>
+            In the first part of this project, I morphed two face images using 
+            <b>Affine Transformation</b>. I obtained 100 correspondences for 
+            each of the two faces and computed their average coordinates.
+            <b>Triangulation</b> was conducted on the correspondences and for 
+            each triangle, <b>Affine Matrixes</b> were generated to stretch the 
+            triangles from the original image to the Midway image. I used <b>Cross 
+                Dissolve</b> to bind the color. I furtherly generated a sequence 
+            of 51 morphed images using different <b>Morph Weight</b> to produce the 
+            morphing GIF. In the second part, I computed the mean face of 12 
+            Brazilian faces, and stretched my face into the shape of the mean face.
+            I also computed the mean face of 12 smiling Brazilian faces to add a smile 
+            on my grim portrait.
+            <br>&emsp;
+        </li>
+        <li>
+            <b><a href= "https://davidpaulwei.github.io/cs180/proj2/">Project 2</a>
+            : Fun with Filters and Frequencies<br></b>
+            By applying filters and analyzing frequencies, images can be processed 
+            and combined in interesting ways.
+            In the first part of this project, edge detection is conducted by applying 
+            the <b>Finite Difference Filter</b>. <b>Gaussian Filter</b> is applied to 
+            get rid of the unnecessary wrinkles. Then, images are sharpened by stacking 
+            its edges onto itself. The second part of this project consists of two 
+            image binding tasks. The first task generates Hybrid Image by adding the 
+            high frequency of one image to the low frequency of another. Both successful 
+            and failing attempts are introduced. The second task blends images by 
+            applying the <b>Gaussian Stack</b> and the <b>Laplacian Stack</b>.
+            <br>&emsp;
+        </li>
+        <li>
+            <b><a href= "https://davidpaulwei.github.io/cs180/proj1/">Project 1</a>
+            : Colorizing the <i>Prokudin-Gorskii</i> Photo Collection<br></b>
+            <i>Prokudin-Gorskii</i> photographed the Russian Empire using black-and-white 
+            negatives with red, green and blue filters, hoping future technologies could 
+            stack the three layers to produce colored image. I took the digitized negatives 
+            of <i>Prokudin-Gorskii</i>'s work to produce the RGB color image. The original 
+            three color layers from <i>Prokudin-Gorskii</i>'s work were not accurately aligned, 
+            so I designed an alignment algorithm using <b>Image Pyramid</b> and <b>Edge 
+            Detection</b> to preprocess the layers before stacking them together.
             <br>&emsp;
         </li>
     </ol>
 </section>
 
-<p><br><br><br>* Last updated on Nov 17, 2024.</p>
+<p><br><br><br>* Last updated on Dec 9, 2024.</p>
 
 
 </body>
