@@ -1,1 +1,1 @@
-Trained Neural Radiance Fields (NeRF) in `NeRF.py` will appear here.
+Trained Neural Radiance Fields (NeRF) in `NeRF.py` (Part B) will appear here.
