@@ -134,7 +134,7 @@
         The model is trained for 2,000 steps on both images, with each step 
         learning from a batch size of <i>N</i> = 10,000 pixels. I used the 
         Adam optimizer with an initial learning rate of 1e-2 for gradient descent.
-        I set the number of hidden layers in the MLP net as 256, and the highest 
+        I set the hidden layer size in the MLP net as 256 neurons, and the highest 
         frequency level in PE encoding as <i>L</i> = 10, which would map a 2 
         dimension coordinate into a 42 dimension vector. I chose the
         <a href="https://en.wikipedia.org/wiki/Mean_squared_error">Mean Squared 
@@ -280,7 +280,7 @@
     </table>
     <p>
         I reduced the highest frequency level in PE encoding to <i>L</i> = 5
-        and the number of hidden layers to 128, and train the MLP network on the 
+        and the hidden layer size to 128 neurons, and train the MLP network on the 
         animal images again. Figure 5 shows the result comparison between the 
         reduced network and the original network.
     </p>
@@ -471,13 +471,14 @@
         </figcaption>
     </figure>
     <p>
-        I trained the model two times, one with 256 hidden layers and 2,000 steps,
-        one with 1,024 hidden layers and 4,000 steps. For each training step, the 
-        first approach randomly samples 10,000 rays with 32 sample locations on 
-        each ray, and the second approach randomly samples 5,000 rays with 64 sample 
-        locations on each ray. The highest frequency level for PE encoding is set
-        as <i>L</i> = 10 for the first approach, and <i>L</i> = 20 for the second 
-        approach. For both approaches, I used the Adam optimizer with an initial 
+        I trained two MLP models. Each hidden layers in the two MLP net contains
+        256 and 1,024 neurons, respectively. The smaller MLP net was trained for 
+        2,000 steps while the larger one was trained for 4,000 steps. For each 
+        training step, the smaller model randomly samples 10,000 rays with 32 sample 
+        locations on each ray, while the larger net randomly samples 5,000 rays 
+        with 64 sample locations on each ray. The highest frequency level for 
+        PE encoding was set as <i>L</i> = 10 in the smaller net, and <i>L</i> = 20 
+        in the larger net. For both models, I used the Adam optimizer with an initial 
         learning rate of 5e-4 for gradient descent. Similar to part A, I chose 
         MSE between the rendered color and the true pixel color as loss function, 
         and used PSNR to measure the reconstruction of the 3D object. The MSE/PSNR 
@@ -489,16 +490,16 @@
                 <img src="media/nerf_loss_graph256.pdf" alt="Figure 8a" 
                     width=100%, height=auto>
                 <figcaption>
-                    Figure 8a: The MSE/PSNR graph for the first 
-                    training approach (256 hidden layers).
+                    Figure 8a: The MSE/PSNR graph for the MLP net 
+                    with 256 neurons in each hidden layer.
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
                 <img src="media/nerf_loss_graph1024.pdf" alt="Figure 8b" 
                     width=100%, height=auto>
                 <figcaption>
-                    Figure 8b: The MSE/PSNR graph for the second 
-                    training approach (1,024 hidden layers).
+                    Figure 8b: The MSE/PSNR graph for the MLP net 
+                    with 1,024 neurons in each hidden layer.
                 </figcaption>
             </figure></td>
         </tr>
@@ -517,7 +518,7 @@
                     width=100%, height=auto>
                 <figcaption>
                     Figure 9a: Predicted <i>Lego</i> image after 100 training 
-                    steps using the MLP net with 256 hidden layers.
+                    steps using the smaller MLP net.
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
@@ -525,7 +526,7 @@
                     width=100%, height=auto>
                 <figcaption>
                     Figure 9b: Predicted <i>Lego</i> image after 250 training 
-                    steps using the MLP net with 256 hidden layers.
+                    steps using the smaller MLP net.
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
@@ -533,7 +534,7 @@
                     width=100%, height=auto>
                 <figcaption>
                     Figure 9c: Predicted <i>Lego</i> image after 500 training 
-                    steps using the MLP net with 256 hidden layers.
+                    steps using the smaller MLP net.
                 </figcaption>
             </figure></td>
         </tr>
@@ -545,7 +546,7 @@
                     width=100%, height=auto>
                 <figcaption>
                     Figure 9d: Predicted <i>Lego</i> image after 1000 training 
-                    steps using the MLP net with 256 hidden layers.
+                    steps using the smaller MLP net.
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
@@ -553,7 +554,7 @@
                     width=100%, height=auto>
                 <figcaption>
                     Figure 9e: Predicted <i>Lego</i> image after 1500 training 
-                    steps using the MLP net with 256 hidden layers.
+                    steps using the smaller MLP net.
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
@@ -561,7 +562,7 @@
                     width=100%, height=auto>
                 <figcaption>
                     Figure 9f: Predicted <i>Lego</i> image after 1950 training 
-                    steps using the MLP net with 256 hidden layers.
+                    steps using the smaller MLP net.
                 </figcaption>
             </figure></td>
         </tr>
@@ -573,7 +574,7 @@
                     width=100%, height=auto>
                 <figcaption>
                     Figure 9g: Predicted <i>Lego</i> image after 100 training 
-                    steps using the MLP net with 1024 hidden layers.
+                    steps using the larger MLP net.
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
@@ -581,7 +582,7 @@
                     width=100%, height=auto>
                 <figcaption>
                     Figure 9h: Predicted <i>Lego</i> image after 250 training 
-                    steps using the MLP net with 1024 hidden layers.
+                    steps using the larger MLP net.
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
@@ -589,7 +590,7 @@
                     width=100%, height=auto>
                 <figcaption>
                     Figure 9i: Predicted <i>Lego</i> image after 500 training 
-                    steps using the MLP net with 1024 hidden layers.
+                    steps using the larger MLP net.
                 </figcaption>
             </figure></td>
         </tr>
@@ -601,7 +602,7 @@
                     width=100%, height=auto>
                 <figcaption>
                     Figure 9j: Predicted <i>Lego</i> image after 1000 training 
-                    steps using the MLP net with 1024 hidden layers.
+                    steps using the larger MLP net.
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
@@ -609,7 +610,7 @@
                     width=100%, height=auto>
                 <figcaption>
                     Figure 9k: Predicted <i>Lego</i> image after 2000 training 
-                    steps using the MLP net with 1024 hidden layers.
+                    steps using the larger MLP net.
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
@@ -617,7 +618,7 @@
                     width=100%, height=auto>
                 <figcaption>
                     Figure 9l: Predicted <i>Lego</i> image after 3950 training 
-                    steps using the MLP net with 1024 hidden layers.
+                    steps using the larger MLP net.
                 </figcaption>
             </figure></td>
         </tr>
@@ -634,7 +635,7 @@
                     width=100%, height=auto>
                 <figcaption>
                     Figure 10a: Rendered video of the <i>Lego</i> rotating 
-                    generated by the MLP net with 256 hidden layers.
+                    generated by the smaller MLP net.
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
@@ -642,7 +643,7 @@
                     width=100%, height=auto>
                 <figcaption>
                     Figure 10b: Rendered video of the <i>Lego</i> rotating 
-                    generated by the MLP net with 1024 hidden layers.
+                    generated by the larger MLP net.
                 </figcaption>
             </figure></td>
         </tr>
