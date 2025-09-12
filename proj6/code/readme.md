@@ -1,6 +1,6 @@
 ## CS 180 Final Project Code
 
-**Neural Radiance Field**&emsp;[Webpage](https://davidpaulwei.github.io/cs180/proj6/)
+**Neural Radiance Field**&emsp;[Webpage](https://jianglanwei.github.io/cs180/proj6/)
 
 Run Part A in `neural_field_2d.py`, run Part B in `NeRF.py`, run them within this folder. Set `TRAINING_MODE` as `True` to train MLP net, as `False` to load trained neural field and generate images. `animator.py` contains an animator class that virtualizes the MSE/PSNR curve. For both Part A and B, GPU with CUDA compatibility are required.    
 

@@ -1,6 +1,6 @@
 ## CS 180 Project 4 Code
 
-**Stitching Photo Mosaics**&emsp;[Webpage](https://davidpaulwei.github.io/cs180/proj4/)
+**Stitching Photo Mosaics**&emsp;[Webpage](https://jianglanwei.github.io/cs180/proj4/)
 
 Run the project in `main.py`, run it within this folder. `proj4a_func.py` and `proj4b_func.py` contains the functions for **Project 4A** and **Project 4B**, respectively. The functions are called in `main.py`. `animator.py` contains an _animator_ class that helps visualizing the gradient descent process. The following libraries are required:
 
@@ -39,6 +39,6 @@ Run the project in `main.py`, run it within this folder. `proj4a_func.py` and `p
 18. `show_matches()`: Show potential correspondences and their matches.
     
 **Acknowledgement**   
-Functions `get_points()`, `read_points()`, `show_points()`, `snap()` are mostly or entirely from [Project 3](https://github.com/davidpaulwei/cs180/tree/main/proj3/code); Functions `get_harris_corners()` and `dist2()` are adapted from sample code given by course staff.
+Functions `get_points()`, `read_points()`, `show_points()`, `snap()` are mostly or entirely from [Project 3](https://github.com/jianglanwei/cs180/tree/main/proj3/code); Functions `get_harris_corners()` and `dist2()` are adapted from sample code given by course staff.
 
 Finished on Oct 24, 2024.

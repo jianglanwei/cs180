@@ -2,6 +2,11 @@
 <head>
     <title>David Wei's CS180 Final Project</title>
     <style>
+        body {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
         h2 {text-align: center;}
         h3 {text-align: left;}
         h4 {text-align: left;}
@@ -32,12 +37,13 @@
         <hr>
     <div>
     <nav>
-        <a href= "https://inst.eecs.berkeley.edu/~cs180/fa23/hw/proj5/"> 
-            Project Introduction </a> |
-        <a href= "https://github.com/davidpaulwei/cs180/tree/main/proj6/code"> 
-            My Code </a> |
-        <a href= "https://davidpaulwei.github.io/cs180"> 
-            All My CS180 Projects </a>
+    <nav>
+        <a href="https://github.com/jianglanwei/cs180/tree/main/proj6/OfficialSpec">Official Spec</a>
+        \
+        <a href="https://jianglanwei.github.io/cs180/proj6/">My Webpage</a>
+        \
+        <a href="https://github.com/jianglanwei/cs180/tree/main/proj6/code">My Code</a><br><br>
+    </nav>
     </nav>
     
 
@@ -124,7 +130,7 @@
                 <figcaption>Figure 2a: The animal image.</figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/lena.png" alt="Figure 2b" 
+                <img src="media/lena.jpg" alt="Figure 2b" 
                     width=100%, height=auto>
                 <figcaption>Figure 2b: The <i>Lenna</i> image.</figcaption>
             </figure></td>
@@ -175,21 +181,21 @@
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 33%><figure>
-                <img src="media/pred_animal0.png" alt="Figure 4a" 
+                <img src="media/pred_animal0.jpg" alt="Figure 4a" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 4a: Predicted animal image after 0 training steps.
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
-                <img src="media/pred_animal100.png" alt="Figure 4b" 
+                <img src="media/pred_animal100.jpg" alt="Figure 4b" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 4b: Predicted animal image after 100 training steps.
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
-                <img src="media/pred_animal250.png" alt="Figure 4c" 
+                <img src="media/pred_animal250.jpg" alt="Figure 4c" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 4c: Predicted animal image after 250 training steps.
@@ -200,21 +206,21 @@
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 33%><figure>
-                <img src="media/pred_animal500.png" alt="Figure 4d" 
+                <img src="media/pred_animal500.jpg" alt="Figure 4d" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 4d: Predicted animal image after 500 training steps.
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
-                <img src="media/pred_animal1000.png" alt="Figure 4e" 
+                <img src="media/pred_animal1000.jpg" alt="Figure 4e" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 4e: Predicted animal image after 1000 training steps.
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
-                <img src="media/pred_animal1950.png" alt="Figure 4f" 
+                <img src="media/pred_animal1950.jpg" alt="Figure 4f" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 4f: Predicted animal image after 1950 training steps.
@@ -225,7 +231,7 @@
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 33%><figure>
-                <img src="media/pred_lena0.png" alt="Figure 4g" 
+                <img src="media/pred_lena0.jpg" alt="Figure 4g" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 4g: Predicted <i>Lenna</i> image after 
@@ -233,7 +239,7 @@
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
-                <img src="media/pred_lena100.png" alt="Figure 4h" 
+                <img src="media/pred_lena100.jpg" alt="Figure 4h" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 4h: Predicted <i>Lenna</i> image after 
@@ -241,7 +247,7 @@
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
-                <img src="media/pred_lena250.png" alt="Figure 4i" 
+                <img src="media/pred_lena250.jpg" alt="Figure 4i" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 4i: Predicted <i>Lenna</i> image after 
@@ -253,7 +259,7 @@
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 33%><figure>
-                <img src="media/pred_lena500.png" alt="Figure 4j" 
+                <img src="media/pred_lena500.jpg" alt="Figure 4j" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 4j: Predicted <i>Lenna</i> image after 
@@ -261,7 +267,7 @@
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
-                <img src="media/pred_lena1000.png" alt="Figure 4k" 
+                <img src="media/pred_lena1000.jpg" alt="Figure 4k" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 4k: Predicted <i>Lenna</i> image after 
@@ -269,7 +275,7 @@
                 </figcaption>
             </figure></td>
             <td width = 33%><figure>
-                <img src="media/pred_lena1950.png" alt="Figure 4l" 
+                <img src="media/pred_lena1950.jpg" alt="Figure 4l" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 4l: Predicted <i>Lenna</i> image after 
@@ -287,14 +293,14 @@
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/pred_img_reduced.png" alt="Figure 5a" 
+                <img src="media/pred_img_reduced.jpg" alt="Figure 5a" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 5a: Predicted animal image on reduced MLP net.
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/pred_animal1950.png" alt="Figure 5b" 
+                <img src="media/pred_animal1950.jpg" alt="Figure 5b" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 5b: Predicted animal image on original MLP net.
@@ -407,7 +413,7 @@
         figure.
     </p>
     <figure>
-        <img src="media/ray_samples.png" alt="Figure 6" 
+        <img src="media/ray_samples.jpg" alt="Figure 6" 
             width=100%, height=auto>
         <figcaption>
             Figure 6: Sampled rays and points during each step of training.
@@ -464,7 +470,7 @@
         and its density. Figure 7 shows the architecture of the MLP net.
     </p>
     <figure>
-        <img src="media/3dmlp.png" alt="Figure 7" 
+        <img src="media/3dmlp.jpg" alt="Figure 7" 
             width=100%, height=auto>
         <figcaption>
             Figure 7: Architecture of MLP network to fit a 3D object.
@@ -663,7 +669,7 @@
         \[
             \begin{align} \hat{C}(\mathbf{r})=\sum_{i=1}^N T_i\left(1-\exp 
             \left(-\sigma_i \delta_i\right)\right) \mathbf{c}_i + 
-            T_{i+1}\mathbf{c}_{back}, \text { where } T_i=\exp
+            T_{i+1}\mathbf{c}_\mathrm{back}, \text { where } T_i=\exp
             \left(-\sum_{j=1}^{i-1} \sigma_j \delta_j\right) \end{align}.
         \]
         In this way, when the color densities of all sample locations along a 
@@ -708,6 +714,12 @@
     * Finished on Dec 9, 2024.
 </p>
 </body>
+
+<div style="margin-top: 20px; font-size: 0.9em; color: #555; border-top: 1px solid #ccc; padding-top: 10px; text-align: left;">
+  <strong>Disclaimer:</strong>  
+  All materials, including assignments, documents, and source code, are provided solely for personal coursework.  
+  All rights reserved by the UC Berkeley CS180 course staff. Redistribution or commercial use is strictly prohibited.
+</div>
 
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3
 /es5/tex-mml-chtml.js"></script>

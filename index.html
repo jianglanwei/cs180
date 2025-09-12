@@ -2,6 +2,11 @@
 <head>
     <title>David Wei's CS180 Projects</title>
     <style>
+        body {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
         h2 {text-align: center;}
         h3 {text-align: left;}
         h4 {text-align: center;}
@@ -23,27 +28,30 @@
         <hr>
     </div>
     <nav>
-        <a href= "https://github.com/davidpaulwei/cs180/tree/main">
-            My CS180 Project Repository on Github
-        </a> 
-        &nbsp;|&nbsp;
-        <a href= "https://davidpaulwei.github.io"> My Personal Webpage </a>
+        <a href= "https://github.com/jianglanwei/cs180/tree/main">Github</a> 
+        /
+        <a href= "https://jianglanwei.github.io"> My Personal Webpage </a>
     </nav>
 
 
 <section>
-    <ol reversed>
-        <li>
-            <b><a href= "https://davidpaulwei.github.io/cs180/proj6/">Final Project</a>
-            : Neural Radiance Field (NeRF)<br></b>
+
+    <table style="width:100%;border:0px;border-spacing:0px 10px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+    <tr>
+        <td style="padding:16px;width:20%;vertical-align:middle">
+        <img src="proj6/media/lego_rotate_net1024.gif" alt="clean-usnob" width="160">
+        </td>
+        <td style="padding:8px;width:80%;vertical-align:middle">
+            <b><a href= "https://jianglanwei.github.io/cs180/proj6/">Final Project
+            : Neural Radiance Field (NeRF)</a><br><br></b>
             My final project consists two parts: <b>Fit a Neural Field to a 2D Image</b>
             (Part A), and <b>Fit a Neural Radiance Field from Multi-view Images</b> 
-            (Part B).<br>
-            &emsp;In Part A, I built a <b>Multiplayer Perceptron (MLP) network</b> to 
+            (Part B).<br><br>
+            In Part A, I built a <b>Multiplayer Perceptron (MLP) network</b> to 
             fit a single 2D image so that given any pixel's coordinate, the network 
             can predict the pixel's RGB color. When the image's shape is provided, 
-            the network can <b>reconstruct the whole image</b>.<br>
-            &emsp;In Part B, I trained a larger MLP network to serve as a <b>Neural 
+            the network can <b>reconstruct the whole image</b>.<br><br>
+            In Part B, I trained a larger MLP network to serve as a <b>Neural 
             Radiance Field (NeRF)</b> and used it to fit a 3D <i>Lego</i> object through 
             inverse rendering from <b>multi-view calibrated images</b>. The pixels 
             on the images were bounded with rays represented in 3D world coordinate 
@@ -54,13 +62,19 @@
             from <b>any given perspectives</b>. I rendered these images into a video 
             to create a rotating effect of the <i>Lego</i>.
             <br>&emsp;
-        </li>
-        <li>
-            <b><a href= "https://davidpaulwei.github.io/cs180/proj5/">Project 5</a>
-            : Fun with Diffusion Models<br></b>    
+        </td>
+    </tr>
+
+    <tr>
+        <td style="padding:16px;width:20%;vertical-align:middle">
+        <img src="proj5/media/man_dog_hybrid.png" alt="clean-usnob" width="160">
+        </td>
+        <td style="padding:8px;width:80%;vertical-align:middle">
+            <b><a href= "https://jianglanwei.github.io/cs180/proj5/">Project 5
+            : Fun with Diffusion Models</a><br><br></b>    
             Project 5 consists two parts: <b>The power of Diffusion Models</b> 
-            (Part A) and <b>Diffusion Models from Scratch</b> (Part B).<br>    
-            &emsp; In Part A, I mainly played around with a pretrained diffusion model
+            (Part A) and <b>Diffusion Models from Scratch</b> (Part B).<br><br>    
+            In Part A, I mainly played around with a pretrained diffusion model
             called <b>DeepFloyd IF</b>. First, I used the model to conduct
             <b>denoising</b>. I blurred a sample image using random noise, 
             and used the model to predict that noise. I also denoised the image using
@@ -69,8 +83,8 @@
             <b>Classifier-Free Guidance</b> technic. Later, I conducted image-to-image 
             translation, where images are translated into similar images either based 
             on masks or text prompts. At last, I produced <b>Visual Anagrams</b>, 
-            <b>Hybrid Images</b>, and a course logo.<br>    
-            &emsp; In Part B, I built and trained a diffusion model from scratch. First, 
+            <b>Hybrid Images</b>, and a course logo.<br><br>   
+            In Part B, I built and trained a diffusion model from scratch. First, 
             I trained a UNet to denoise half-noisy <b>MNIST</b> images (original 
             image + 50% pure noise). Then, to denoise images with different
             amount of noise, I added <b>Time Conditioning</b> to the UNet, where the 
@@ -83,15 +97,20 @@
             is not only told how noisy the images are, but also the labels (0 to 9) 
             of the images. 10% of the images are not provided with a label. I adapted 
             <b>Classifier-Free Guidance</b> to generate MNIST-like images. The results
-            are much better compared the previous attempt.    
-            <br>&emsp;
-        </li>
-        <li>
-            <b><a href= "https://davidpaulwei.github.io/cs180/proj4/">Project 4</a>
-            : Autostitching and Photo Mosaic<br></b>
+            are much better compared the previous attempt.  
+        </td>
+    </tr>
+
+    <tr>
+        <td style="padding:16px;width:20%;vertical-align:middle">
+        <img src="proj4/media/door_mosaic_auto.jpg" alt="clean-usnob" width="160">
+        </td>
+        <td style="padding:8px;width:80%;vertical-align:middle">
+            <b><a href= "https://jianglanwei.github.io/cs180/proj4/">Project 4
+            : Autostitching and Photo Mosaic</a><br><br></b>
             Project 4 consists two parts: <b>Image Warping and Mosaicing</b> 
-            (Part A) and <b>Feature Matching for Autostitching</b> (Part B).<br>
-            &emsp;In Part A, I rectified images using <b>Perspective Transform</b>. 
+            (Part A) and <b>Feature Matching for Autostitching</b> (Part B).<br><br>
+            In Part A, I rectified images using <b>Perspective Transform</b>. 
             I manually selected correspondences on the images, and warped them
             so that their transformed correspondences form a rectangle.
             I also produced <b>mosaics images</b> by blending pairs of images that 
@@ -102,8 +121,8 @@
             aligns with the correspondences on the second images. In this way, 
             the same objects on the two images would match. Finally, I conducted 
             <b>Alpha Blend</b> on the output mosaic to erase the edge between the 
-            two images.<br>
-            &emsp;In Part B, I also produced mosaic images, 
+            two images.<br><br>
+            ;In Part B, I also produced mosaic images, 
             only this time instead of manually matching the pixels, the pixel 
             matches are automatically detected and selected.
             Corners serve as great symbols of objects on an image, so I used 
@@ -121,11 +140,17 @@
             similar to Part A, I used the optimal matches to conduct perspective 
             transform on the first image so that it aligns with the second image, 
             and blended the overlapping region to erase the edge.
-            <br>&emsp;
-        </li>
-        <li>
-            <b><a href= "https://davidpaulwei.github.io/cs180/proj3/">Project 3</a>
-            : Face Morphing and Modelling a Photo Collection<br></b>
+            <br>&emsp; 
+        </td>
+    </tr>
+
+    <tr>
+        <td style="padding:16px;width:20%;vertical-align:middle">
+        <img src="proj3/media/morph-fast.gif" alt="clean-usnob" width="160">
+        </td>
+        <td style="padding:8px;width:80%;vertical-align:middle">
+            <b><a href= "https://jianglanwei.github.io/cs180/proj3/">Project 3
+            : Face Morphing and Modelling a Photo Collection</a><br><br></b>
             In the first part of this project, I morphed two face images using 
             <b>Affine Transformation</b>. I obtained 100 correspondences for 
             each of the two faces and computed their average coordinates.
@@ -138,11 +163,17 @@
             Brazilian faces, and stretched my face into the shape of the mean face.
             I also computed the mean face of 12 smiling Brazilian faces to add a smile 
             on my grim portrait.
-            <br>&emsp;
-        </li>
-        <li>
-            <b><a href= "https://davidpaulwei.github.io/cs180/proj2/">Project 2</a>
-            : Fun with Filters and Frequencies<br></b>
+            <br>&emsp; 
+        </td>
+    </tr>
+
+    <tr>
+        <td style="padding:16px;width:20%;vertical-align:middle">
+        <img src="proj2/media/oraple.png" alt="clean-usnob" width="160">
+        </td>
+        <td style="padding:8px;width:80%;vertical-align:middle">
+            <b><a href= "https://jianglanwei.github.io/cs180/proj2/">Project 2
+            : Fun with Filters and Frequencies</a><br><br></b>
             By applying filters and analyzing frequencies, images can be processed 
             and combined in interesting ways.
             In the first part of this project, edge detection is conducted by applying 
@@ -154,10 +185,16 @@
             and failing attempts are introduced. The second task blends images by 
             applying the <b>Gaussian Stack</b> and the <b>Laplacian Stack</b>.
             <br>&emsp;
-        </li>
-        <li>
-            <b><a href= "https://davidpaulwei.github.io/cs180/proj1/">Project 1</a>
-            : Colorizing the <i>Prokudin-Gorskii</i> Photo Collection<br></b>
+        </td>
+    </tr>
+
+    <tr>
+        <td style="padding:16px;width:20%;vertical-align:middle">
+        <img src="proj1/media/emir.jpg" alt="clean-usnob" width="160">
+        </td>
+        <td style="padding:8px;width:80%;vertical-align:middle">
+            <b><a href= "https://jianglanwei.github.io/cs180/proj1/">Project 1
+            : Colorizing the <i>Prokudin-Gorskii</i> Photo Collection</a><br><br></b>
             <i>Prokudin-Gorskii</i> photographed the Russian Empire using black-and-white 
             negatives with red, green and blue filters, hoping future technologies could 
             stack the three layers to produce colored image. I took the digitized negatives 
@@ -166,12 +203,18 @@
             so I designed an alignment algorithm using <b>Image Pyramid</b> and <b>Edge 
             Detection</b> to preprocess the layers before stacking them together.
             <br>&emsp;
-        </li>
-    </ol>
+        </td>
+    </tr>
+    </table>
 </section>
 
-<p><br><br><br>* Last updated on Dec 9, 2024.</p>
+<p><br><br><br>* Final Project finished on Dec 9, 2024.</p>
 
+<div style="margin-top: 20px; font-size: 0.9em; color: #555; border-top: 1px solid #ccc; padding-top: 10px; text-align: left;">
+  <strong>Disclaimer:</strong>  
+  All materials, including assignments, documents, and source code, are provided solely for personal coursework.  
+  All rights reserved by the UC Berkeley CS180 course staff. Redistribution or commercial use is strictly prohibited.
+</div>
 
 </body>
 </html>

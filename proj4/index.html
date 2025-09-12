@@ -2,6 +2,11 @@
 <head>
     <title>David Wei's CS180 Project 4</title>
     <style>
+        body {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
         h2 {text-align: center;}
         h3 {text-align: left;}
         h4 {text-align: left;}
@@ -32,12 +37,15 @@
         <hr>
     <div>
     <nav>
-        <a href= "https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj4/"> 
-            Project Introduction </a> |
-        <a href= "https://github.com/davidpaulwei/cs180/tree/main/proj4/code"> 
-            My Code </a> |
-        <a href= "https://davidpaulwei.github.io/cs180"> 
-            All My CS180 Projects </a>
+        Official Spec (
+        <a href="https://github.com/jianglanwei/cs180/tree/main/proj4/OfficialSpec-A">Part A</a>
+        \
+        <a href="https://github.com/jianglanwei/cs180/tree/main/proj4/OfficialSpec-B">Part B</a>
+        )
+        \
+        <a href="https://jianglanwei.github.io/cs180/proj4/">My Webpage</a>
+        \
+        <a href="https://github.com/jianglanwei/cs180/tree/main/proj4/code">My Code</a><br><br>
     </nav>
     
 
@@ -142,12 +150,12 @@
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 55%><figure>
-                <img src="media/sign_pt.png" alt="Figure 1a" 
+                <img src="media/sign_pt.jpg" alt="Figure 1a" 
                     width=100%, height=auto>
                 <figcaption>Figure 1a: Sign image correspondences.</figcaption>
             </figure></td>
             <td width = 45%><figure>
-                <img src="media/sheet_pt.png" alt="Figure 1b" 
+                <img src="media/sheet_pt.jpg" alt="Figure 1b" 
                     width=100%, height=auto>
                 <figcaption>Figure 1b: Sheet image correspondences.</figcaption>
             </figure></td>
@@ -156,12 +164,12 @@
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 55%><figure>
-                <img src="media/sign_rectificated.png" alt="Figure 2a" 
+                <img src="media/sign_rectificated.jpg" alt="Figure 2a" 
                     width=100%, height=auto>
                 <figcaption>Figure 2a: Rectified sign image.</figcaption>
             </figure></td>
             <td width = 45%><figure>
-                <img src="media/sheet_rectificated.png" alt="Figure 2b" 
+                <img src="media/sheet_rectificated.jpg" alt="Figure 2b" 
                     width=100%, height=auto>
                 <figcaption>Figure 2b: Rectified sheet image.</figcaption>
             </figure></td>
@@ -189,7 +197,7 @@
         would match. The <i>Sather Tower</i> mosaic image is shown in Figure 4a.
     </p>
     <figure>
-        <img src="media/tower_matches.png" alt="Figure 3" 
+        <img src="media/tower_matches.jpg" alt="Figure 3" 
             width=100%, height=auto>
         <figcaption>
             Figure 3: Matching pixels on two <i>Sather Tower</i> images.
@@ -216,7 +224,7 @@
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/tower_mosaic_before_blending.png" alt="Figure 4a" 
+                <img src="media/tower_mosaic_before_blending.jpg" alt="Figure 4a" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 4a: <i>Sather Tower</i> mosaic image <b>before</b> 
@@ -224,7 +232,7 @@
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/tower_mosaic.png" alt="Figure 4b" 
+                <img src="media/tower_mosaic.jpg" alt="Figure 4b" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 4b: <i>Sather Tower</i> mosaic image <b>after</b>
@@ -240,19 +248,19 @@
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/road_left.png" alt="Figure 5a" 
+                <img src="media/road_left.jpg" alt="Figure 5a" 
                     width=100%, height=auto>
                 <figcaption>Figure 5a: Crossroad left.</figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/road_right.png" alt="Figure 5b" 
+                <img src="media/road_right.jpg" alt="Figure 5b" 
                     width=100%, height=auto>
                 <figcaption>Figure 5b: Crossroad right.</figcaption>
             </figure></td>
         </tr>
     </table>
     <figure>
-        <img src="media/road_mosaic.png" alt="Figure 5c" 
+        <img src="media/road_mosaic.jpg" alt="Figure 5c" 
             width=100%, height=auto>
         <figcaption>Figure 5c: Crossroad mosaic image.</figcaption>
     </figure>
@@ -260,12 +268,12 @@
         <tr>
             <td width = 10%></td>
             <td width = 40%><figure>
-                <img src="media/room_left.png" alt="Figure 6a" 
+                <img src="media/room_left.jpg" alt="Figure 6a" 
                     width=100%, height=auto>
                 <figcaption>Figure 6a: My room left.</figcaption>
             </figure></td>
             <td width = 40%><figure>
-                <img src="media/room_right.png" alt="Figure 6b" 
+                <img src="media/room_right.jpg" alt="Figure 6b" 
                     width=100%, height=auto>
                 <figcaption>Figure 6b: My room right.</figcaption>
             </figure></td>
@@ -273,7 +281,7 @@
         </tr>
     </table>
     <figure>
-        <img src="media/room_mosaic.png" alt="Figure 6c" 
+        <img src="media/room_mosaic.jpg" alt="Figure 6c" 
             width=60%, height=auto>
         <figcaption>Figure 6c: My room mosaic image.</figcaption>
     </figure>
@@ -299,14 +307,14 @@
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/moffitt_right.png" alt="Figure 7a" 
+                <img src="media/moffitt_right.jpg" alt="Figure 7a" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 7a: <i>Moffitt Library</i> image.
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/moffitt_corner_strength.png" alt="Figure 7b" 
+                <img src="media/moffitt_corner_strength.jpg" alt="Figure 7b" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 7b: Pixel's Corner Strength.
@@ -337,7 +345,7 @@
         as red dots in the image.
     </p>
     <figure>
-        <img src="media/moffitt_anms_dots.png" alt="Figure 8" 
+        <img src="media/moffitt_anms_dots.jpg" alt="Figure 8" 
             width=60%, height=auto>
         <figcaption>
             Figure 8: Interest points (blue dots) and potential correspondences
@@ -374,7 +382,7 @@
         moffitt library</i> images are shown in Figure 9.
     </p>
     <figure>
-        <img src="media/moffitt_matches.png" alt="Figure 9" 
+        <img src="media/moffitt_matches.jpg" alt="Figure 9" 
             width=100%, height=auto>
         <figcaption>
             Figure 9: Potential correspondence (pink dots) and selected 
@@ -420,14 +428,14 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 11), and the
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/moffitt_left.png" alt="Figure 10a" 
+                <img src="media/moffitt_left.jpg" alt="Figure 10a" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 10a: <i>Moffitt Library</i> left.
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/moffitt_right.png" alt="Figure 10b" 
+                <img src="media/moffitt_right.jpg" alt="Figure 10b" 
                     width=100%, height=auto>
                     <figcaption>
                         Figure 10b: <i>Moffitt Library</i> right.
@@ -438,7 +446,7 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 11), and the
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/moffitt_mosaic_manual.png" alt="Figure 10c" 
+                <img src="media/moffitt_mosaic_manual.jpg" alt="Figure 10c" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 10c: <i>Moffitt Library</i> mosaic based on 
@@ -446,7 +454,7 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 11), and the
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/moffitt_mosaic_auto.png" alt="Figure 10d" 
+                <img src="media/moffitt_mosaic_auto.jpg" alt="Figure 10d" 
                     width=100%, height=auto>
                     <figcaption>
                         Figure 10d: <i>Moffitt Library</i> mosaic based on 
@@ -458,14 +466,14 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 11), and the
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/hub_left.png" alt="Figure 11a" 
+                <img src="media/hub_left.jpg" alt="Figure 11a" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 11a: <i>Baker Bioenginuity Hub</i> left.
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/hub_right.png" alt="Figure 11b" 
+                <img src="media/hub_right.jpg" alt="Figure 11b" 
                     width=100%, height=auto>
                     <figcaption>
                         Figure 11b: <i>Baker Bioenginuity Hub</i> right.
@@ -476,7 +484,7 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 11), and the
     <table class="center" style="margin-left:auto;margin-right:auto;">
         <tr>
             <td width = 50%><figure>
-                <img src="media/hub_mosaic_manual.png" alt="Figure 11c" 
+                <img src="media/hub_mosaic_manual.jpg" alt="Figure 11c" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 11c: <i>Baker Bioenginuity Hub</i> mosaic based 
@@ -484,7 +492,7 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 11), and the
                 </figcaption>
             </figure></td>
             <td width = 50%><figure>
-                <img src="media/hub_mosaic_auto.png" alt="Figure 11d" 
+                <img src="media/hub_mosaic_auto.jpg" alt="Figure 11d" 
                     width=100%, height=auto>
                     <figcaption>
                         Figure 11d: <i>Baker Bioenginuity Hub</i> mosaic based 
@@ -497,14 +505,14 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 11), and the
         <tr>
             <td width = 10%></td>
             <td width = 40%><figure>
-                <img src="media/door_left.png" alt="Figure 12a" 
+                <img src="media/door_left.jpg" alt="Figure 12a" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 12a: <i>FU</i> left.
                 </figcaption>
             </figure></td>
             <td width = 40%><figure>
-                <img src="media/door_right.png" alt="Figure 12b" 
+                <img src="media/door_right.jpg" alt="Figure 12b" 
                     width=100%, height=auto>
                     <figcaption>
                         Figure 12b: <i>FU</i> right.
@@ -517,7 +525,7 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 11), and the
         <tr>
             <td width = 10%></td>
             <td width = 40%><figure>
-                <img src="media/door_mosaic_manual.png" alt="Figure 12c" 
+                <img src="media/door_mosaic_manual.jpg" alt="Figure 12c" 
                     width=100%, height=auto>
                 <figcaption>
                     Figure 12c: <i>FU</i> mosaic based 
@@ -525,7 +533,7 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 11), and the
                 </figcaption>
             </figure></td>
             <td width = 40%><figure>
-                <img src="media/door_mosaic_auto.png" alt="Figure 12d" 
+                <img src="media/door_mosaic_auto.jpg" alt="Figure 12d" 
                     width=100%, height=auto>
                     <figcaption>
                         Figure 12d: <i>FU</i> mosaic based 
@@ -543,6 +551,13 @@ Quantitative_Biosciences">Baker Bioenginuity Hub</a> (Figure 11), and the
 <p>
     * Part A finished on Oct 19, 2024; Part B finished on Oct 24, 2024.
 </p>
+
+<div style="margin-top: 20px; font-size: 0.9em; color: #555; border-top: 1px solid #ccc; padding-top: 10px; text-align: left;">
+  <strong>Disclaimer:</strong>  
+  All materials, including assignments, documents, and source code, are provided solely for personal coursework.  
+  All rights reserved by the UC Berkeley CS180 course staff. Redistribution or commercial use is strictly prohibited.
+</div>
+
 </body>
 
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3
