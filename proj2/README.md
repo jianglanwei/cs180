@@ -1,6 +1,6 @@
 ## Project 2: Fun with Filters and Frequencies
 
-[Official Spec](https://github.com/jianglanwei/cs180/tree/main/proj2/OfficialSpec)
+[Official Spec](https://github.com/jianglanwei/cs180/tree/main/proj2/OfficialSpec.pdf)
 /
 [My Webpage](https://jianglanwei.github.io/cs180/proj2/) 
 /

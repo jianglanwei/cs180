@@ -1,6 +1,6 @@
 ## Project 1: Colorizing the _Prokudin-Gorskii_ Photo Collection
 
-[Official Spec](https://github.com/jianglanwei/cs180/tree/main/proj1/OfficialSpec)
+[Official Spec](https://github.com/jianglanwei/cs180/tree/main/proj1/OfficialSpec.pdf)
 /
 [My Webpage](https://jianglanwei.github.io/cs180/proj1/) 
 /

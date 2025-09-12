@@ -1,6 +1,6 @@
 ## Project 3: Face Morphing and Modelling a Photo Collection
 
-[Official Spec](https://github.com/jianglanwei/cs180/tree/main/proj3/OfficialSpec)
+[Official Spec](https://github.com/jianglanwei/cs180/tree/main/proj3/OfficialSpec.pdf)
 /
 [My Webpage](https://jianglanwei.github.io/cs180/proj3/) 
 /

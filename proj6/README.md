@@ -1,7 +1,7 @@
 ## Final Project: Neural Radiance Field (NeRF)
 
 
-[Official Spec](https://github.com/jianglanwei/cs180/tree/main/proj6/OfficialSpec)
+[Official Spec](https://github.com/jianglanwei/cs180/tree/main/proj6/OfficialSpec.pdf)
 /
 [My Webpage](https://jianglanwei.github.io/cs180/proj6/) 
 /

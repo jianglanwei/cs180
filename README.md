@@ -10,7 +10,7 @@ This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to C
       <td style="padding:8px;width:80%;vertical-align:middle">
          <b>Final Project
          : Neural Radiance Field (NeRF)<br><br></b>
-         <a href="https://github.com/jianglanwei/cs180/tree/main/proj6/OfficialSpec">Official Spec</a>
+         <a href="https://github.com/jianglanwei/cs180/tree/main/proj6/OfficialSpec.pdf">Official Spec</a>
          \
          <a href="https://jianglanwei.github.io/cs180/proj6/">My Webpage</a>
          \
@@ -43,9 +43,9 @@ This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to C
       <td style="padding:8px;width:80%;vertical-align:middle">
          <b>Project 5: Fun with Diffusion Models<br><br></b>
          Official Spec (
-            <a href="https://github.com/jianglanwei/cs180/tree/main/proj5/OfficialSpec-A">Part A</a>
+            <a href="https://github.com/jianglanwei/cs180/tree/main/proj5/OfficialSpec-A.pdf">Part A</a>
             \
-            <a href="https://github.com/jianglanwei/cs180/tree/main/proj5/OfficialSpec-B">Part B</a>
+            <a href="https://github.com/jianglanwei/cs180/tree/main/proj5/OfficialSpec-B.pdf">Part B</a>
          )
          \
          <a href="https://jianglanwei.github.io/cs180/proj5/">My Webpage</a>
@@ -87,9 +87,9 @@ This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to C
       <td style="padding:8px;width:80%;vertical-align:middle">
          <b>Project 4: Autostitching and Photo Mosaic<br><br></b>
          Official Spec (
-            <a href="https://github.com/jianglanwei/cs180/tree/main/proj4/OfficialSpec-A">Part A</a>
+            <a href="https://github.com/jianglanwei/cs180/tree/main/proj4/OfficialSpec-A.pdf">Part A</a>
             \
-            <a href="https://github.com/jianglanwei/cs180/tree/main/proj4/OfficialSpec-B">Part B</a>
+            <a href="https://github.com/jianglanwei/cs180/tree/main/proj4/OfficialSpec-B.pdf">Part B</a>
          )
          \
          <a href="https://jianglanwei.github.io/cs180/proj4/">My Webpage</a>
@@ -137,7 +137,7 @@ This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to C
       </td>
       <td style="padding:8px;width:80%;vertical-align:middle">
          <b>Project 3: Face Morphing and Modelling a Photo Collection<br><br></b>
-         <a href="https://github.com/jianglanwei/cs180/tree/main/proj3/OfficialSpec">Official Spec</a>
+         <a href="https://github.com/jianglanwei/cs180/tree/main/proj3/OfficialSpec.pdf">Official Spec</a>
          \
          <a href="https://jianglanwei.github.io/cs180/proj3/">My Webpage</a>
          \
@@ -164,7 +164,7 @@ This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to C
       </td>
       <td style="padding:8px;width:80%;vertical-align:middle">
          <b>Project 2: Fun with Filters and Frequencies<br><br></b>
-         <a href="https://github.com/jianglanwei/cs180/tree/main/proj2/OfficialSpec">Official Spec</a>
+         <a href="https://github.com/jianglanwei/cs180/tree/main/proj2/OfficialSpec.pdf">Official Spec</a>
          \
          <a href="https://jianglanwei.github.io/cs180/proj2/">My Webpage</a>
          \
@@ -189,7 +189,7 @@ This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to C
       </td>
       <td style="padding:8px;width:80%;vertical-align:middle">
          <b>Project 1: Colorizing the <i>Prokudin-Gorskii</i> Photo Collection<br><br></b>
-         <a href="https://github.com/jianglanwei/cs180/tree/main/proj1/OfficialSpec">Official Spec</a>
+         <a href="https://github.com/jianglanwei/cs180/tree/main/proj1/OfficialSpec.pdf">Official Spec</a>
          \
          <a href="https://jianglanwei.github.io/cs180/proj1/">My Webpage</a>
          \
