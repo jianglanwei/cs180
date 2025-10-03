@@ -1,6 +1,6 @@
 ## UC Berkeley COMPSCI 180 Projects
 
-This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to Computer Vision and Computational Photography](https://inst.eecs.berkeley.edu/~cs180/fa24/) (Fall 2024) by [Alexei Efros](https://people.eecs.berkeley.edu/~efros/). They are also showcased on [this webpage](https://jianglanwei.github.io/cs180/). 
+This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to Computer Vision and Computational Photography](https://www2.eecs.berkeley.edu/Courses/CS180/) (Fall 2024) by [Alexei Efros](https://people.eecs.berkeley.edu/~efros/). They are also showcased on [this webpage](https://jianglanwei.github.io/cs180/). 
 
 <table style="width:100%;border:0px;border-spacing:0px 10px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
    <tr>
