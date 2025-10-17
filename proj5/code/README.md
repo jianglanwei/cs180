@@ -1,4 +1,4 @@
-## CS 180 Project 5 Code
+git push --force-with-lease origin main## CS 180 Project 5 Code
 
 **Fun with Diffusion Models**&emsp;[Webpage](https://jianglanwei.github.io/cs180/proj5/)
 
