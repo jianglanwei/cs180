@@ -1,0 +1,15 @@
+# macOS system files
+.DS_Store
+
+# Thumbnails (Windows)
+Thumbs.db
+
+# IDE / editor folders
+.vscode/
+.idea/
+
+# Node modules
+node_modules/
+
+ # Jupyter notebook checkpoints
+.ipynb_checkpoints/
