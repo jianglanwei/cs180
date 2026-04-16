@@ -3,7 +3,7 @@
 
 [Official Spec](https://github.com/jianglanwei/cs180/tree/main/proj6/OfficialSpec.pdf)
 /
-[My Webpage](https://jianglanwei.github.io/cs180/proj6/) 
+[My Webpage](https://jianglanwei.com/cs180/proj6/) 
 /
 [My Code](https://github.com/jianglanwei/cs180/tree/main/proj6/code) 
 

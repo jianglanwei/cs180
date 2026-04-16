@@ -1,6 +1,6 @@
 ## UC Berkeley COMPSCI 180 Projects
 
-This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to Computer Vision and Computational Photography](https://www2.eecs.berkeley.edu/Courses/CS180/) (Fall 2024) by [Alexei Efros](https://people.eecs.berkeley.edu/~efros/). They are also showcased on [this webpage](https://jianglanwei.github.io/cs180/). 
+This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to Computer Vision and Computational Photography](https://www2.eecs.berkeley.edu/Courses/CS180/) (Fall 2024) by [Alexei Efros](https://people.eecs.berkeley.edu/~efros/). They are also showcased on [this webpage](https://jianglanwei.com/cs180/). 
 
 <table style="width:100%;border:0px;border-spacing:0px 10px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
    <tr>
@@ -12,7 +12,7 @@ This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to C
          : Neural Radiance Field (NeRF)<br><br></b>
          <a href="https://github.com/jianglanwei/cs180/tree/main/proj6/OfficialSpec.pdf">Official Spec</a>
          \
-         <a href="https://jianglanwei.github.io/cs180/proj6/">My Webpage</a>
+         <a href="https://jianglanwei.com/cs180/proj6/">My Webpage</a>
          \
          <a href="https://github.com/jianglanwei/cs180/tree/main/proj6/code">My Code</a><br><br>
          My final project consists two parts: <b>Fit a Neural Field to a 2D Image</b>
@@ -48,7 +48,7 @@ This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to C
             <a href="https://github.com/jianglanwei/cs180/tree/main/proj5/OfficialSpec-B.pdf">Part B</a>
          )
          \
-         <a href="https://jianglanwei.github.io/cs180/proj5/">My Webpage</a>
+         <a href="https://jianglanwei.com/cs180/proj5/">My Webpage</a>
          \
          <a href="https://github.com/jianglanwei/cs180/tree/main/proj5/code">My Code</a><br><br>   
          Project 5 consists two parts: <b>The power of Diffusion Models</b> 
@@ -92,7 +92,7 @@ This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to C
             <a href="https://github.com/jianglanwei/cs180/tree/main/proj4/OfficialSpec-B.pdf">Part B</a>
          )
          \
-         <a href="https://jianglanwei.github.io/cs180/proj4/">My Webpage</a>
+         <a href="https://jianglanwei.com/cs180/proj4/">My Webpage</a>
          \
          <a href="https://github.com/jianglanwei/cs180/tree/main/proj4/code">My Code</a><br><br>
          Project 4 consists two parts: <b>Image Warping and Mosaicing</b> 
@@ -139,7 +139,7 @@ This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to C
          <b>Project 3: Face Morphing and Modelling a Photo Collection<br><br></b>
          <a href="https://github.com/jianglanwei/cs180/tree/main/proj3/OfficialSpec.pdf">Official Spec</a>
          \
-         <a href="https://jianglanwei.github.io/cs180/proj3/">My Webpage</a>
+         <a href="https://jianglanwei.com/cs180/proj3/">My Webpage</a>
          \
          <a href="https://github.com/jianglanwei/cs180/tree/main/proj3/code">My Code</a><br><br>
          In the first part of this project, I morphed two face images using 
@@ -166,7 +166,7 @@ This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to C
          <b>Project 2: Fun with Filters and Frequencies<br><br></b>
          <a href="https://github.com/jianglanwei/cs180/tree/main/proj2/OfficialSpec.pdf">Official Spec</a>
          \
-         <a href="https://jianglanwei.github.io/cs180/proj2/">My Webpage</a>
+         <a href="https://jianglanwei.com/cs180/proj2/">My Webpage</a>
          \
          <a href="https://github.com/jianglanwei/cs180/tree/main/proj2/code">My Code</a><br><br>
          By applying filters and analyzing frequencies, images can be processed 
@@ -191,7 +191,7 @@ This repository contains my projects for UC Berkeley's [COMPSCI 180 - Intro to C
          <b>Project 1: Colorizing the <i>Prokudin-Gorskii</i> Photo Collection<br><br></b>
          <a href="https://github.com/jianglanwei/cs180/tree/main/proj1/OfficialSpec.pdf">Official Spec</a>
          \
-         <a href="https://jianglanwei.github.io/cs180/proj1/">My Webpage</a>
+         <a href="https://jianglanwei.com/cs180/proj1/">My Webpage</a>
          \
          <a href="https://github.com/jianglanwei/cs180/tree/main/proj1/code">My Code</a><br><br>
          <i>Prokudin-Gorskii</i> photographed the Russian Empire using black-and-white 

@@ -1,6 +1,6 @@
 ## CS 180 Project 3 Code
 
-**Face Morphing and Modelling a Photo Collection**&emsp;[Webpage](https://jianglanwei.github.io/cs180/proj3/)
+**Face Morphing and Modelling a Photo Collection**&emsp;[Webpage](https://jianglanwei.com/cs180/proj3/)
 
 **main.py** contains all the necessary code for Project 3, run it within this folder. The following libraries are required:
 

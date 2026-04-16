@@ -1,6 +1,6 @@
 ## CS 180 Project 4 Code
 
-**Stitching Photo Mosaics**&emsp;[Webpage](https://jianglanwei.github.io/cs180/proj4/)
+**Stitching Photo Mosaics**&emsp;[Webpage](https://jianglanwei.com/cs180/proj4/)
 
 Run the project in `main.py`, run it within this folder. `proj4a_func.py` and `proj4b_func.py` contains the functions for **Project 4A** and **Project 4B**, respectively. The functions are called in `main.py`. `animator.py` contains an _animator_ class that helps visualizing the gradient descent process. The following libraries are required:
 

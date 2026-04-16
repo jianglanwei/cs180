@@ -1,6 +1,6 @@
 ## CS 180 Project 2 Code
 
-**Fun with Filters and Frequencies**&emsp;[Webpage](https://jianglanwei.github.io/cs180/proj2/)
+**Fun with Filters and Frequencies**&emsp;[Webpage](https://jianglanwei.com/cs180/proj2/)
 
 **main.py** contains all the necessary code for Project 2, run it within this folder. The following libraries are required:
 

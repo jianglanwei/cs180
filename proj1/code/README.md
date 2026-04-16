@@ -1,6 +1,6 @@
 ## CS 180 Project 1 Code
 
-**Colorizing the _Prokudin-Gorskii_ Photo Collection**&emsp;[Webpage](https://jianglanwei.github.io/cs180/proj1/)
+**Colorizing the _Prokudin-Gorskii_ Photo Collection**&emsp;[Webpage](https://jianglanwei.com/cs180/proj1/)
 
 **main.py** contains all the necessary code for Project 1, run it within this folder. The following libraries are required:
 

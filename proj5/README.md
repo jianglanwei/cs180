@@ -6,7 +6,7 @@ Official Spec (
     [Part B](https://github.com/jianglanwei/cs180/tree/main/proj5/Official-Spec-B)
 )
 /
-[My Webpage](https://jianglanwei.github.io/cs180/proj5/) 
+[My Webpage](https://jianglanwei.com/cs180/proj5/) 
 /
 [My Code](https://github.com/jianglanwei/cs180/tree/main/proj5/code)  
    

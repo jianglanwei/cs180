@@ -1,6 +1,6 @@
 git push --force-with-lease origin main## CS 180 Project 5 Code
 
-**Fun with Diffusion Models**&emsp;[Webpage](https://jianglanwei.github.io/cs180/proj5/)
+**Fun with Diffusion Models**&emsp;[Webpage](https://jianglanwei.com/cs180/proj5/)
 
 For Part A, the course staff should provide a Jupyter notebook containing detailed instructions and starter code.
 For Part B, implementation code for Unconditioned UNet, Time-Conditioned UNet, Class-Conditioned UNet are stored in `unconditioned_unet.py`, `time_conditioned_unet.py`, `class_conditioned_unet.py`, respectively. They should be run separately. Set `TRAINING_MODE` as `True` to train UNet, as `False` to load trained UNet to denoise or generate MNIST images. The net modules are stored in `module.py`. `animator.py` contains an animator class that virtualizes the training loss curve. For both Part A and B, GPU with CUDA compatibility are required.    
